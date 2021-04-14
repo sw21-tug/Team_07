@@ -12,15 +12,15 @@ Pangea aims to be a single app form which you can manage your social media posts
 | Role | Name |
 | ---- | ---- |
 | **Product Owner** | Mujkic, Ahmed |
-| **Scrum Master** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
+| **Scrum Master** | Eitzinger, Sandro |
+| **Developer** | Dyonysio, Christina |
+| **Developer** | Schreiner, Sebastian |
+| **Developer** | Tufan, Milad |
+| **Developer** | Krisper, Lukas |
+| **Developer** | Rindler, Maximilian |
+| **Developer** | Tufan, Tamin |
+| **Developer** | Rossmann, Daniel |
+| **Developer** | Hirschbichler, Christian |
 
 
 ## Implemented Features
