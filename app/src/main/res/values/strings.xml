@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Pangea</string>
+    <string name="accounts">accounts</string>
+    <string name="bookmarked">bookmarked</string>
+    <string name="posts">posts</string>
+    <string name="accounts_tab">Accounts tab</string>
+    <string name="ACCOUNTS">ACCOUNTS</string>
+    <string name="POSTS">POSTS</string>
+    <string name="BOOKMARKED">BOOKMARKED</string>
+    <string name="all_accounts">All Accounts</string>
+    <string name="all_posts">All Posts</string>
+    <string name="all_bookmarked">All Bookmarked</string>
+    <string name="dashboard">Dashboard</string>
 </resources>
