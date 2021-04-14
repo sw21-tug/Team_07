@@ -1,7 +1,7 @@
 ### Pairing Matrix
 Dev 1: Christina
 Dev 2: Sebastian
-Dev 3: Milab
+Dev 3: Milad
 Dev 4: Lukas
 Dev 5: Maximilian
 Dev 6: Tamin
