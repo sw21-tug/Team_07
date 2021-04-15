@@ -11,10 +11,15 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 
+/* This class controls the overall dashboard view
+   and the switching between the different Tabs
+   Layout-File: activity_dashboards.xml */
 class DashboardsActivity : AppCompatActivity()
 {
     lateinit var tabLayout : TabLayout
     lateinit var swipe : ViewPager
+
+    //creates the view
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboards)
@@ -28,11 +33,9 @@ class DashboardsActivity : AppCompatActivity()
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.setupWithViewPager(swipe)
-        //tabLayout.setVisibility()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 swipe.currentItem = tab.position
-
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
