@@ -6,6 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/ViewPager"
+        android:layout_width="411dp"
+        android:layout_height="686dp"
+        app:layout_constraintBottom_toTopOf="@+id/dashboard_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/dashboard_bar"
         android:layout_width="match_parent"
@@ -19,31 +28,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="@string/ACCOUNTS"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="@string/ACCOUNTS" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/posts_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="@string/POSTS"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="@string/POSTS" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/bookmarked_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="@string/BOOKMARKED"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="@string/BOOKMARKED" />
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/ViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="171dp"
-        tools:layout_editor_absoluteY="421dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

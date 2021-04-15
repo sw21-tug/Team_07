@@ -27,6 +27,8 @@ class DashboardsActivity : AppCompatActivity()
 
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        tabLayout.setupWithViewPager(swipe)
+        //tabLayout.setVisibility()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 swipe.currentItem = tab.position
