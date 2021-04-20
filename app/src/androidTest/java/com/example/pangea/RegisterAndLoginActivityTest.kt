@@ -12,8 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RegisterActivityTest{
-    @get:Rule var rule = ActivityScenarioRule(RegisterActivity::class.java)
+class RegisterAndLoginActivityTest{
+    @get:Rule var rule = ActivityScenarioRule(RegisterAndLoginActivity::class.java)
 
     @Test
     fun registerUser() {
@@ -26,5 +26,22 @@ class RegisterActivityTest{
         onView(withId(R.id.password)).perform(typeText("12345"))
 
         onView(withId(R.id.registerButton)).perform(click())
+    }
+
+    @Test
+    fun loginWithRegisteredUser() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Assert.assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("12345"))
+
+        onView(withId(R.id.registerButton)).perform(click())
+
+        onView(withId(R.id.login)).perform(click())
+
+        //TODO: check if view changed to Dashboard
     }
 }
