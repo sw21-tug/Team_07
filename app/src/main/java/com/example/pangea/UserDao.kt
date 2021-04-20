@@ -1,9 +1,6 @@
 package com.example.pangea
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface UserDao {
@@ -19,7 +16,7 @@ interface UserDao {
     @Insert
     fun insertAll(vararg users: User)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(user: User)
 
     @Delete

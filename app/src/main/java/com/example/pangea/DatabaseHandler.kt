@@ -10,6 +10,7 @@ class DatabaseHandler {
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword))
             return 0
+
         }
     public fun getRegisteredUser(userEmail: String, context: Context): User {
         val db = AppDatabase.getInstance(context)

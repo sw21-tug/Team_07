@@ -26,9 +26,22 @@ class RegisterAndLoginActivity : AppCompatActivity() {
             registerButton.hideKeyboard()
             val register = com.example.pangea.DatabaseHandler()
             register.registerUser(userEmail.toString(), password.toString(), applicationContext)
+            val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
+            myToastSuccess.show()
+        }
 
-            val myToast = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_LONG)
-            myToast.show()
+        val loginButton = findViewById<Button>(R.id.loginButton);
+        loginButton.setOnClickListener {
+            loginButton.hideKeyboard()
+            val register = com.example.pangea.DatabaseHandler()
+            val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
+            if (user != null && user.password.equals(password.toString())) {
+                //TODO: CHange VIew
+            } else
+            {
+                val myToast = Toast.makeText(applicationContext,"Login failed" ,Toast.LENGTH_SHORT)
+                myToast.show()
+            }
         }
     }
 

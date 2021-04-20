@@ -40,7 +40,7 @@ class RegisterAndLoginActivityTest{
 
         onView(withId(R.id.registerButton)).perform(click())
 
-        onView(withId(R.id.login)).perform(click())
+        onView(withId(R.id.loginButton)).perform(click())
 
         //TODO: check if view changed to Dashboard
     }
