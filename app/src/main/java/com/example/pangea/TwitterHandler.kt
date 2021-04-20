@@ -49,6 +49,13 @@ class TwitterHandler(private val context: Context) {
         return !(accessToken == "" || accessTokenSecret == "")
     }
 
+    fun unlinkAccount() {
+        val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
+        sharedPref.edit().putString("twitter_oauth_token", "").apply()
+        sharedPref.edit().putString("twitter_oauth_token_secret", "").apply()
+        twitter = null
+    }
+
     fun getTwitterConnector():Twitter?  {
         val builder = ConfigurationBuilder()
             .setDebugEnabled(true)

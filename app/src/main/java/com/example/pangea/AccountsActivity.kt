@@ -20,9 +20,21 @@ class AccountsActivity : AppCompatActivity(), TwitterHandler.ITwitterCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accounts)
         tHandler = TwitterHandler(this)
+        if(tHandler.hasLinkedAccount()) {
+            twitter_login_btn.text = "Unlink twitter account"
+        }
+        else{
+            twitter_login_btn.text = "Login with Twitter"
+        }
 
         twitter_login_btn.setOnClickListener {
-            setupDialogAndRequestAuthToken()
+            if(tHandler.hasLinkedAccount()) {
+                tHandler.unlinkAccount()
+                twitter_login_btn.text = "Login with Twitter"
+            }
+            else {
+                setupDialogAndRequestAuthToken()
+            }
         }
     }
 
@@ -33,7 +45,7 @@ class AccountsActivity : AppCompatActivity(), TwitterHandler.ITwitterCallback {
                 val requestToken = tHandler.getTwitterConnector()?.oAuthRequestToken
                 withContext(Dispatchers.Main) {
                     if (requestToken != null) {
-                        setupTwitterWebviewDialog(requestToken.authorizationURL)
+                        setupTwitterWebviewDialog(requestToken.authorizationURL + "&force_login=true")
                         twitterDialog.show()
                     }
                 }
@@ -58,6 +70,7 @@ class AccountsActivity : AppCompatActivity(), TwitterHandler.ITwitterCallback {
     override fun oAuthResponse() {
         GlobalScope.launch(Dispatchers.Main) {
             twitterDialog.dismiss()
+            twitter_login_btn.text =  "Unlink twitter account"
             Log.d("TWITTER-Handler", "Logged in user and linked account")
         }
     }

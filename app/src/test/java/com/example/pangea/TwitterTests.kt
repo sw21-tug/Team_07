@@ -24,6 +24,7 @@ class TwitterTests {
         assertEquals(hasAccount, true)
     }
 
+    @Test
     fun testUnlinkTwitter() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val pref = context.applicationContext.getSharedPreferences("twitter", Context.MODE_PRIVATE)
