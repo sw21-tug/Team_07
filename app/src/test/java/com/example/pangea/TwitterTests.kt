@@ -23,4 +23,19 @@ class TwitterTests {
         val hasAccount = handler.hasLinkedAccount()
         assertEquals(hasAccount, true)
     }
+
+    fun testUnlinkTwitter() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val pref = context.applicationContext.getSharedPreferences("twitter", Context.MODE_PRIVATE)
+        pref.edit().putString("twitter_oauth_token", "test-test").apply()
+        pref.edit().putString("twitter_oauth_token_secret", "test-test").apply()
+
+        val handler = TwitterHandler(context)
+        var hasAccount = handler.hasLinkedAccount()
+        assertEquals(hasAccount, true)
+
+        handler.unlinkAccount()
+        hasAccount = handler.hasLinkedAccount()
+        assertEquals(hasAccount, false)
+    }
 }
