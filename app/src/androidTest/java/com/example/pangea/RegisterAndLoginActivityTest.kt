@@ -2,6 +2,10 @@ package com.example.pangea
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,6 +34,7 @@ class RegisterAndLoginActivityTest{
 
     @Test
     fun loginWithRegisteredUser() {
+        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         Assert.assertEquals("com.example.pangea", appContext.packageName)
 
@@ -42,6 +47,7 @@ class RegisterAndLoginActivityTest{
 
         onView(withId(R.id.loginButton)).perform(click())
 
-        //TODO: check if view changed to Dashboard
+        //check if Dashboard is shown after login
+        intended(hasComponent(DashboardsActivity::class.java.name))
     }
 }
