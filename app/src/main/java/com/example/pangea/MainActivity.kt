@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
         val loginButton = findViewById<LoginButton>(R.id.login_button);
 
         loginButton.setOnClickListener {
-            Toast.makeText(this@MainActivity, "MOiga", Toast.LENGTH_LONG).show();
+            Toast.makeText(this@MainActivity, "Loging in!", Toast.LENGTH_LONG).show();
 
         }
         // Callback registration
         loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                     override fun onSuccess(result: LoginResult?) {
 
-                        Toast.makeText(this@MainActivity, "MOiga", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this@MainActivity, "Loging in!", Toast.LENGTH_LONG).show();
                         TODO("Not yet implemented")
                     }
 
