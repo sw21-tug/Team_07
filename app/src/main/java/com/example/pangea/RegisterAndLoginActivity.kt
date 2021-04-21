@@ -36,7 +36,8 @@ class RegisterAndLoginActivity : AppCompatActivity() {
             val register = com.example.pangea.DatabaseHandler()
             val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
             if (user != null && user.password.equals(password.toString())) {
-                //TODO: CHange VIew
+                val intent = Intent(this, DashboardsActivity::class.java)
+                startActivity(intent)
             } else
             {
                 val myToast = Toast.makeText(applicationContext,"Login failed" ,Toast.LENGTH_SHORT)
