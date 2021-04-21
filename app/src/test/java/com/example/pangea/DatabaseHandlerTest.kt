@@ -50,8 +50,6 @@ class DatabaseHandlerTest {
 
         user = dbHandler.getRegisteredUser(email, context)
 
-
-
         Assert.assertEquals(twitterAuthToken, user.twitterAuthToken)
         Assert.assertEquals(twitterAuthTokenSecret, user.twitterAuthSecret)
 
