@@ -1,14 +1,14 @@
 package com.example.pangea
 
 import android.content.Context
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 
 class DatabaseHandler {
     public fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
-            userDao.insertOne(User(email = userEmail, password = userPassword))
+            userDao.insertOne(User(email = userEmail, password = userPassword,
+                twitterAuthToken = "", twitterAuthSecret = ""
+            ))
             return 0
 
         }
@@ -17,6 +17,10 @@ class DatabaseHandler {
         val userDao = db.userDao()
         val user = userDao.getUserByEmail(userEmail)
         return user
+    }
+
+    fun saveTwitterLink(user: User, twitterAuthToken: String, twitterAuthTokenSecret: String) {
+
     }
 
 }
