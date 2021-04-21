@@ -48,6 +48,33 @@ class AccountsLinkTest {
 
     }
 
+    @Test
+    fun testTwitterHasLinkedAccount() {
+
+        val email = "test.user@test.com"
+        val pw = "1234abc"
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val dbHandler = com.example.pangea.DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals(email, user.email)
+        Assert.assertEquals(pw, user.password)
+
+        val twitterAuthToken = "token"
+        val twitterAuthTokenSecret = "secret"
+        dbHandler.saveTwitterLink(user, twitterAuthToken, twitterAuthTokenSecret, context)
+
+        val intent = Intent()
+        intent.putExtra("loggedInUserMail", "test.user@test.com" )
+        activityRule.launchActivity(intent)
+
+        onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitter_login_btn)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitter_login_btn)).check(matches(withText("Unlink twitter account")))
+
+    }
+
+
     @After
     fun cleanUp() {
         Intents.release()
