@@ -3,6 +3,7 @@ package com.example.pangea
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import junit.framework.Assert
+import org.junit.After
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,6 +13,11 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class PostsTabTests {
 
+    @After
+    fun tearDown() {
+        PostDatabase.destroyInstance()
+    }
+
     @Test
     fun testPostData() {
 
@@ -20,8 +26,7 @@ class PostsTabTests {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val message = "test"
         val image = null
-        val platforms = listOf(true, false)
-        register.addPost(email, message, image, platforms, context)
+        register.addFBPost(email, message, image, context)
 
         val posts = register.getAllPosts(email, context)
         assertEquals(1, posts.size)

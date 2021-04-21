@@ -1,30 +1,41 @@
 package com.example.pangea
 
 import android.content.Context
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 
 class DatabaseHandler {
-    public fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
+    fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword))
             return 0
 
         }
-    public fun getRegisteredUser(userEmail: String, context: Context): User {
+    fun getRegisteredUser(userEmail: String, context: Context): User {
         val db = AppDatabase.getInstance(context)
         val userDao = db.userDao()
         val user = userDao.getUserByEmail(userEmail)
         return user
     }
 
-    public fun getAllPosts(userEmail: String, context: Context): List<Post?> {
-        return listOf()
+    fun getAllPosts(userEmail: String, context: Context): List<Post> {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        return postDao.selectAllPostsForUser(userEmail)
     }
 
-    public fun addPost(userEmail: String, message: String, image: String?, platforms: List<Boolean>, context: Context): Post? {
-        return null
+    fun addFBPost(userEmail: String, message: String, image: String?, context: Context): Int {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, fbLikes = 0, fbComments = 0, fbShared = 0, retweets = 0, twitterComments = 0, twitterLikes = 0)
+        postDao.insertOne(post)
+        return 0
     }
 
+    fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context): Int {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, fbLikes = 0, fbComments = 0, fbShared = 0, retweets = 0, twitterComments = 0, twitterLikes = 0)
+        postDao.insertOne(post)
+        return 0
+    }
 }

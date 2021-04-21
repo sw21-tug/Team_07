@@ -1,4 +1,24 @@
 package com.example.pangea
 
+import androidx.room.*
+
+@Dao
 interface PostDao {
+    @Query("SELECT * FROM posts")
+    fun getAll(): List<Post>
+
+    @Query("SELECT * FROM posts WHERE uid IN (:postIds)")
+    fun loadAllByIds(postIds: IntArray): List<Post>
+
+    @Query("SELECT * FROM posts WHERE email IS (:email)")
+    fun selectAllPostsForUser(email: String): List<Post>
+
+    @Insert
+    fun insertAll(vararg posts: Post)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOne(post: Post)
+
+    @Delete
+    fun delete(post: Post)
 }

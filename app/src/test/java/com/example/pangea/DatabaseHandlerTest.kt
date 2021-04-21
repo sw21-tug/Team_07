@@ -1,8 +1,10 @@
 package com.example.pangea
 
 import android.content.Context
+import androidx.room.Database
 import androidx.test.core.app.ApplicationProvider
 import junit.framework.Assert
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runner.manipulation.Ordering
@@ -10,6 +12,11 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DatabaseHandlerTest {
+
+    @After
+    fun tearDown() {
+        AppDatabase.destroyInstance()
+    }
 
     @Test
     fun registerNewUserTest() {
@@ -19,6 +26,8 @@ class DatabaseHandlerTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val errorCode = register.registerUser(email, pw, context)
         Assert.assertEquals(0, errorCode)
+
+
     }
 
     @Test
