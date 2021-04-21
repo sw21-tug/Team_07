@@ -46,9 +46,11 @@ class DatabaseHandlerTest {
 
         val twitterAuthToken = "token"
         val twitterAuthTokenSecret = "secret"
-        dbHandler.saveTwitterLink(user, twitterAuthToken, twitterAuthTokenSecret)
+        dbHandler.saveTwitterLink(user, twitterAuthToken, twitterAuthTokenSecret, context)
 
         user = dbHandler.getRegisteredUser(email, context)
+
+
 
         Assert.assertEquals(twitterAuthToken, user.twitterAuthToken)
         Assert.assertEquals(twitterAuthTokenSecret, user.twitterAuthSecret)

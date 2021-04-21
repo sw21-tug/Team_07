@@ -19,8 +19,11 @@ class DatabaseHandler {
         return user
     }
 
-    fun saveTwitterLink(user: User, twitterAuthToken: String, twitterAuthTokenSecret: String) {
-
+    fun saveTwitterLink(user: User, twitterAuthToken: String, twitterAuthTokenSecret: String, context: Context) {
+        val db = AppDatabase.getInstance(context)
+        user.twitterAuthToken = twitterAuthToken
+        user.twitterAuthSecret = twitterAuthTokenSecret
+        db.userDao().updateUser(user)
     }
 
 }
