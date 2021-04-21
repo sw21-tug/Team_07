@@ -41,7 +41,7 @@ class TwitterTests {
     }
 
     @Test
-    fun testPostTwitterStatus() {
+    fun testFailPostTwitterStatus() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val pref = context.applicationContext.getSharedPreferences("twitter", Context.MODE_PRIVATE)
         pref.edit().putString("twitter_oauth_token", "test-test").apply()
@@ -52,6 +52,6 @@ class TwitterTests {
         assertEquals(hasAccount, true)
 
         val response  = handler.postTweet("Test Tweet")
-        assertEquals(response, "200")
+        assertEquals(response, "-1")
     }
 }

@@ -41,6 +41,34 @@ class TwitterHandler(private val context: Context) {
         twitter = factory.instance
     }
 
+    fun initTwitterApi() {
+        val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
+        val accessToken = sharedPref.getString("twitter_oauth_token", "")
+        val accessTokenSecret = sharedPref.getString("twitter_oauth_token_secret", "")
+        val builder = ConfigurationBuilder()
+        builder.setOAuthConsumerKey(TwitterConstants.CONSUMER_KEY)
+                .setOAuthConsumerSecret(TwitterConstants.CONSUMER_SECRET)
+                .setOAuthAccessToken(accessToken)
+                .setOAuthAccessTokenSecret(accessTokenSecret)
+        val config = builder.build()
+        val factory = TwitterFactory(config)
+        twitter = factory.instance
+    }
+
+    fun postTweet(tweet:String): String {
+        if(twitter == null) {
+            initTwitterApi()
+        }
+
+        return try {
+            val status = twitter?.updateStatus(tweet)
+            "200"
+        } catch (e: Exception) {
+            Log.e("ERROR: ", e.toString())
+            "-1"
+        }
+    }
+
     fun hasLinkedAccount(): Boolean {
         val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
         val accessToken = sharedPref.getString("twitter_oauth_token", "")
