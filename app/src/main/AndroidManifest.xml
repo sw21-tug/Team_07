@@ -13,12 +13,16 @@
         android:theme="@style/Theme.Pangea">
         <activity android:name=".AccountsActivity"></activity>
         <activity android:name=".MainActivity">
+
+        <activity android:name=".RegisterAndLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DashboardsActivity"></activity>
+
     </application>
 
 </manifest>
