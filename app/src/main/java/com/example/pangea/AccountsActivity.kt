@@ -19,7 +19,10 @@ class AccountsActivity : AppCompatActivity(), TwitterHandler.ITwitterCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accounts)
-        tHandler = TwitterHandler(this)
+
+        val userEmail = intent.getStringExtra("loggedInUserMail").toString()
+        val user = DatabaseHandler().getRegisteredUser(userEmail, this)
+        tHandler = TwitterHandler(this, user)
         if(tHandler.hasLinkedAccount()) {
             twitter_login_btn.text = "Unlink twitter account"
         }

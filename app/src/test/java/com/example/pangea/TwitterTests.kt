@@ -27,7 +27,7 @@ class TwitterTests {
         val twitterAuthTokenSecret = "secret"
         dbHandler.saveTwitterLink(user, twitterAuthToken, twitterAuthTokenSecret, context)
 
-        val handler = TwitterHandler(context)
+        val handler = TwitterHandler(context, user)
         val hasAccount = handler.hasLinkedAccount()
         assertEquals(hasAccount, true)
     }
@@ -47,7 +47,7 @@ class TwitterTests {
         val twitterAuthTokenSecret = "secret"
         dbHandler.saveTwitterLink(user, twitterAuthToken, twitterAuthTokenSecret, context)
 
-        val handler = TwitterHandler(context)
+        val handler = TwitterHandler(context, user)
         var hasAccount = handler.hasLinkedAccount()
         assertEquals(hasAccount, true)
 
@@ -58,12 +58,16 @@ class TwitterTests {
 
     @Test
     fun testFailPostTwitterStatus() {
+        val email = "test.user@test.com"
+        val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val pref = context.applicationContext.getSharedPreferences("twitter", Context.MODE_PRIVATE)
-        pref.edit().putString("twitter_oauth_token", "test-test").apply()
-        pref.edit().putString("twitter_oauth_token_secret", "test-test").apply()
+        val dbHandler = com.example.pangea.DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals(email, user.email)
+        Assert.assertEquals(pw, user.password)
 
-        val handler = TwitterHandler(context)
+        val handler = TwitterHandler(context, user)
         var hasAccount = handler.hasLinkedAccount()
         assertEquals(hasAccount, true)
 

@@ -22,15 +22,15 @@ import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import twitter4j.conf.ConfigurationBuilder
 
-class TwitterHandler(private val context: Context) {
+class TwitterHandler(private val context: Context, private val user: User) {
 
     private var twitter: Twitter? = null
 
     fun initTwitterApi(accToken:AccessToken?) {
 
-        val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
-        sharedPref.edit().putString("twitter_oauth_token", accToken?.token ?: "").apply()
-        sharedPref.edit().putString("twitter_oauth_token_secret", accToken?.tokenSecret ?: "").apply()
+        val dbHandler = DatabaseHandler()
+        dbHandler.saveTwitterLink(user, accToken?.token, accToken?.tokenSecret, context)
+
         val builder = ConfigurationBuilder()
         builder.setOAuthConsumerKey(TwitterConstants.CONSUMER_KEY)
             .setOAuthConsumerSecret(TwitterConstants.CONSUMER_SECRET)
@@ -42,14 +42,11 @@ class TwitterHandler(private val context: Context) {
     }
 
     fun initTwitterApi() {
-        val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
-        val accessToken = sharedPref.getString("twitter_oauth_token", "")
-        val accessTokenSecret = sharedPref.getString("twitter_oauth_token_secret", "")
         val builder = ConfigurationBuilder()
         builder.setOAuthConsumerKey(TwitterConstants.CONSUMER_KEY)
                 .setOAuthConsumerSecret(TwitterConstants.CONSUMER_SECRET)
-                .setOAuthAccessToken(accessToken)
-                .setOAuthAccessTokenSecret(accessTokenSecret)
+                .setOAuthAccessToken(user.twitterAuthToken)
+                .setOAuthAccessTokenSecret(user.twitterAuthSecret)
         val config = builder.build()
         val factory = TwitterFactory(config)
         twitter = factory.instance
@@ -70,17 +67,12 @@ class TwitterHandler(private val context: Context) {
     }
 
     fun hasLinkedAccount(): Boolean {
-        val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
-        val accessToken = sharedPref.getString("twitter_oauth_token", "")
-        val accessTokenSecret = sharedPref.getString("twitter_oauth_token_secret", "")
-
-        return !(accessToken == "" || accessTokenSecret == "")
+        return !(user.twitterAuthToken == null || user.twitterAuthSecret == null)
     }
 
     fun unlinkAccount() {
-        val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
-        sharedPref.edit().putString("twitter_oauth_token", "").apply()
-        sharedPref.edit().putString("twitter_oauth_token_secret", "").apply()
+        val dbHandler = DatabaseHandler()
+        dbHandler.saveTwitterLink(user, null, null, context)
         twitter = null
     }
 
