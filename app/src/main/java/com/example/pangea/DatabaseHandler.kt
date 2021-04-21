@@ -19,4 +19,12 @@ class DatabaseHandler {
         return user
     }
 
+    public fun getAllPosts(userEmail: String, context: Context): List<Post?> {
+        return listOf()
+    }
+
+    public fun addPost(userEmail: String, message: String, image: String?, platforms: List<Boolean>, context: Context): Post? {
+        return null
+    }
+
 }

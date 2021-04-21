@@ -18,4 +18,6 @@ class Posts : Fragment()
     ): View? {
         return inflater.inflate(R.layout.posts_view, container, false)
     }
+
+    fun fetchPosts() {}
 }
