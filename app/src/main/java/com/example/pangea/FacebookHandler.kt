@@ -1,55 +1,65 @@
 package com.example.pangea
 
 import android.content.Context
+import android.util.Log
 import android.widget.Button
 import com.facebook.*
-import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
-import twitter4j.TwitterFactory
-import twitter4j.conf.ConfigurationBuilder
 
 
 class FacebookHandler(private val context: Context)
 {
     private var facebook: FacebookSdk? = null;
+    var callbackManager: CallbackManager = CallbackManager.Factory.create();
 
     fun getAccessToken(): AccessToken
     {
         return AccessToken.getCurrentAccessToken();
     }
 
-    fun isLoggedIn(access_token: AccessToken): Boolean
+    fun isLoggedIn(): Boolean
     {
-        return !access_token.isExpired;
+        val accessToken = AccessToken.getCurrentAccessToken()
+        return accessToken != null && !accessToken.isExpired
+    }
+
+    fun hasLinkedAccount(): Boolean
+    {
+        val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
+        val accessToken = sharedPref.getString("facebook_oauth_token", "")
+        return accessToken != ""
     }
 
     // onclickListener
     fun loginFacebook(facebook_login_button: LoginButton)
     {
-        val callbackManager = CallbackManager.Factory.create();
+        Log.d("TAG", "LoginFacebook")
         facebook_login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
                 override fun onSuccess(result: LoginResult)
                 {
-                    // access_token
+                    Log.d("TAG", "Success Login")
                     val access_token = result.accessToken;
                     AccessToken.setCurrentAccessToken(access_token); // set Current accessToken
-                    TODO("Not yet implemented")
+                    val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
+                    sharedPref.edit().putString("facebook_oauth_token", access_token?.token ?: "").apply()
                 }
 
                 override fun onCancel()
                 {
-                    TODO("Not yet implemented")
+                    // user closes login popup, safe to ignore
+                    Log.d("TAG", "Cancel Login");
                 }
 
                 override fun onError(error: FacebookException?)
                 {
+                    Log.d("TAG", "Error with Facebook Login: " + error.toString());
+                    //Toast.makeText(context, "error: "+error.toString(), Toast.LENGTH_LONG).show();
                     TODO("Not yet implemented")
                 }
 
             });
-        //manageLogin();
     }
 
     fun logoutFacebook(facebook_logout_btn: Button)
@@ -61,41 +71,13 @@ class FacebookHandler(private val context: Context)
                     "/me/permissions/", null, HttpMethod.DELETE,
                     GraphRequest.Callback {
                         AccessToken.setCurrentAccessToken(null);
-                        LoginManager.getInstance().logOut();
-                        finish();
+                        val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
+                        sharedPref.edit().putString("facebook_oauth_token", "").apply()
+                        //finish();
                     })
             }
         }
     }
-
-    /*fun manageLogin()
-    {
-        val callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onSuccess(result: LoginResult?) {
-                    // manage login
-                    TODO("Not yet implemented")
-                }
-
-                override fun onCancel() {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onError(error: FacebookException?) {
-                    TODO("Not yet implemented")
-                }
-
-                val access_token = AccessToken.getCurrentAccessToken();
-
-            });
-
-        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            callbackManager.onActivityResult(requestCode, resultCode, data)
-            super.onActivityResult(requestCode, resultCode, data)
-            callbackManager.onActivityResult(requestCode, resultCode, data)
-        }
-
-    }*/
 
 
 }

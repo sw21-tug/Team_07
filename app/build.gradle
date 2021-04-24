@@ -3,8 +3,14 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
 }
+//test
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+androidExtensions {
+    experimental = true
+}
 
 android {
     compileSdkVersion 30

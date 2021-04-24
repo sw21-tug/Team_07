@@ -13,7 +13,6 @@
         android:theme="@style/Theme.Pangea">
         <activity android:name=".AccountsActivity"></activity>
         <activity android:name=".MainActivity"></activity>
-
         <activity android:name=".RegisterAndLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
