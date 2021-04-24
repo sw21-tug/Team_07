@@ -48,11 +48,11 @@ class AccountsActivity : AppCompatActivity(), TwitterHandler.ITwitterCallback {
         login_button_facebook.setOnClickListener {
             if(fHandler.isLoggedIn())
             {
-                fHandler.logoutFacebook(login_button_facebook);
+                fHandler.logoutFacebook();
             }
             else
             {
-                fHandler.loginFacebook(login_button_facebook);
+                fHandler.loginFacebook();
                 Toast.makeText(this, "logging in", Toast.LENGTH_LONG).show();
             }
         }
