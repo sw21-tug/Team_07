@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Button
 import com.facebook.*
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 
@@ -32,10 +33,11 @@ class FacebookHandler(private val context: Context)
     }
 
     // onclickListener
-    fun loginFacebook(facebook_login_button: LoginButton)
+    fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
-        facebook_login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult>
+
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
                 override fun onSuccess(result: LoginResult)
                 {
@@ -62,20 +64,19 @@ class FacebookHandler(private val context: Context)
             });
     }
 
-    fun logoutFacebook(facebook_logout_btn: Button)
+    fun logoutFacebook()
     {
-        facebook_logout_btn.setOnClickListener {
-            if(AccessToken.getCurrentAccessToken() != null)
-            {
-                GraphRequest(AccessToken.getCurrentAccessToken(),
-                    "/me/permissions/", null, HttpMethod.DELETE,
-                    GraphRequest.Callback {
-                        AccessToken.setCurrentAccessToken(null);
-                        val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
-                        sharedPref.edit().putString("facebook_oauth_token", "").apply()
-                        //finish();
-                    })
-            }
+        val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
+        sharedPref.edit().putString("facebook_oauth_token", "").apply()
+        if(AccessToken.getCurrentAccessToken() != null)
+        {
+            GraphRequest(AccessToken.getCurrentAccessToken(),
+                "/me/permissions/", null, HttpMethod.DELETE,
+                GraphRequest.Callback {
+                    AccessToken.setCurrentAccessToken(null);
+                    LoginManager.getInstance().logOut()
+                    //finish();
+                })
         }
     }
 
