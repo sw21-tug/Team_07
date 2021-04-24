@@ -26,14 +26,17 @@ class MainActivity : AppCompatActivity()
         /*ATTENTION - START
         * This starts the activity dashboard, if you don't need a button after logging in
         * just delete the Button and use the intent and startActivity() like shown below. */
-        val accounts: Button = findViewById(R.id.dashboard)
+       /* val accounts: Button = findViewById(R.id.dashboard)
         accounts.setOnClickListener {
             val intent = Intent(this@MainActivity, DashboardsActivity::class.java)
             startActivity(intent)
-        }
+        }*/
         /*ATTENTION - END*/
 
-
+        val loginbtn = findViewById<LoginButton>(R.id.login_button_facebook);
+        loginbtn.setOnClickListener {
+            FacebookHandler.loginFacebook(loginbtn);
+        }
 
 
 

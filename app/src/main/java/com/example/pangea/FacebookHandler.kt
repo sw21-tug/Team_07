@@ -1,24 +1,29 @@
 package com.example.pangea
 
 import android.content.Context
-import android.widget.Toast
-import com.facebook.*
-import com.facebook.login.LoginResult
-import android.content.Intent
-import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
+import twitter4j.TwitterFactory
+import twitter4j.conf.ConfigurationBuilder
 
 
-class FacebookHandler(private val app_context: Context?) : AppCompatActivity()
+class FacebookHandler(private val context: Context)
 {
+    private var facebook: FacebookSdk? = null;
+
+    fun getAccessToken(): AccessToken
+    {
+        return AccessToken.getCurrentAccessToken();
+    }
+
+    fun isLoggedIn(access_token: AccessToken): Boolean
+    {
+        return !access_token.isExpired;
+    }
+
     // onclickListener
     fun loginFacebook(facebook_login_button: LoginButton)
     {
@@ -27,6 +32,9 @@ class FacebookHandler(private val app_context: Context?) : AppCompatActivity()
         {
                 override fun onSuccess(result: LoginResult)
                 {
+                    // access_token
+                    val access_token = result.accessToken;
+                    AccessToken.setCurrentAccessToken(access_token); // set Current accessToken
                     TODO("Not yet implemented")
                 }
 
@@ -41,7 +49,7 @@ class FacebookHandler(private val app_context: Context?) : AppCompatActivity()
                 }
 
             });
-        manageLogin();
+        //manageLogin();
     }
 
     fun logoutFacebook(facebook_logout_btn: Button)
@@ -60,7 +68,7 @@ class FacebookHandler(private val app_context: Context?) : AppCompatActivity()
         }
     }
 
-    fun manageLogin()
+    /*fun manageLogin()
     {
         val callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -87,7 +95,7 @@ class FacebookHandler(private val app_context: Context?) : AppCompatActivity()
             callbackManager.onActivityResult(requestCode, resultCode, data)
         }
 
-    }
+    }*/
 
 
 }

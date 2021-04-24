@@ -23,7 +23,8 @@ import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import twitter4j.conf.ConfigurationBuilder
 
-class TwitterHandler(private val context: Context) {
+class TwitterHandler(private val context: Context)
+{
 
     private var twitter: Twitter? = null
 
