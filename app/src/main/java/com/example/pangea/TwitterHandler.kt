@@ -12,6 +12,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,11 +23,12 @@ import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import twitter4j.conf.ConfigurationBuilder
 
-class TwitterHandler(private val context: Context) {
+class TwitterHandler(private val context: Context)
+{
 
     private var twitter: Twitter? = null
 
-    fun initTwitterApi(accToken:AccessToken?) {
+    fun initTwitterApi(accToken: twitter4j.auth.AccessToken?) {
 
         val sharedPref = context.getSharedPreferences("twitter", Context.MODE_PRIVATE)
         sharedPref.edit().putString("twitter_oauth_token", accToken?.token ?: "").apply()
