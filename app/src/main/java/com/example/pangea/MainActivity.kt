@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         /*ATTENTION - START
         * This starts the activity dashboard, if you don't need a button after logging in
         * just delete the Button and use the intent and startActivity() like shown below. */
