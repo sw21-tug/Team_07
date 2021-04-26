@@ -24,11 +24,15 @@ class DashboardsActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboards)
 
+
+        val userEmail = intent.getStringExtra("loggedInUserMail").toString()
+        val user = DatabaseHandler().getRegisteredUser(userEmail, this)
+
         tabLayout = findViewById(R.id.dashboard_bar)
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         val adapter = SwipeAdapter(this, supportFragmentManager,
-            tabLayout.tabCount)
+            tabLayout.tabCount, user)
 
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
