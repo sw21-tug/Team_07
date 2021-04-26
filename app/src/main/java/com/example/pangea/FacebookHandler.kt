@@ -11,13 +11,7 @@ import com.facebook.login.widget.LoginButton
 
 class FacebookHandler(private val context: Context)
 {
-    private var facebook: FacebookSdk? = null;
     var callbackManager: CallbackManager = CallbackManager.Factory.create();
-
-    fun getAccessToken(): AccessToken
-    {
-        return AccessToken.getCurrentAccessToken();
-    }
 
     fun isLoggedIn(): Boolean
     {
@@ -61,7 +55,7 @@ class FacebookHandler(private val context: Context)
                     TODO("Not yet implemented")
                 }
 
-            });
+        });
     }
 
     fun logoutFacebook()
@@ -75,10 +69,7 @@ class FacebookHandler(private val context: Context)
                 GraphRequest.Callback {
                     AccessToken.setCurrentAccessToken(null);
                     LoginManager.getInstance().logOut()
-                    //finish();
                 })
         }
     }
-
-
 }

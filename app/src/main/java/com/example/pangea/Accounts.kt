@@ -22,5 +22,4 @@ class Accounts : Fragment()
         return inflater.inflate(R.layout.account_view, container, false)
     }
 
-
 }

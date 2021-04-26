@@ -15,8 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 @Suppress("DEPRECATION")
 class AccountsActivity : AppCompatActivity(), TwitterHandler.ITwitterCallback {
-
-
     lateinit var twitterDialog: Dialog
     lateinit var tHandler: TwitterHandler
     lateinit var fHandler: FacebookHandler

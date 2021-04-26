@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-
     <Button
         android:id="@+id/dashboard"
         android:layout_width="wrap_content"
