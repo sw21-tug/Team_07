@@ -54,7 +54,6 @@ class FacebookHandler(private val context: Context)
                     //Toast.makeText(context, "error: "+error.toString(), Toast.LENGTH_LONG).show();
                     TODO("Not yet implemented")
                 }
-
         });
     }
 
