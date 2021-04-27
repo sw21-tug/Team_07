@@ -5,10 +5,6 @@ import androidx.room.Dao
 
 @Dao
 interface UserDao {
-
-    @Update
-    fun updateUser(user: User)
-
     @Query("SELECT * FROM users")
     fun getAll(): List<User>
 
