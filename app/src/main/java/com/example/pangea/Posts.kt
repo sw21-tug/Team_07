@@ -16,6 +16,8 @@ class Posts : Fragment()
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // get all posts for user in db "test.user@test.com"
+        // show them in posts tab
         return inflater.inflate(R.layout.posts_view, container, false)
     }
 

@@ -38,4 +38,8 @@ class DatabaseHandler {
         postDao.insertOne(post)
         return 0
     }
+
+    fun deletePost(userEmail: String, message: String, image: String?, accountType: String, context: Context) {
+
+    }
 }
