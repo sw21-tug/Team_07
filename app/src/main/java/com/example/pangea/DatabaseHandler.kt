@@ -7,7 +7,7 @@ class DatabaseHandler {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword,
-                twitterAuthToken = "", twitterAuthSecret = ""
+                twitterAuthToken = null, twitterAuthSecret = null
             ))
             return 0
 

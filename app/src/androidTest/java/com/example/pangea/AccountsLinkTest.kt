@@ -2,6 +2,8 @@ package com.example.pangea
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -27,6 +29,8 @@ class AccountsLinkTest {
             }
         }
 
+    var resources: Resources = InstrumentationRegistry.getInstrumentation().targetContext.resources
+
     @Test
     fun testTwitterLinkVisibleInAccountsFragment() {
         val email = "test.user@test.com"
@@ -44,7 +48,7 @@ class AccountsLinkTest {
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.twitter_login_btn)).check(matches(isDisplayed()))
-        onView(withId(R.id.twitter_login_btn)).check(matches(withText("Login with Twitter")))
+        onView(withId(R.id.twitter_login_btn)).check(matches(withText(resources.getString(R.string.twitter_link_text))))
     }
 
     @Test
@@ -65,7 +69,7 @@ class AccountsLinkTest {
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.twitter_login_btn)).check(matches(isDisplayed()))
-        onView(withId(R.id.twitter_login_btn)).check(matches(withText("Unlink twitter account")))
+        onView(withId(R.id.twitter_login_btn)).check(matches(withText(resources.getString(R.string.twitter_unlink_text))))
     }
 
 

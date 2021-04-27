@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.account_view.*
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,7 @@ import kotlinx.coroutines.withContext
 /* This class controls the logic in the "Accounts"-Tab
    New Methods can be implemented as needed.
    Layout-File: account_view.xml */
-class Accounts(private var user: User) : Fragment(), TwitterHandler.ITwitterCallback
+class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitterCallback
 {
     //creates the view (account_view.xml)
     lateinit var twitterDialog: Dialog
@@ -38,22 +39,21 @@ class Accounts(private var user: User) : Fragment(), TwitterHandler.ITwitterCall
         val context = activity as AppCompatActivity
         tHandler = TwitterHandler(context, user)
         if(tHandler.hasLinkedAccount()) {
-            twitter_login_btn.text = "Unlink twitter account"
+            twitter_login_btn.text = getString(R.string.twitter_unlink_text)
         }
         else{
-            twitter_login_btn.text = "Login with Twitter"
+            twitter_login_btn.text = getString(R.string.twitter_link_text)
         }
 
         twitter_login_btn.setOnClickListener {
             if(tHandler.hasLinkedAccount()) {
                 tHandler.unlinkAccount()
-                twitter_login_btn.text = "Login with Twitter"
+                twitter_login_btn.text =getString(R.string.twitter_link_text)
             }
             else {
                 setupDialogAndRequestAuthToken()
             }
         }
-
 
         return view
     }
@@ -76,7 +76,7 @@ class Accounts(private var user: User) : Fragment(), TwitterHandler.ITwitterCall
     }
 
     private fun setupTwitterWebviewDialog(url: String): Dialog {
-        twitterDialog = Dialog(activity?.applicationContext!!)
+        twitterDialog = Dialog(requireContext())
         val webView = WebView(activity?.applicationContext!!)
         webView.isVerticalScrollBarEnabled = false
         webView.isHorizontalScrollBarEnabled = false

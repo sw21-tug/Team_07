@@ -30,5 +30,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login_title">Register or Login</string>
 
-
+    <!-- Strings related to twitter -->
+    <string name="twitter_link_text">Login with Twitter</string>
+    <string name="twitter_unlink_text">Unlink twitter account</string>
 </resources>
