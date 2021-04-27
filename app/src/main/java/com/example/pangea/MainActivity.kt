@@ -11,7 +11,7 @@ import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
-import kotlinx.android.synthetic.main.activity_accounts.*
+
 
 @Suppress("DEPRECATION")
 

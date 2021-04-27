@@ -22,24 +22,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button253"
+        android:id="@+id/twitter_login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.805" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="294dp"
-        android:layout_height="276dp"
-        android:text="@string/lorem_ipsum"
+        android:layout_centerInParent="true"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:text="@string/twitter_link_text"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:textAllCaps="false"
+        android:text="@string/facebook_link_text"
+        android:id="@+id/login_button_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="428dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.facebook.login.widget.LoginButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hidden_facebook_button"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="428dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
