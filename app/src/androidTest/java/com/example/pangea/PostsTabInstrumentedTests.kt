@@ -49,4 +49,27 @@ class PostsTabInstrumentedTests {
         register.deletePost(email, message, image, "Facebook", context)
         PostDatabase.destroyInstance()
     }
+
+    @Test
+    fun multiplePosts() {
+        rule.scenario
+        val email = "test.user@test.com"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val messageFB = "testFB"
+        val messageTwitter = "testTwitter"
+        val image = null
+        register.addFBPost(email, messageFB, image, context)
+        register.addTwitterPost(email, messageTwitter, image, context)
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        // if we only inserted one post, only one post should be displayed in the posts tab
+        onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(hasChildCount(2)))
+
+        register.deletePost(email, messageFB, image, "Facebook", context)
+        register.deletePost(email, messageFB, image, "Twitter", context)
+
+        PostDatabase.destroyInstance()
+    }
 }
