@@ -28,24 +28,26 @@ class Posts : Fragment()
         // show them in posts tab
 
         val email = "test.user@test.com"
-        val register = com.example.pangea.DatabaseHandler()
+        val register = DatabaseHandler()
         val posts = activity?.let { register.getAllPosts(email, it.applicationContext) }
-
 
         val view = inflater.inflate(R.layout.posts_view, container, false)
         val linearLayout : LinearLayout = view.findViewById(R.id.linearLayout)
-        val textView = TextView(activity?.applicationContext)
-        textView.text = email
-        val textid = 10
-        textView.id = textid
-        val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        textView.layoutParams = params
-        textView.textSize = 24F
-        textView.setTextColor(Color.RED)
-        linearLayout.addView(textView)
+
+        if (posts != null) {
+            for (post in posts) {
+                val textView = TextView(activity?.applicationContext)
+                textView.text = post.message
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                textView.layoutParams = params
+                textView.textSize = 24F
+                textView.setTextColor(Color.RED)
+                linearLayout.addView(textView)
+            }
+        }
 
         return view
     }

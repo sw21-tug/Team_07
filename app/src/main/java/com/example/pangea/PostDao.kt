@@ -21,4 +21,10 @@ interface PostDao {
 
     @Delete
     fun delete(post: Post)
+
+    @Query("DELETE FROM posts WHERE email = :email AND message = :message AND facebook = 1")
+    fun deleteFBPostByUserIdWitText(email: String, message: String)
+
+    @Query("DELETE FROM posts WHERE email = :email AND message = :message AND twitter = 1")
+    fun deleteTwitterPostByUserIdWitText(email: String, message: String)
 }

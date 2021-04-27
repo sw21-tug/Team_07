@@ -39,7 +39,15 @@ class DatabaseHandler {
         return 0
     }
 
+    //add image if needed
     fun deletePost(userEmail: String, message: String, image: String?, accountType: String, context: Context) {
-
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        if(accountType.equals("Facebook")) {
+            postDao.deleteFBPostByUserIdWitText(userEmail, message)
+        }
+        else if(accountType.equals("Twitter")) {
+            postDao.deleteTwitterPostByUserIdWitText(userEmail, message)
+        }
     }
 }
