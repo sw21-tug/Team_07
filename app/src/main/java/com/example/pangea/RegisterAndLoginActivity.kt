@@ -1,6 +1,7 @@
 package com.example.pangea
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -33,7 +34,9 @@ class RegisterAndLoginActivity : AppCompatActivity() {
             val register = DatabaseHandler()
             val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
             if (user != null && user.password.equals(password.toString())) {
-                //TODO: CHange VIew
+                val intent = Intent(this, DashboardsActivity::class.java)
+                intent.putExtra("loggedInUserMail", user.email)
+                startActivity(intent)
             } else
             {
                 val myToast = Toast.makeText(applicationContext,"Login failed" ,Toast.LENGTH_SHORT)

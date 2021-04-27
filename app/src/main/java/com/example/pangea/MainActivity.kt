@@ -1,11 +1,19 @@
 package com.example.pangea
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 
+
+import android.widget.Button
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
+import kotlinx.android.synthetic.main.activity_accounts.*
+
+@Suppress("DEPRECATION")
 
 class MainActivity : AppCompatActivity()
 {

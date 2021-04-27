@@ -1,12 +1,7 @@
 package com.example.pangea
 
-import android.annotation.SuppressLint
-import android.annotation.TargetApi
-import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -15,18 +10,16 @@ import android.webkit.WebViewClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
-import twitter4j.auth.AccessToken
 import twitter4j.conf.ConfigurationBuilder
 
 class TwitterHandler(private val context: Context, private val user: User) {
 
+
     private var twitter: Twitter? = null
 
-    fun initTwitterApi(accToken:AccessToken?) {
+    fun initTwitterApi(accToken: twitter4j.auth.AccessToken?) {
 
         val dbHandler = DatabaseHandler()
         dbHandler.saveTwitterLink(user, accToken?.token, accToken?.tokenSecret, context)
