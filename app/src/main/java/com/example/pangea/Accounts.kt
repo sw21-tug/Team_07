@@ -11,9 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import com.facebook.FacebookSdk
 import kotlinx.android.synthetic.main.account_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,16 +25,23 @@ import kotlinx.coroutines.withContext
 /* This class controls the logic in the "Accounts"-Tab
    New Methods can be implemented as needed.
    Layout-File: account_view.xml */
-class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitterCallback
+class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHandler.IFacebookCallback
 {
     //creates the view (account_view.xml)
     lateinit var twitterDialog: Dialog
     lateinit var tHandler: TwitterHandler
     lateinit var twitter_login_btn: Button
+    lateinit var fHandler: FacebookHandler
+    lateinit var login_button_facebook: Button
+    lateinit var hidden_facebook_button: Button
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
+
+        FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
+        FacebookSdk.sdkInitialize(context);
 
         val view = inflater.inflate(R.layout.account_view, container, false)
         twitter_login_btn = view.findViewById(R.id.twitter_login_btn)
@@ -54,6 +63,34 @@ class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitt
                 setupDialogAndRequestAuthToken()
             }
         }
+
+        fHandler = FacebookHandler(context, user)
+        fHandler.initApi(this)
+        login_button_facebook = view.findViewById(R.id.login_button_facebook)
+        hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
+        if(fHandler.hasLinkedAccount())
+        {
+            login_button_facebook.text = getString(R.string.facebook_unlink_text)
+        }
+        else
+        {
+            login_button_facebook.text = getString(R.string.facebook_link_text)
+        }
+        login_button_facebook.setOnClickListener {
+            hidden_facebook_button.performClick()
+        }
+
+        hidden_facebook_button.setOnClickListener {
+            if(fHandler.isLoggedIn())
+            {
+                fHandler.logoutFacebook();
+            }
+            else
+            {
+                fHandler.loginFacebook();
+            }
+        }
+
 
         return view
     }
@@ -93,6 +130,24 @@ class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitt
             twitter_login_btn.text =  "Unlink twitter account"
             Log.d("TWITTER-Handler", "Logged in user and linked account")
         }
+    }
+
+    // needed for Facebook
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        fHandler.callbackManager.onActivityResult(requestCode, resultCode, data)
+        if(fHandler.hasLinkedAccount())
+        {
+            login_button_facebook.text = getString(R.string.facebook_unlink_text)
+        }
+        else
+        {
+            login_button_facebook.text = getString(R.string.facebook_link_text)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun loggedOut() {
+        login_button_facebook.text = getString(R.string.facebook_link_text)
     }
 
 }

@@ -19,9 +19,11 @@ class FacebookTests {
 
     @Test
     fun testFacebookLink() {
+        FacebookSdk.setApplicationId("171191854853298")
         val email = "test.user@test.com"
         val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
+        FacebookSdk.sdkInitialize(context)
         val dbHandler = DatabaseHandler()
         dbHandler.registerUser(email, pw, context)
         var user = dbHandler.getRegisteredUser(email, context)
@@ -31,7 +33,7 @@ class FacebookTests {
         val facebookOauthToken = "testtoken"
         dbHandler.saveFacebookLink(user, facebookOauthToken, context)
 
-        val fbHandler = FacebookHandler(context)
+        val fbHandler = FacebookHandler(context, user)
         val hasAccount = fbHandler.hasLinkedAccount()
         assertEquals(hasAccount, true)
     }
@@ -52,7 +54,7 @@ class FacebookTests {
         val facebookOauthToken = "testtoken"
         dbHandler.saveFacebookLink(user, facebookOauthToken, context)
 
-        val fbHandler = FacebookHandler(context)
+        val fbHandler = FacebookHandler(context, user)
         var hasAccount = fbHandler.hasLinkedAccount()
         assertEquals(hasAccount, true)
 

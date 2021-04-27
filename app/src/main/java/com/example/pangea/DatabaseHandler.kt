@@ -7,7 +7,7 @@ class DatabaseHandler {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword,
-                twitterAuthToken = null, twitterAuthSecret = null
+                twitterAuthToken = null, twitterAuthSecret = null, facebookAuthToken = null
             ))
             return 0
 
@@ -27,8 +27,10 @@ class DatabaseHandler {
         db.userDao().updateUser(user)
     }
 
-    fun saveFacebookLink(user: User, facebookOauthToken: String, context: Context?) {
-
+    fun saveFacebookLink(user: User, facebookOauthToken: String?, context: Context) {
+        val db = AppDatabase.getInstance(context)
+        user.facebookAuthToken = facebookOauthToken
+        db.userDao().updateUser(user)
     }
 
 }

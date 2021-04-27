@@ -19,6 +19,9 @@ data class User(
         var twitterAuthToken: String?,
 
         @ColumnInfo(name = "twitterAuthSecret")
-        var twitterAuthSecret: String?
+        var twitterAuthSecret: String?,
+
+        @ColumnInfo(name = "facebookAuthToken")
+        var facebookAuthToken: String?
 
 )

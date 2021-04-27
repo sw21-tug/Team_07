@@ -9,9 +9,25 @@ import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 
 
-class FacebookHandler(private val context: Context)
+class FacebookHandler(private val context: Context, private val user: User)
 {
+    lateinit var caller: IFacebookCallback
     var callbackManager: CallbackManager = CallbackManager.Factory.create();
+    var accessTokenTracker: AccessTokenTracker = object : AccessTokenTracker() {
+        override fun onCurrentAccessTokenChanged(
+                oldAccessToken: AccessToken?,
+                currentAccessToken: AccessToken?
+        ) {
+            if (currentAccessToken == null) {
+                caller.loggedOut()
+            }
+        }
+    }
+
+    fun  initApi(caller: IFacebookCallback){
+        this.caller = caller
+        accessTokenTracker.startTracking()
+    }
 
     fun isLoggedIn(): Boolean
     {
@@ -21,9 +37,7 @@ class FacebookHandler(private val context: Context)
 
     fun hasLinkedAccount(): Boolean
     {
-        val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
-        val accessToken = sharedPref.getString("facebook_oauth_token", "")
-        return accessToken != ""
+        return !(user.facebookAuthToken == null)
     }
 
     // onclickListener
@@ -37,9 +51,9 @@ class FacebookHandler(private val context: Context)
                 {
                     Log.d("TAG", "Success Login")
                     val access_token = result.accessToken;
+                    val dbHandler = DatabaseHandler()
+                    dbHandler.saveFacebookLink(user, access_token?.token, context)
                     AccessToken.setCurrentAccessToken(access_token); // set Current accessToken
-                    val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
-                    sharedPref.edit().putString("facebook_oauth_token", access_token?.token ?: "").apply()
                 }
 
                 override fun onCancel()
@@ -59,8 +73,8 @@ class FacebookHandler(private val context: Context)
 
     fun logoutFacebook()
     {
-        val sharedPref = context.getSharedPreferences("facebook", Context.MODE_PRIVATE)
-        sharedPref.edit().putString("facebook_oauth_token", "").apply()
+        val dbHandler = DatabaseHandler()
+        dbHandler.saveFacebookLink(user, null, context)
         if(AccessToken.getCurrentAccessToken() != null)
         {
             GraphRequest(AccessToken.getCurrentAccessToken(),
@@ -70,5 +84,10 @@ class FacebookHandler(private val context: Context)
                     LoginManager.getInstance().logOut()
                 })
         }
+    }
+
+    interface IFacebookCallback {
+
+        fun loggedOut()
     }
 }

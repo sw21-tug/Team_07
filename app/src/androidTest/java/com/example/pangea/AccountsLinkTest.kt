@@ -75,15 +75,18 @@ class AccountsLinkTest {
 
     @Test
     fun testFacebookLinkVisibleInAccountsFragment() {
+        FacebookSdk.setApplicationId("171191854853298")
         val email = "test.user@test.com"
         val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
+        FacebookSdk.sdkInitialize(context)
         val dbHandler = DatabaseHandler()
         dbHandler.registerUser(email, pw, context)
         var user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
-
+        val fbHandler = FacebookHandler(context, user)
+        fbHandler.logoutFacebook()
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
@@ -108,8 +111,8 @@ class AccountsLinkTest {
 
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
-        onView(withId(R.id.twitter_login_btn)).check(matches(isDisplayed()))
-        onView(withId(R.id.twitter_login_btn)).check(matches(withText(resources.getString(R.string.facebook_unlink_text))))
+        onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
+        onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_unlink_text))))
     }
 
 }
