@@ -12,17 +12,22 @@ Pangea aims to be a single app form which you can manage your social media posts
 | Role | Name |
 | ---- | ---- |
 | **Product Owner** | Mujkic, Ahmed |
-| **Scrum Master** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
-| **Developer** |  |
+| **Scrum Master** | Eitzinger, Sandro |
+| **Developer** | Dyonysio, Christina |
+| **Developer** | Schreiner, Sebastian |
+| **Developer** | Tufan, Milad |
+| **Developer** | Krisper, Lukas |
+| **Developer** | Rindler, Maximilian |
+| **Developer** | Tufan, Tamin |
+| **Developer** | Rossmann, Daniel |
+| **Developer** | Hirschbichler, Christian |
 
 
 ## Implemented Features
 
-**TODO** 
+P1 - Registration
+P2 - Login
+P3 - Socal media logins Twitter
+P10 - Socal media logins Facebook
+P14 - Accounts tab
+P4 - Settings

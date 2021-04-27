@@ -1,6 +1,7 @@
 package com.example.pangea
 
 import androidx.room.*
+import androidx.room.Dao
 
 @Dao
 interface UserDao {
@@ -16,6 +17,9 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE email IS (:email)")
     fun getUserByEmail(email: String): User
+
+    @Update
+    fun updateUser(vararg user : User)
 
     @Insert
     fun insertAll(vararg users: User)

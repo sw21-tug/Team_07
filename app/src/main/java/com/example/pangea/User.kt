@@ -6,12 +6,24 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "users")
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    val uid: Int = 0,
+        @PrimaryKey(autoGenerate = true)
+        val uid: Int = 0,
 
-    @ColumnInfo(name = "email")
-    val email: String?,
+        @ColumnInfo(name = "email")
+        val email: String?,
 
-    @ColumnInfo(name = "password")
-    var password: String?
+        @ColumnInfo(name = "password")
+        val password: String?,
+
+        @ColumnInfo(name = "twitterAuthToken")
+        var twitterAuthToken: String?,
+
+        @ColumnInfo(name = "twitterAuthSecret")
+        var twitterAuthSecret: String?,
+
+        @ColumnInfo(name = "facebookAuthToken")
+        var facebookAuthToken: String?
+
+        @ColumnInfo(name = "password")
+        var password: String?
 )

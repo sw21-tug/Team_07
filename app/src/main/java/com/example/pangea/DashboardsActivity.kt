@@ -19,17 +19,23 @@ class DashboardsActivity : AppCompatActivity()
 {
     lateinit var tabLayout : TabLayout
     lateinit var swipe : ViewPager
+    lateinit var accountsTab : Accounts
 
     //creates the view
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboards)
 
+
+        val userEmail = intent.getStringExtra("loggedInUserMail").toString()
+        val user = DatabaseHandler().getRegisteredUser(userEmail, this)
+
         tabLayout = findViewById(R.id.dashboard_bar)
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        accountsTab = Accounts(user)
         val adapter = SwipeAdapter(this, supportFragmentManager,
-            tabLayout.tabCount)
+            tabLayout.tabCount, accountsTab)
 
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
@@ -48,5 +54,11 @@ class DashboardsActivity : AppCompatActivity()
                 startActivity(intent)
         }
 
+    }
+
+    // needed for Facebook
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        accountsTab.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

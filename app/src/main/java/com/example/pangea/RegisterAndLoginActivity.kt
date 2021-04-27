@@ -1,10 +1,8 @@
 package com.example.pangea
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -24,7 +22,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
 
         registerButton.setOnClickListener {
             registerButton.hideKeyboard()
-            val register = com.example.pangea.DatabaseHandler()
+            val register = DatabaseHandler()
             register.registerUser(userEmail.toString(), password.toString(), applicationContext)
             val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
             myToastSuccess.show()
@@ -33,10 +31,11 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.loginButton);
         loginButton.setOnClickListener {
             loginButton.hideKeyboard()
-            val register = com.example.pangea.DatabaseHandler()
+            val register = DatabaseHandler()
             val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
             if (user != null && user.password.equals(password.toString())) {
                 val intent = Intent(this, DashboardsActivity::class.java)
+                intent.putExtra("loggedInUserMail", user.email)
                 startActivity(intent)
             } else
             {
