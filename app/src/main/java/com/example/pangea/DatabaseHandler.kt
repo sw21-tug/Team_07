@@ -20,6 +20,14 @@ class DatabaseHandler {
         return user
     }
 
+    public fun changePassword(userEmail: String, userpassword: String, context: Context)
+    {
+        val user = getRegisteredUser(userEmail, context)
+        user.password = userpassword
+        val db = AppDatabase.getInstance(context)
+        val userDao = db.userDao()
+        userDao.updateUser(user)
+
     fun saveTwitterLink(user: User, twitterAuthToken: String?, twitterAuthTokenSecret: String?, context: Context) {
         val db = AppDatabase.getInstance(context)
         user.twitterAuthToken = twitterAuthToken
