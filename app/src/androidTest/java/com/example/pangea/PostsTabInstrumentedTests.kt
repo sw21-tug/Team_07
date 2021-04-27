@@ -8,8 +8,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -29,9 +28,12 @@ import java.util.regex.Pattern.matches
  */
 @RunWith(AndroidJUnit4::class)
 class PostsTabInstrumentedTests {
+    // launch desired activity
+    @get:Rule var rule = ActivityScenarioRule(DashboardsActivity::class.java)
 
     @Test
     fun basicPost() {
+        rule.scenario
         val email = "test.user@test.com"
         val register = DatabaseHandler()
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -42,7 +44,7 @@ class PostsTabInstrumentedTests {
         assertEquals("com.example.pangea", appContext.packageName)
 
         // if we only inserted one post, only one post should be displayed in the posts tab
-        onView(withId(R.id.posts_tab)).check(ViewAssertions.matches(withText(message)))
+        onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(hasChildCount(1)))
 
         register.deletePost(email, message, image, "Facebook", context)
         PostDatabase.destroyInstance()
