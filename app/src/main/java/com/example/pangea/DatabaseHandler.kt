@@ -27,4 +27,8 @@ class DatabaseHandler {
         db.userDao().updateUser(user)
     }
 
+    fun saveFacebookLink(user: User, facebookOauthToken: String, context: Context?) {
+
+    }
+
 }

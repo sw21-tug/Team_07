@@ -35,4 +35,8 @@
     <!-- Strings related to twitter -->
     <string name="twitter_link_text">Login with Twitter</string>
     <string name="twitter_unlink_text">Unlink twitter account</string>
+
+    <!-- Strings related to twitter -->
+    <string name="facebook_link_text">Login with Facebook</string>
+    <string name="facebook_unlink_text">Unlink facebook account</string>
 </resources>
