@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -47,12 +46,6 @@ class DashboardsActivity : AppCompatActivity()
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-
-        val settingsButton = findViewById<Button>(R.id.settingsButton);
-        settingsButton.setOnClickListener {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-        }
 
     }
 
