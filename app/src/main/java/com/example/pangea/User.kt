@@ -12,9 +12,6 @@ data class User(
         @ColumnInfo(name = "email")
         val email: String?,
 
-        @ColumnInfo(name = "password")
-        val password: String?,
-
         @ColumnInfo(name = "twitterAuthToken")
         var twitterAuthToken: String?,
 
@@ -22,7 +19,7 @@ data class User(
         var twitterAuthSecret: String?,
 
         @ColumnInfo(name = "facebookAuthToken")
-        var facebookAuthToken: String?
+        var facebookAuthToken: String?,
 
         @ColumnInfo(name = "password")
         var password: String?

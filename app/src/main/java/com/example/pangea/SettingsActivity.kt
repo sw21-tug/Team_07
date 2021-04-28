@@ -27,7 +27,6 @@ class SettingsActivity : AppCompatActivity() {
             changePassword.hideKeyboard()
         }
 
-
     }
 
     fun View.hideKeyboard() {
