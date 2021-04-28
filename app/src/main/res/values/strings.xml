@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Pangea</string>
+    <string name="facebook_app_id">171191854853298</string>
+    <string name="fb_login_protocol_scheme">fb171191854853298</string>
 
     <string name="accounts">accounts</string>
     <string name="bookmarked">bookmarked</string>
@@ -30,5 +32,11 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login_title">Register or Login</string>
 
+    <!-- Strings related to twitter -->
+    <string name="twitter_link_text">Login with Twitter</string>
+    <string name="twitter_unlink_text">Unlink twitter account</string>
 
+    <!-- Strings related to twitter -->
+    <string name="facebook_link_text">Login with Facebook</string>
+    <string name="facebook_unlink_text">Unlink facebook account</string>
 </resources>

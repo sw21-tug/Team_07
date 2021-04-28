@@ -41,4 +41,27 @@ class DatabaseHandlerTest {
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
     }
+
+    @Test
+    fun testStoreTwitterLinkInDB() {
+        val email = "test.user@test.com"
+        val pw = "1234abc"
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val dbHandler = com.example.pangea.DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals(email, user.email)
+        Assert.assertEquals(pw, user.password)
+
+        val twitterAuthToken = "token"
+        val twitterAuthTokenSecret = "secret"
+        dbHandler.saveTwitterLink(user, twitterAuthToken, twitterAuthTokenSecret, context)
+
+        user = dbHandler.getRegisteredUser(email, context)
+
+        Assert.assertEquals(twitterAuthToken, user.twitterAuthToken)
+        Assert.assertEquals(twitterAuthTokenSecret, user.twitterAuthSecret)
+
+
+    }
 }
