@@ -66,7 +66,7 @@ class PostsTabInstrumentedTests {
 
         mActivityTestRule.launchActivity(null)
         // if we only inserted one post, only one post should be displayed in the posts tab
-        onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(hasChildCount(1)))
+        onView(withId(R.id.linearLayoutPosts)).check(ViewAssertions.matches(hasChildCount(2)))
 
         register.deletePost(email, message, image, "Facebook", context)
         PostDatabase.destroyInstance()
@@ -88,7 +88,7 @@ class PostsTabInstrumentedTests {
 
         mActivityTestRule.launchActivity(null)
         // if we only inserted one post, only one post should be displayed in the posts tab
-        onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(hasChildCount(2)))
+        onView(withId(R.id.linearLayoutPosts)).check(ViewAssertions.matches(hasChildCount(4)))
 
         register.deletePost(email, messageFB, image, "Facebook", context)
         register.deletePost(email, messageTwitter, image, "Twitter", context)
