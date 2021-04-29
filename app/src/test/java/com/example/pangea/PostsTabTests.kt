@@ -26,7 +26,7 @@ class PostsTabTests {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val message = "test"
         val image = null
-        register.addFBPost(email, message, image, context)
+        register.addFBPost(email, message, image, context, "")
 
         val posts = register.getAllPosts(email, context)
         assertEquals(1, posts.size)

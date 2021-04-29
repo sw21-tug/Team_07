@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 /* This class controls the swipe-adapter used in
    DashboardsActivity for swiping and switching between tabs
    IMPORTANT: The names of the tabs are defined here (not in @strings)!*/
-internal class SwipeAdapter(var context: Context, fm: FragmentManager, var amount_tabs: Int, var accounts: Accounts) : FragmentPagerAdapter(fm)
+internal class SwipeAdapter(var context: Context, fm: FragmentManager, var amount_tabs: Int, var accounts: Accounts, var user: User) : FragmentPagerAdapter(fm)
 {
     val tabNames = arrayOf("Accounts", "Posts", "Bookmarked")
     override fun getItem(index: Int): Fragment
@@ -16,7 +16,7 @@ internal class SwipeAdapter(var context: Context, fm: FragmentManager, var amoun
         return when (index)
         {
             0 -> {accounts}
-            1 -> {Posts()}
+            1 -> {Posts(user)}
             2 -> {Bookmarked()}
             else -> getItem(index)
         }

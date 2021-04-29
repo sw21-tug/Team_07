@@ -39,18 +39,18 @@ class DatabaseHandler {
         return postDao.selectAllPostsForUser(userEmail)
     }
 
-    fun addFBPost(userEmail: String, message: String, image: String?, context: Context): Int {
+    fun addFBPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()
-        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, fbLikes = 0, fbComments = 0, fbShared = 0, retweets = 0, twitterComments = 0, twitterLikes = 0)
+        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, postID = id)
         postDao.insertOne(post)
         return 0
     }
 
-    fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context): Int {
+    fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()
-        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, fbLikes = 0, fbComments = 0, fbShared = 0, retweets = 0, twitterComments = 0, twitterLikes = 0)
+        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, postID = id)
         postDao.insertOne(post)
         return 0
     }
@@ -65,5 +65,13 @@ class DatabaseHandler {
         else if(accountType.equals("Twitter")) {
             postDao.deleteTwitterPostByUserIdWitText(userEmail, message)
         }
+    }
+
+    fun deletePostByID(postID: String, context: Context)
+    {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+
+        postDao.deletePostByID(postID)
     }
 }

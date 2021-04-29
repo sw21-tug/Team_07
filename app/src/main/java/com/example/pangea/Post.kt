@@ -21,24 +21,10 @@ data class Post(
     @ColumnInfo(name = "facebook")
     val facebook: Boolean,
 
-    @ColumnInfo(name = "fbLikes")
-    val fbLikes: Int?,
-
-    @ColumnInfo(name = "fbComments")
-    val fbComments: Int?,
-
-    @ColumnInfo(name = "fbShared")
-    val fbShared: Int?,
-
     @ColumnInfo(name = "twitter")
     val twitter: Boolean?,
 
-    @ColumnInfo(name = "twitterLikes")
-    val twitterLikes: Int?,
+    @ColumnInfo(name = "postID")
+    val postID: String?
 
-    @ColumnInfo(name = "twitterComments")
-    val twitterComments: Int?,
-
-    @ColumnInfo(name = "retweets")
-    val retweets: Int?
 )
