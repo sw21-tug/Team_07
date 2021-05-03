@@ -26,5 +26,20 @@ class SettingsTests {
         Assert.assertEquals(user.password, "1234")
     }
 
+    @Test
+    fun testSwitchLanguage(){
 
+        val email = "test.user@test.com"
+        val pw = "1234abc"
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val dbHandler = DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+
+        Assert.assertEquals(user.language, "de")
+        dbHandler.updateUserLanguage(user, "ru", context)
+        Assert.assertEquals(user.language, "ru")
+        dbHandler.updateUserLanguage(user,"de", context)
+        Assert.assertEquals(user.language, "de")
+    }
 }

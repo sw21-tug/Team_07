@@ -59,4 +59,26 @@ class SettingsInstrumentedTest {
         user = dbHandler.getRegisteredUser(email, context)
         assert(user.password.toString() == "1234")
     }
+
+    @Test
+    fun testSwitchLanguage() {
+        val email = "test.user@test.com"
+        val pw = "1234abc"
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val dbHandler = DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals(email, user.email)
+        Assert.assertEquals(pw, user.password)
+
+        mActivityTestRule.launchActivity(null)
+
+        onView(withText("Sprache")).check(matches(isDisplayed()))
+
+        onView(withId(androidx.preference.R.id.recycler_view))
+                .perform(actionOnItem<RecyclerView.ViewHolder>(
+                        hasDescendant(withText(R.string.change_language_title)), click()))
+
+        onView(withText("Язык")).check(matches(isDisplayed()))
+    }
 }

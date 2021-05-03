@@ -22,6 +22,9 @@ data class User(
         var twitterAuthSecret: String?,
 
         @ColumnInfo(name = "facebookAuthToken")
-        var facebookAuthToken: String?
+        var facebookAuthToken: String?,
+
+        @ColumnInfo(name = "language")
+        var language: String?
 
 )

@@ -46,5 +46,6 @@
 
     <!-- Password Preferences -->
     <string name="change_password_title">Change password</string>
+    <string name="change_language_title" />
 
 </resources>
