@@ -39,4 +39,12 @@
     <!-- Strings related to twitter -->
     <string name="facebook_link_text">Login with Facebook</string>
     <string name="facebook_unlink_text">Unlink facebook account</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="password_header">Password</string>
+
+    <!-- Password Preferences -->
+    <string name="change_password_title">Change password</string>
+
 </resources>

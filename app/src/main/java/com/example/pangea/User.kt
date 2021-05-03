@@ -13,7 +13,7 @@ data class User(
         val email: String?,
 
         @ColumnInfo(name = "password")
-        val password: String?,
+        var password: String?,
 
         @ColumnInfo(name = "twitterAuthToken")
         var twitterAuthToken: String?,

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_dashboards.*
 
 /* This class controls the overall dashboard view
    and the switching between the different Tabs
@@ -46,6 +47,12 @@ class DashboardsActivity : AppCompatActivity()
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+
+        btnSettings.setOnClickListener {
+            val settings = Intent(this, SettingsActivity::class.java)
+            settings.putExtra("loggedInUserMail", userEmail)
+            startActivity(settings)
+        }
 
     }
 
