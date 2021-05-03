@@ -21,13 +21,6 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.registerButton);
 
         registerButton.setOnClickListener {
-            /*registerButton.hideKeyboard()
-            val register = DatabaseHandler()
-            register.registerUser(userEmail.toString(), password.toString(), applicationContext)
-            val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
-            myToastSuccess.show()
-
-             */
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
@@ -36,8 +29,8 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             loginButton.hideKeyboard()
             val register = DatabaseHandler()
-            val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
-            if (user != null && user.password.equals(password.toString())) {
+            val user = register.getRegisteredUser(userEmail.text.toString(), applicationContext)
+            if (user != null && user.password.equals(password.text.toString())) {
                 val intent = Intent(this, DashboardsActivity::class.java)
                 intent.putExtra("loggedInUserMail", user.email)
                 startActivity(intent)

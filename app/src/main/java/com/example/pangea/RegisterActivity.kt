@@ -28,12 +28,12 @@ class RegisterActivity() : AppCompatActivity() {
         registerButton.setOnClickListener {
             registerButton.hideKeyboard()
             val register = DatabaseHandler()
-            register.registerUser(userEmail.toString(), password.toString(), applicationContext)
+            register.registerUser(userEmail.text.toString(), password.text.toString(), applicationContext)
             val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
             myToastSuccess.show()
-            val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
+            //val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
             val intent = Intent(this, DashboardsActivity::class.java)
-            intent.putExtra("loggedInUserMail", user.email)
+            intent.putExtra("loggedInUserMail", userEmail.text.toString())
             startActivity(intent)
         }
     }
