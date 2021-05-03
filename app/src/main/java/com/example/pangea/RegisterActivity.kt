@@ -9,11 +9,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
 
-class RegisterAndLoginActivity : AppCompatActivity() {
+class RegisterActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register_login)
+        setContentView(R.layout.activity_register)
 
         val userEmail = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -21,37 +26,19 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.registerButton);
 
         registerButton.setOnClickListener {
-            /*registerButton.hideKeyboard()
+            registerButton.hideKeyboard()
             val register = DatabaseHandler()
             register.registerUser(userEmail.toString(), password.toString(), applicationContext)
             val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
             myToastSuccess.show()
-
-             */
-            val intent = Intent(this, RegisterActivity::class.java)
+            val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
+            val intent = Intent(this, DashboardsActivity::class.java)
+            intent.putExtra("loggedInUserMail", user.email)
             startActivity(intent)
         }
-
-        val loginButton = findViewById<Button>(R.id.loginButton);
-        loginButton.setOnClickListener {
-            loginButton.hideKeyboard()
-            val register = DatabaseHandler()
-            val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
-            if (user != null && user.password.equals(password.toString())) {
-                val intent = Intent(this, DashboardsActivity::class.java)
-                intent.putExtra("loggedInUserMail", user.email)
-                startActivity(intent)
-            } else
-            {
-                val myToast = Toast.makeText(applicationContext,"Login failed" ,Toast.LENGTH_SHORT)
-                myToast.show()
-            }
-        }
     }
-
     fun View.hideKeyboard() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }
-
