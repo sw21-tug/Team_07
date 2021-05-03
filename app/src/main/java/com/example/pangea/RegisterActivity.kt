@@ -9,11 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 
 class RegisterActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
