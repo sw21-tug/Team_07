@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_dashboards.*
 /* This class controls the overall dashboard view
    and the switching between the different Tabs
    Layout-File: activity_dashboards.xml */
-class DashboardsActivity : AppCompatActivity()
+class DashboardsActivity : BaseActivity()
 {
     lateinit var tabLayout : TabLayout
     lateinit var swipe : ViewPager
@@ -26,16 +26,11 @@ class DashboardsActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboards)
 
-
-        val userEmail = intent.getStringExtra("loggedInUserMail").toString()
-        val user = DatabaseHandler().getRegisteredUser(userEmail, this)
-
         tabLayout = findViewById(R.id.dashboard_bar)
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        accountsTab = Accounts(user)
         val adapter = SwipeAdapter(this, supportFragmentManager,
-            tabLayout.tabCount, accountsTab)
+                tabLayout.tabCount)
 
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
@@ -50,7 +45,6 @@ class DashboardsActivity : AppCompatActivity()
 
         btnSettings.setOnClickListener {
             val settings = Intent(this, SettingsActivity::class.java)
-            settings.putExtra("loggedInUserMail", userEmail)
             startActivity(settings)
         }
 

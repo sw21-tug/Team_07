@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.preference.Preference
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
@@ -16,10 +17,13 @@ import androidx.test.espresso.action.ViewActions.typeTextIntoFocusedView
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import junit.framework.Assert
+import org.hamcrest.Matchers.anything
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 
@@ -73,12 +77,20 @@ class SettingsInstrumentedTest {
 
         mActivityTestRule.launchActivity(null)
 
-        onView(withText("Sprache")).check(matches(isDisplayed()))
+        onView(withText("Language")).check(matches(isDisplayed()))
 
         onView(withId(androidx.preference.R.id.recycler_view))
                 .perform(actionOnItem<RecyclerView.ViewHolder>(
-                        hasDescendant(withText(R.string.change_language_title)), click()))
+                        hasDescendant(withText("English")), click()))
 
-        onView(withText("Язык")).check(matches(isDisplayed()))
+        user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals("en", user.language)
+
+        onView(withText("Russian"))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .perform(click());
+
+        user = dbHandler.getRegisteredUser(email, context)
+        //Assert.assertEquals("ru", user.language)
     }
 }

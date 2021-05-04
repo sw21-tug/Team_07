@@ -8,7 +8,7 @@ class DatabaseHandler {
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword,
                 twitterAuthToken = null, twitterAuthSecret = null, facebookAuthToken = null,
-                language = "de"
+                language = "en"
             ))
             return 0
 
@@ -41,8 +41,9 @@ class DatabaseHandler {
         db.userDao().updateUser(user)
     }
 
-    fun updateUserLanguage(user:User, lang: String, context: Context) {
+    fun updateUserLanguage(userEmail: String, lang: String, context: Context) {
         val db = AppDatabase.getInstance(context)
+        val user = getRegisteredUser(userEmail, context)
         user.language = lang
         db.userDao().updateUser(user)
     }

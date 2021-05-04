@@ -34,7 +34,10 @@ class RegisterAndLoginActivity : AppCompatActivity() {
             val register = DatabaseHandler()
             val user = register.getRegisteredUser(userEmail.text.toString(), applicationContext)
             if (user != null && user.password.equals(password.text.toString())) {
+                val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("current_user", user.email).apply()
                 val intent = Intent(this, DashboardsActivity::class.java)
+
                 intent.putExtra("loggedInUserMail", user.email)
                 startActivity(intent)
             } else

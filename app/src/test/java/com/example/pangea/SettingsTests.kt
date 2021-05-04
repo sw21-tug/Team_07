@@ -36,10 +36,12 @@ class SettingsTests {
         dbHandler.registerUser(email, pw, context)
         var user = dbHandler.getRegisteredUser(email, context)
 
-        Assert.assertEquals(user.language, "de")
-        dbHandler.updateUserLanguage(user, "ru", context)
+        Assert.assertEquals(user.language, "en")
+        dbHandler.updateUserLanguage(email, "ru", context)
+        user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(user.language, "ru")
-        dbHandler.updateUserLanguage(user,"de", context)
-        Assert.assertEquals(user.language, "de")
+        dbHandler.updateUserLanguage(email,"en", context)
+        user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals(user.language, "en")
     }
 }
