@@ -20,22 +20,6 @@ import org.junit.runner.RunWith
 class RegisterActivityTest{
     @get:Rule var rule = ActivityScenarioRule(RegisterAndLoginActivity::class.java)
 
-    @Test
-    fun registerUser() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Assert.assertEquals("com.example.pangea", appContext.packageName)
-
-        onView(withId(R.id.registerButton)).perform(click())
-
-        onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
-        onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("12345"))
-
-        onView(withId(R.id.registerButton)).perform(click())
-
-
-    }
 
     @Test
     fun registerAndThenLogin() {
@@ -61,9 +45,12 @@ class RegisterActivityTest{
         pressBack()
 
         //login
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("12345"))
         onView(withId(R.id.loginButton)).perform(click())
 
-        //check if Dashboard is shown after login
-        intended(hasComponent(DashboardsActivity::class.java.name))
+
     }
 }
