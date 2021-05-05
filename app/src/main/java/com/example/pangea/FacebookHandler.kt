@@ -3,14 +3,16 @@ package com.example.pangea
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.facebook.*
+import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONObject
-import java.util.*
 
 
-class FacebookHandler(private val context: Context, private val user: User)
+class FacebookHandler(private val context: Context, private val user: User, private var activity1: FragmentActivity?)
 {
     lateinit var caller: IFacebookCallback
     var callbackManager: CallbackManager = CallbackManager.Factory.create();
@@ -41,14 +43,27 @@ class FacebookHandler(private val context: Context, private val user: User)
         return accessToken != null && !accessToken.isExpired
     }
 
+    fun isLoggedInWithWritePermissions(): Boolean
+    {
+        if(!isLoggedIn()) {
+            loginFacebook(true)
+        }
+        val permission = AccessToken.getCurrentAccessToken().permissions
+        return permission == arrayOf("publish_actions")
+    }
+
     fun hasLinkedAccount(): Boolean
     {
         return !(user.facebookAuthToken == null)
     }
 
-    fun loginFacebook()
+    fun loginFacebook(write: Boolean)
     {
         Log.d("TAG", "LoginFacebook")
+        if(write) {
+            var permissions: Array<String> = arrayOf("publish_actions")
+            LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
+        }
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
@@ -100,6 +115,7 @@ class FacebookHandler(private val context: Context, private val user: User)
     {
         val jsonobj: JSONObject = JSONObject()
         jsonobj.put("message", msg)
+
         val request = GraphRequest.newPostRequest(
             getCurrentAccesToken(),
             "/100373638861088/feed",
@@ -108,6 +124,5 @@ class FacebookHandler(private val context: Context, private val user: User)
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
         }
         request.executeAsync()
-
     }
 }

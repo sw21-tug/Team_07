@@ -1,11 +1,8 @@
 package com.example.pangea
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.posts_popup.*
 
 class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, FacebookHandler.IFacebookCallback
@@ -33,15 +30,13 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
 
             val curr_user: User = register.getRegisteredUser(userEmail, applicationContext)
 
-            val fhandler = FacebookHandler(applicationContext, curr_user)
+            val fhandler = FacebookHandler(applicationContext, curr_user, this@PostsPopup)
             fhandler.initApi(this)
             val thandler = TwitterHandler(applicationContext, curr_user)
             thandler.initTwitterApi()
 
             // call facebook or twitter post message here
-            if(facebook_check) {
-                if(!fhandler.isLoggedIn())
-                    fhandler.loginFacebook()
+            if(facebook_check && fhandler.isLoggedIn()) {
                 fhandler.postMessage(message.toString())
             }
             else if(twitter_check)

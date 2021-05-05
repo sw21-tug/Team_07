@@ -84,7 +84,7 @@ class AccountsLinkTest {
         var user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
-        val fbHandler = FacebookHandler(context, user)
+        val fbHandler = FacebookHandler(context, user, activity)
         fbHandler.logoutFacebook()
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))

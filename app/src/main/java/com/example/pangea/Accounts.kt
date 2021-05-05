@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
-import com.facebook.share.model.ShareContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -65,7 +63,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
         }
 
-        fHandler = FacebookHandler(context, user)
+        fHandler = FacebookHandler(context, user, activity)
         fHandler.initApi(this)
         login_button_facebook = view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
@@ -88,7 +86,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
             else
             {
-                fHandler.loginFacebook();
+                fHandler.loginFacebook(false);
             }
         }
 

@@ -30,7 +30,7 @@ class FacebookTests {
         val facebookOauthToken = "testtoken"
         dbHandler.saveFacebookLink(user, facebookOauthToken, context)
 
-        val fbHandler = FacebookHandler(context, user)
+        val fbHandler = FacebookHandler(context, user, activity)
         val hasAccount = fbHandler.hasLinkedAccount()
         assertEquals(hasAccount, true)
     }
@@ -51,7 +51,7 @@ class FacebookTests {
         val facebookOauthToken = "testtoken"
         dbHandler.saveFacebookLink(user, facebookOauthToken, context)
 
-        val fbHandler = FacebookHandler(context, user)
+        val fbHandler = FacebookHandler(context, user, activity)
         var hasAccount = fbHandler.hasLinkedAccount()
         assertEquals(hasAccount, true)
 
