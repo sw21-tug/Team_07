@@ -41,9 +41,11 @@
     <!-- Preference Titles -->
     <string name="password_header">пароль</string>
     <string name="language_header">язык</string>
-
+    <string name="theme_header">Тема приложения</string>
     <!-- Password Preferences -->
     <string name="change_password_title">Измени пароль</string>
     <string name="change_language_title" />
+    <string name="change_theme_title">Включить темный режим</string>
+
 
 </resources>

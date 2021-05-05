@@ -47,7 +47,6 @@ class SettingsTests {
 
     @Test
     fun testSwitchDarkMode(){
-
         val email = "test.user@test.com"
         val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -57,6 +56,6 @@ class SettingsTests {
 
         dbHandler.updateUserTheme(email, true, context)
         user = dbHandler.getRegisteredUser(email, context)
-        Assert.assertEquals(user.darkmode, true)
+        Assert.assertEquals(user.darkMode, true)
     }
 }

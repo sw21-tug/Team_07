@@ -8,7 +8,7 @@ class DatabaseHandler {
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword,
                 twitterAuthToken = null, twitterAuthSecret = null, facebookAuthToken = null,
-                language = "en"
+                language = "en", darkMode = false
             ))
             return 0
 
@@ -47,5 +47,13 @@ class DatabaseHandler {
         user.language = lang
         db.userDao().updateUser(user)
     }
+
+    fun updateUserTheme(userEmail: String, darkMode: Boolean, context: Context) {
+        val db = AppDatabase.getInstance(context)
+        val user = getRegisteredUser(userEmail, context)
+        user.darkMode = darkMode
+        db.userDao().updateUser(user)
+    }
+
 
 }

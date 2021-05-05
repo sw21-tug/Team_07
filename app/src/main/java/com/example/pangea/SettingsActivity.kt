@@ -8,13 +8,14 @@ import android.text.InputType
 import android.text.TextUtils
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class SettingsActivity : BaseActivity() {
+class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     lateinit var userEmail: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,23 @@ class SettingsActivity : BaseActivity() {
                     .replace(R.id.settings, SettingsFragment())
                     .commit()
         }
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this)
     }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if(key == "theme"){
+            if(sharedPreferences?.getBoolean("theme", false)!! ){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            delegate.applyDayNight()
+        }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
@@ -81,6 +98,14 @@ class SettingsActivity : BaseActivity() {
                 true
             }
 
+            val themePref: SwitchPreference? = findPreference("theme")
+            themePref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    var db = DatabaseHandler()
+                    db.updateUserTheme(userMail, newValue as Boolean, requireContext())
+                }
+                true
+            }
         }
 
     }

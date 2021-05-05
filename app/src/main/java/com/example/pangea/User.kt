@@ -25,6 +25,9 @@ data class User(
         var facebookAuthToken: String?,
 
         @ColumnInfo(name = "language")
-        var language: String?
+        var language: String?,
+
+        @ColumnInfo(name = "darMode")
+        var darkMode: Boolean
 
 )

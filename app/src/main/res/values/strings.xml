@@ -41,9 +41,12 @@
     <!-- Preference Titles -->
     <string name="password_header">Password</string>
     <string name="language_header">Language</string>
+    <string name="theme_header">App Theme</string>
+
 
     <!-- Password Preferences -->
     <string name="change_password_title">Change password</string>
     <string name="change_language_title" />
+    <string name="change_theme_title">Enable Dark-Mode</string>
 
 </resources>

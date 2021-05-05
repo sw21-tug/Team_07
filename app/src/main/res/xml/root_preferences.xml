@@ -10,12 +10,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/language_header">
-    <DropDownPreference
-        android:key="language"
-        android:title="@string/change_language_title"
-        android:entries="@array/language_values"
-        app:useSimpleSummaryProvider="true"
-        android:entryValues="@array/language_keys"/>
+        <DropDownPreference
+            android:key="language"
+            android:title="@string/change_language_title"
+            android:entries="@array/language_values"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/language_keys"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/theme_header">
+        <SwitchPreference
+            android:key="theme"
+            android:title="@string/change_theme_title"
+            app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
