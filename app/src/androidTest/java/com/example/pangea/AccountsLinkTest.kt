@@ -3,7 +3,6 @@ package com.example.pangea
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches

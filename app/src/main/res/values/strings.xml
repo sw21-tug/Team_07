@@ -39,4 +39,9 @@
     <!-- Strings related to twitter -->
     <string name="facebook_link_text">Login with Facebook</string>
     <string name="facebook_unlink_text">Unlink facebook account</string>
+
+    <!-- Posts strings -->
+    <string name="post_message">post message</string>
+    <string name="send">send</string>
+
 </resources>

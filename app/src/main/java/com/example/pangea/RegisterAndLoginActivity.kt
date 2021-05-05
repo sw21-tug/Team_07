@@ -49,5 +49,6 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
+
 }
 

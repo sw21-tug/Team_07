@@ -2,11 +2,12 @@ package com.example.pangea
 
 import android.content.Context
 import android.util.Log
-import android.widget.Button
+import android.widget.Toast
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
+import org.json.JSONObject
+import java.util.*
 
 
 class FacebookHandler(private val context: Context, private val user: User)
@@ -29,6 +30,11 @@ class FacebookHandler(private val context: Context, private val user: User)
         accessTokenTracker.startTracking()
     }
 
+    fun getCurrentAccesToken(): AccessToken
+    {
+        return AccessToken.getCurrentAccessToken()
+    }
+
     fun isLoggedIn(): Boolean
     {
         val accessToken = AccessToken.getCurrentAccessToken()
@@ -40,7 +46,6 @@ class FacebookHandler(private val context: Context, private val user: User)
         return !(user.facebookAuthToken == null)
     }
 
-    // onclickListener
     fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
@@ -89,5 +94,20 @@ class FacebookHandler(private val context: Context, private val user: User)
     interface IFacebookCallback {
 
         fun loggedOut()
+    }
+
+    fun postMessage(msg: String)
+    {
+        val jsonobj: JSONObject = JSONObject()
+        jsonobj.put("message", msg)
+        val request = GraphRequest.newPostRequest(
+            getCurrentAccesToken(),
+            "/100373638861088/feed",
+            jsonobj)
+        {
+            Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+        }
+        request.executeAsync()
+
     }
 }

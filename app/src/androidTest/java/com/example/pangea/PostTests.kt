@@ -26,20 +26,20 @@ class PostTests {
         @get:Rule var rule = ActivityScenarioRule(DashboardsActivity::class.java)
 
         @Test
-        fun testButton () {
+        fun testButton ()
+        {
             rule.scenario
             onView(withId(R.id.sendpostbtn)).perform(click())
 
-            onView(withId(R.id.postbtn)).check(matches(isDisplayed()))
-            onView(withId(R.id.textfield)).check(matches(isDisplayed()))
-            onView(withId(R.id.fbcheck)).check(matches(isDisplayed()))
-            onView(withId(R.id.twittercheck)).check(matches(isDisplayed()))
+            onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
+            onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
+            onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
 
-            onView(withId(R.id.fbcheck)).perform(click())
-            onView(withId(R.id.fbcheck)).check(matches(isChecked()))
+            onView(withId(R.id.facebookCheck)).perform(click())
+            onView(withId(R.id.facebookCheck)).check(matches(isChecked()))
 
-            onView(withId(R.id.twittercheck)).perform(click())
-            onView(withId(R.id.twittercheck)).check(matches(isChecked()))
+            onView(withId(R.id.twitterCheck)).perform(click())
+            onView(withId(R.id.twitterCheck)).check(matches(isChecked()))
         }
 
 }

@@ -24,4 +24,5 @@ data class User(
         @ColumnInfo(name = "facebookAuthToken")
         var facebookAuthToken: String?
 
+
 )

@@ -1,8 +1,6 @@
 package com.example.pangea
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
-import kotlinx.android.synthetic.main.account_view.*
+import com.facebook.share.model.ShareContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -144,6 +140,8 @@ class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitt
             login_button_facebook.text = getString(R.string.facebook_link_text)
         }
         super.onActivityResult(requestCode, resultCode, data)
+
+
     }
 
     override fun loggedOut() {

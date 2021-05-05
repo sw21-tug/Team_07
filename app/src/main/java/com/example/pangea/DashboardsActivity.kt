@@ -34,7 +34,7 @@ class DashboardsActivity : AppCompatActivity()
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         accountsTab = Accounts(user)
         val adapter = SwipeAdapter(this, supportFragmentManager,
-            tabLayout.tabCount, accountsTab)
+            tabLayout.tabCount, accountsTab, intent)
 
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))

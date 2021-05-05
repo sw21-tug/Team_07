@@ -1,11 +1,8 @@
 package com.example.pangea
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import com.facebook.FacebookSdk
-import com.facebook.FacebookSdk.getApplicationContext
 import junit.framework.Assert
 import org.junit.Test
 

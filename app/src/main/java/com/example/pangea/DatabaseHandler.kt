@@ -6,7 +6,8 @@ class DatabaseHandler {
      fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
-            userDao.insertOne(User(email = userEmail, password = userPassword,
+            userDao.insertOne(User(
+                email = userEmail, password = userPassword,
                 twitterAuthToken = null, twitterAuthSecret = null, facebookAuthToken = null
             ))
             return 0
