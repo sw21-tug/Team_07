@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pangea">
+
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
-
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -21,7 +21,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".RegisterAndLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

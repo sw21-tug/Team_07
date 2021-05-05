@@ -35,11 +35,8 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.registerButton);
 
         registerButton.setOnClickListener {
-            registerButton.hideKeyboard()
-            val register = DatabaseHandler()
-            register.registerUser(userEmail.text.toString(), password.text.toString(), applicationContext)
-            val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
-            myToastSuccess.show()
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
 
         val loginButton = findViewById<Button>(R.id.loginButton);
@@ -51,8 +48,6 @@ class RegisterAndLoginActivity : AppCompatActivity() {
                 val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
                 sharedPref.edit().putString("current_user", user.email).apply()
                 val intent = Intent(this, DashboardsActivity::class.java)
-
-                intent.putExtra("loggedInUserMail", user.email)
                 startActivity(intent)
             } else
             {
