@@ -31,6 +31,6 @@ P3 - Socal media logins Twitter
 P10 - Socal media logins Facebook  
 P14 - Accounts tab  
 P4 - Settings  
-P25 - Chinese or Russian
-P15 - Dark mode
-P21 - Login/register refinement
+P25 - Chinese or Russian  
+P15 - Dark mode  
+P21 - Login/register refinement  
