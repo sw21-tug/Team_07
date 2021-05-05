@@ -2,6 +2,7 @@ package com.example.pangea
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -9,9 +10,22 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager
 
 class RegisterAndLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        var prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        var darkMode = prefs.getBoolean("theme", false);
+        if(darkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+        delegate.applyDayNight()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_login)
 
@@ -21,21 +35,19 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.registerButton);
 
         registerButton.setOnClickListener {
-            registerButton.hideKeyboard()
-            val register = DatabaseHandler()
-            register.registerUser(userEmail.toString(), password.toString(), applicationContext)
-            val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
-            myToastSuccess.show()
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
 
         val loginButton = findViewById<Button>(R.id.loginButton);
         loginButton.setOnClickListener {
             loginButton.hideKeyboard()
             val register = DatabaseHandler()
-            val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
-            if (user != null && user.password.equals(password.toString())) {
+            val user = register.getRegisteredUser(userEmail.text.toString(), applicationContext)
+            if (user != null && user.password.equals(password.text.toString())) {
+                val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("current_user", user.email).apply()
                 val intent = Intent(this, DashboardsActivity::class.java)
-                intent.putExtra("loggedInUserMail", user.email)
                 startActivity(intent)
             } else
             {
