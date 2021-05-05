@@ -27,8 +27,9 @@ class RegisterActivity() : AppCompatActivity() {
             val myToastSuccess = Toast.makeText(applicationContext,"Registration successful" ,Toast.LENGTH_SHORT)
             myToastSuccess.show()
             //val user = register.getRegisteredUser(userEmail.toString(), applicationContext)
+            val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+            sharedPref.edit().putString("current_user", userEmail.text.toString()).apply()
             val intent = Intent(this, DashboardsActivity::class.java)
-            intent.putExtra("loggedInUserMail", userEmail.text.toString())
             startActivity(intent)
         }
     }
