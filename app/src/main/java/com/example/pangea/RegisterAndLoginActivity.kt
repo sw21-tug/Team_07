@@ -49,6 +49,8 @@ class RegisterAndLoginActivity : AppCompatActivity() {
                 sharedPref.edit().putString("current_user", user.email).apply()
                 val intent = Intent(this, DashboardsActivity::class.java)
                 startActivity(intent)
+                userEmail.text.clear()
+                password.text.clear()
             } else
             {
                 val myToast = Toast.makeText(applicationContext,"Login failed" ,Toast.LENGTH_SHORT)

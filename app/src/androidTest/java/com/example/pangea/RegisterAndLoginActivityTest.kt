@@ -1,6 +1,7 @@
 package com.example.pangea
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
@@ -49,5 +50,31 @@ class RegisterAndLoginActivityTest{
 
         //check if Dashboard is shown after login
         intended(hasComponent(DashboardsActivity::class.java.name))
+    }
+
+    @Test
+    fun testRegisterLoginAndLogout() {
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Assert.assertEquals("com.example.pangea", appContext.packageName)
+
+        //open register view
+        onView(withId(R.id.registerButton)).perform(click())
+
+        //register
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("12345"))
+        onView(withId(R.id.registerButton)).perform(click())
+
+        //now we're registered and already in the dashboard
+        intended(hasComponent(DashboardsActivity::class.java.name))
+
+        openActionBarOverflowOrOptionsMenu(appContext)
+        onView(withText(R.string.menu_action_logout))
+                .perform(click())
+
+        onView(withId(R.id.loginButton)).check(ViewAssertions.matches(isDisplayed()))
     }
 }
