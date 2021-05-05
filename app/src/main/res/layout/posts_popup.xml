@@ -10,14 +10,13 @@
         android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="266dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="330dp"
+        android:layout_marginTop="56dp"
         android:text="@string/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plain_text_input"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/facebook_img"
@@ -60,11 +59,20 @@
         android:layout_marginStart="44dp"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="67dp"
-        android:layout_marginBottom="9dp"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/send"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/facebook_img" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/facebook_img"
+        app:layout_constraintEnd_toStartOf="@+id/twitterCheck"
+        app:layout_constraintTop_toTopOf="@+id/twitterCheck"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/twitter_bird_logo_2012_svg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,5 +47,9 @@
     <string name="change_language_title" />
     <string name="change_theme_title">Включить темный режим</string>
 
+    <!-- Posts strings -->
+    <string name="post_message">отправить сообщениеe</string>
+    <string name="send">Отправить</string>
+    <string name="refresh">освежить</string>
 
 </resources>

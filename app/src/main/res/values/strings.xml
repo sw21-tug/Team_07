@@ -53,5 +53,6 @@
     <!-- Posts strings -->
     <string name="post_message">post message</string>
     <string name="send">send</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

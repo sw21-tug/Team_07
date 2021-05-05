@@ -1,6 +1,8 @@
 package com.example.pangea
 
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.posts_popup.*
@@ -11,6 +13,11 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.posts_popup)
+
+        if (Build.VERSION.SDK_INT > 9) {
+            val policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+        }
 
         // facebook and twitter have booleans
         send.setOnClickListener {
@@ -36,17 +43,22 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
             thandler.initTwitterApi()
 
             // call facebook or twitter post message here
-            if(facebook_check && fhandler.isLoggedIn()) {
-                fhandler.postMessage(message.toString())
+            if(facebook_check) {
+                var postId = fhandler.postMessage(message.toString())
+                register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString())
             }
-            else if(twitter_check)
-                thandler.postTweet(message.toString())
+            else if(twitter_check) {
+                var postId = thandler.postTweet(message.toString())
+                register.addTwitterPost(userEmail, message.toString(), null, applicationContext, postId)
+            }
             else if (facebook_check && twitter_check)
             {
-                fhandler.postMessage(message.toString())
-                thandler.postTweet(message.toString())
+                var postId = fhandler.postMessage(message.toString())
+                register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString())
+                var twitterId = thandler.postTweet(message.toString())
+                register.addTwitterPost(userEmail, message.toString(), null, applicationContext, twitterId)
             }
-            //finish()
+            finish()
         }
     }
 

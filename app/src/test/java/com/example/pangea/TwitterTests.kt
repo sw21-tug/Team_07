@@ -3,6 +3,7 @@ package com.example.pangea
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import junit.framework.Assert
+import org.junit.After
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,6 +12,11 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class TwitterTests {
+
+    @After
+    fun tearDown() {
+        AppDatabase.destroyInstance()
+    }
 
     @Test
     fun testTwitterLink() {
@@ -69,7 +75,7 @@ class TwitterTests {
 
         val handler = TwitterHandler(context, user)
         var hasAccount = handler.hasLinkedAccount()
-        assertEquals(hasAccount, true)
+        assertEquals(hasAccount, false)
 
         val response  = handler.postTweet("Test Tweet")
         assertEquals(response, "-1")

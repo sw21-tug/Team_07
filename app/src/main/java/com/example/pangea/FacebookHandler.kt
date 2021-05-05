@@ -46,7 +46,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     fun isLoggedInWithWritePermissions(): Boolean
     {
         if(!isLoggedIn()) {
-            loginFacebook(true)
+            loginFacebook()
         }
         val permission = AccessToken.getCurrentAccessToken().permissions
         return permission == arrayOf("publish_actions")
@@ -57,13 +57,12 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         return !(user.facebookAuthToken == null)
     }
 
-    fun loginFacebook(write: Boolean)
+    fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
-        if(write) {
-            var permissions: Array<String> = arrayOf("publish_actions")
-            LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
-        }
+
+        var permissions: Array<String> = arrayOf("publish_actions")
+        LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
@@ -111,8 +110,12 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         fun loggedOut()
     }
 
-    fun postMessage(msg: String)
+    fun postMessage(msg: String) : Any
     {
+        if(!isLoggedIn()) {
+            loginFacebook()
+        }
+
         val jsonobj: JSONObject = JSONObject()
         jsonobj.put("message", msg)
 
@@ -122,7 +125,10 @@ class FacebookHandler(private val context: Context, private val user: User, priv
             jsonobj)
         {
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+
+
         }
         request.executeAsync()
+        return request.graphObject.get("id")
     }
 }

@@ -86,7 +86,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
             else
             {
-                fHandler.loginFacebook(false);
+                fHandler.loginFacebook();
             }
         }
 
