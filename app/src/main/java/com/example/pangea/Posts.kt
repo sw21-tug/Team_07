@@ -1,5 +1,6 @@
 package com.example.pangea
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,14 +14,15 @@ import androidx.fragment.app.Fragment
 /* This class controls the logic in the "Posts"-Tab
    New Methods can be implemented as needed.
    Layout-File: post_view.xml */
-class Posts(val user: User) : Fragment()
+class Posts() : Fragment()
 {
     //creates the view (post_view.xml)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val email = user.email
+        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+        val email = sharedPref.getString("current_user", "").toString()
         val register = DatabaseHandler()
         var posts = emptyList<Post>()
 
