@@ -55,5 +55,45 @@ class DatabaseHandler {
         db.userDao().updateUser(user)
     }
 
+    fun getAllPosts(userEmail: String, context: Context): List<Post> {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        return postDao.selectAllPostsForUser(userEmail)
+    }
 
+    fun addFBPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, postID = id)
+        postDao.insertOne(post)
+        return 0
+    }
+
+    fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, postID = id)
+        postDao.insertOne(post)
+        return 0
+    }
+
+    //add image if needed
+    fun deletePost(userEmail: String, message: String, image: String?, accountType: String, context: Context) {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        if(accountType.equals("Facebook")) {
+            postDao.deleteFBPostByUserIdWitText(userEmail, message)
+        }
+        else if(accountType.equals("Twitter")) {
+            postDao.deleteTwitterPostByUserIdWitText(userEmail, message)
+        }
+    }
+
+    fun deletePostByID(postID: String, context: Context)
+    {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+
+        postDao.deletePostByID(postID)
+    }
 }

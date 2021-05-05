@@ -32,6 +32,7 @@ class DashboardsActivity : BaseActivity()
         val adapter = SwipeAdapter(this, supportFragmentManager,
                 tabLayout.tabCount)
 
+
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.setupWithViewPager(swipe)

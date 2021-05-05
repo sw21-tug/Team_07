@@ -10,6 +10,7 @@ import com.facebook.FacebookSdk.getApplicationContext
 /* This class controls the swipe-adapter used in
    DashboardsActivity for swiping and switching between tabs
    IMPORTANT: The names of the tabs are defined here (not in @strings)!*/
+
 internal class SwipeAdapter(var context: Context, fm: FragmentManager, var amount_tabs: Int) : FragmentPagerAdapter(fm)
 {
     val tabNames = arrayOf(context.getString(R.string.ACCOUNTS), context.getString(R.string.POSTS), context.getString(R.string.BOOKMARKED))
