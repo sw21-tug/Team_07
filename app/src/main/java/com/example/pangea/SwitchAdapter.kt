@@ -12,14 +12,14 @@ import com.facebook.FacebookSdk.getApplicationContext
    DashboardsActivity for swiping and switching between tabs
    IMPORTANT: The names of the tabs are defined here (not in @strings)!*/
 
-internal class SwipeAdapter(var context: Context, fm: FragmentManager, var amount_tabs: Int) : FragmentPagerAdapter(fm)
+internal class SwipeAdapter(var context: Context, fm: FragmentManager, var amount_tabs: Int, var accounts: Accounts) : FragmentPagerAdapter(fm)
 {
     val tabNames = arrayOf(context.getString(R.string.ACCOUNTS), context.getString(R.string.POSTS), context.getString(R.string.BOOKMARKED))
     override fun getItem(index: Int): Fragment
     {
         return when (index)
         {
-            0 -> {Accounts()}
+            0 -> {accounts}
             1 -> {Posts()}
             2 -> {Bookmarked()}
             else -> getItem(index)

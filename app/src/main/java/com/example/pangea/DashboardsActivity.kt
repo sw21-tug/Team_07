@@ -31,7 +31,7 @@ class DashboardsActivity : BaseActivity()
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         val adapter = SwipeAdapter(this, supportFragmentManager,
-                tabLayout.tabCount)
+                tabLayout.tabCount, accountsTab)
 
 
         swipe.adapter = adapter
