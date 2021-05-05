@@ -1,6 +1,7 @@
 package com.example.pangea
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
@@ -70,10 +71,10 @@ class RegisterAndLoginActivityTest{
         //now we're registered and already in the dashboard
         intended(hasComponent(DashboardsActivity::class.java.name))
 
-        onView(withContentDescription(R.string.menu_action_more))
+        openActionBarOverflowOrOptionsMenu(appContext)
+        onView(withText(R.string.menu_action_logout))
                 .perform(click())
 
-        onView(withText(R.string.action_logout)).perform(click());
-        intended(hasComponent(RegisterAndLoginActivity::class.java.name))
+        onView(withId(R.id.loginButton)).check(ViewAssertions.matches(isDisplayed()))
     }
 }

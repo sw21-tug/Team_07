@@ -3,8 +3,10 @@ package com.example.pangea
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -26,6 +28,8 @@ class DashboardsActivity : BaseActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboards)
 
+        //setSupportActionBar(findViewById(R.id.toolbar))
+
         tabLayout = findViewById(R.id.dashboard_bar)
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
@@ -44,12 +48,35 @@ class DashboardsActivity : BaseActivity()
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        btnSettings.setOnClickListener {
-            val settings = Intent(this, SettingsActivity::class.java)
-            startActivity(settings)
-        }
+        findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
+            when(item.itemId) {
+                R.id.action_settings -> {
+                    val settings = Intent(this, SettingsActivity::class.java)
+                    startActivity(settings)
+                    // User chose the "Settings" item, show the app settings UI...
+                    true
+                }
 
+                R.id.action_logout -> {
+                    val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+                    sharedPref.edit().putString("current_user", null).apply()
+                    finish()
+                    // User chose the "Favorite" action, mark the current item
+                    // as a favorite...
+                    true
+                }
+
+                else -> {
+                    // If we got here, the user's action was not recognized.
+                    // Invoke the superclass to handle it.
+                    super.onOptionsItemSelected(item)
+                }
+            }
+        }
     }
+
+
+
 
     // needed for Facebook
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

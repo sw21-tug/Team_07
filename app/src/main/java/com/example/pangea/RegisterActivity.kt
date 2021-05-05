@@ -31,6 +31,7 @@ class RegisterActivity() : AppCompatActivity() {
             sharedPref.edit().putString("current_user", userEmail.text.toString()).apply()
             val intent = Intent(this, DashboardsActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
     fun View.hideKeyboard() {

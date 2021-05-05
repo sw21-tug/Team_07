@@ -6,15 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="60sp"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnSettings"
-        app:icon="@android:drawable/ic_menu_manage"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10sp"
-        android:layout_marginRight="10sp" />
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:menu="@menu/actionbar_menu"
+        app:titleTextColor="@color/white" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/ViewPager"
