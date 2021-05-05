@@ -1,20 +1,18 @@
 package com.example.pangea
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import kotlinx.android.synthetic.main.account_view.*
 import kotlinx.coroutines.Dispatchers
@@ -22,10 +20,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
 /* This class controls the logic in the "Accounts"-Tab
    New Methods can be implemented as needed.
    Layout-File: account_view.xml */
-class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHandler.IFacebookCallback
+class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHandler.IFacebookCallback
 {
     //creates the view (account_view.xml)
     lateinit var twitterDialog: Dialog
@@ -35,15 +34,18 @@ class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitt
     lateinit var login_button_facebook: Button
     lateinit var hidden_facebook_button: Button
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?): View? {
 
         FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
         FacebookSdk.sdkInitialize(context);
-
         val view = inflater.inflate(R.layout.account_view, container, false)
+        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+        val userMail = sharedPref.getString("current_user", "").toString()
+
+        val user = DatabaseHandler().getRegisteredUser(userMail, requireContext())
+
         twitter_login_btn = view.findViewById(R.id.twitter_login_btn)
         val context = activity as AppCompatActivity
         tHandler = TwitterHandler(context, user)
@@ -117,7 +119,7 @@ class Accounts(private var user: User) : DialogFragment(), TwitterHandler.ITwitt
         val webView = WebView(activity?.applicationContext!!)
         webView.isVerticalScrollBarEnabled = false
         webView.isHorizontalScrollBarEnabled = false
-        webView.webViewClient = tHandler.TwitterWebViewClient( this)
+        webView.webViewClient = tHandler.TwitterWebViewClient(this)
         webView.settings.javaScriptEnabled = true
         webView.loadUrl(url)
         twitterDialog.setContentView(webView)

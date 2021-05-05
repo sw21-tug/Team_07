@@ -7,7 +7,8 @@ class DatabaseHandler {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
             userDao.insertOne(User(email = userEmail, password = userPassword,
-                twitterAuthToken = null, twitterAuthSecret = null, facebookAuthToken = null
+                twitterAuthToken = null, twitterAuthSecret = null, facebookAuthToken = null,
+                language = "en", darkMode = false
             ))
             return 0
 
@@ -20,6 +21,13 @@ class DatabaseHandler {
         return user
     }
 
+    fun changePassword(userEmail: String, userpassword: String, context: Context) {
+        val user = getRegisteredUser(userEmail, context)
+        user.password = userpassword
+        val db = AppDatabase.getInstance(context)
+        val userDao = db.userDao()
+        userDao.updateUser(user)
+    }
     fun saveTwitterLink(user: User, twitterAuthToken: String?, twitterAuthTokenSecret: String?, context: Context) {
         val db = AppDatabase.getInstance(context)
         user.twitterAuthToken = twitterAuthToken
@@ -30,6 +38,20 @@ class DatabaseHandler {
     fun saveFacebookLink(user: User, facebookOauthToken: String?, context: Context) {
         val db = AppDatabase.getInstance(context)
         user.facebookAuthToken = facebookOauthToken
+        db.userDao().updateUser(user)
+    }
+
+    fun updateUserLanguage(userEmail: String, lang: String, context: Context) {
+        val db = AppDatabase.getInstance(context)
+        val user = getRegisteredUser(userEmail, context)
+        user.language = lang
+        db.userDao().updateUser(user)
+    }
+
+    fun updateUserTheme(userEmail: String, darkMode: Boolean, context: Context) {
+        val db = AppDatabase.getInstance(context)
+        val user = getRegisteredUser(userEmail, context)
+        user.darkMode = darkMode
         db.userDao().updateUser(user)
     }
 

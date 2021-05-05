@@ -10,11 +10,12 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_dashboards.*
 
 /* This class controls the overall dashboard view
    and the switching between the different Tabs
    Layout-File: activity_dashboards.xml */
-class DashboardsActivity : AppCompatActivity()
+class DashboardsActivity : BaseActivity()
 {
     lateinit var tabLayout : TabLayout
     lateinit var swipe : ViewPager
@@ -25,16 +26,12 @@ class DashboardsActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboards)
 
-
-        val userEmail = intent.getStringExtra("loggedInUserMail").toString()
-        val user = DatabaseHandler().getRegisteredUser(userEmail, this)
-
         tabLayout = findViewById(R.id.dashboard_bar)
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        accountsTab = Accounts(user)
         val adapter = SwipeAdapter(this, supportFragmentManager,
-            tabLayout.tabCount, accountsTab, user)
+                tabLayout.tabCount)
+
 
         swipe.adapter = adapter
         swipe.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
@@ -46,6 +43,11 @@ class DashboardsActivity : AppCompatActivity()
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+
+        btnSettings.setOnClickListener {
+            val settings = Intent(this, SettingsActivity::class.java)
+            startActivity(settings)
+        }
 
     }
 
