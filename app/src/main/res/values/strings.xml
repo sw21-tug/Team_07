@@ -17,7 +17,7 @@
     <string name="test_button">test button</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login/logout -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -28,6 +28,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="login_title">Register or Login</string>
+    <string name="action_logout">Logout</string>
 
     <!-- Strings related to twitter -->
     <string name="twitter_link_text">Login with Twitter</string>
@@ -48,5 +49,6 @@
     <string name="change_password_title">Change password</string>
     <string name="change_language_title" />
     <string name="change_theme_title">Enable Dark-Mode</string>
+    <string name="menu_action_more" />
 
 </resources>

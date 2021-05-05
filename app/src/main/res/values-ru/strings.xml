@@ -17,7 +17,7 @@
     <string name="test_button">test button</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login/logout -->
     <string name="prompt_email">электронная почта</string>
     <string name="prompt_password">пароль</string>
     <string name="action_sign_in">войти</string>
@@ -28,6 +28,7 @@
     <string name="invalid_password">пароль должен состоять из 5 символов</string>
     <string name="login_failed">"Ошибка входа"</string>
     <string name="login_title">зарегистрируйтесь или войдите</string>
+    <string name="action_logout">выйти</string>
 
     <!-- Strings related to twitter -->
     <string name="twitter_link_text">войти через Twitter</string>
@@ -46,6 +47,7 @@
     <string name="change_password_title">Измени пароль</string>
     <string name="change_language_title" />
     <string name="change_theme_title">Включить темный режим</string>
+    <string name="menu_action_more" />
 
 
 </resources>
