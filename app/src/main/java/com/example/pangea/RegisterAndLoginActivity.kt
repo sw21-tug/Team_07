@@ -15,17 +15,6 @@ import androidx.preference.PreferenceManager
 
 class RegisterAndLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        var prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        var darkMode = prefs.getBoolean("theme", false);
-        if(darkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-        else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-        delegate.applyDayNight()
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_login)
 
