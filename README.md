@@ -25,4 +25,12 @@ Pangea aims to be a single app form which you can manage your social media posts
 
 ## Implemented Features
 
-**TODO** 
+P1 - Registration  
+P2 - Login  
+P3 - Socal media logins Twitter  
+P10 - Socal media logins Facebook  
+P14 - Accounts tab  
+P4 - Settings  
+P25 - Chinese or Russian  
+P15 - Dark mode  
+P21 - Login/register refinement  
