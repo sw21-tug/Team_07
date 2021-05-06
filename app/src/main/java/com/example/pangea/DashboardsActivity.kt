@@ -34,6 +34,8 @@ class DashboardsActivity : BaseActivity()
         accountsTab = Accounts()
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+
+        accountsTab = Accounts()
         val adapter = SwipeAdapter(this, supportFragmentManager,
                 tabLayout.tabCount, accountsTab)
 
@@ -75,9 +77,6 @@ class DashboardsActivity : BaseActivity()
             }
         }
     }
-
-
-
 
     // needed for Facebook
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
