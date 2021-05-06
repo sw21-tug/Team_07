@@ -31,10 +31,11 @@ class DashboardsActivity : BaseActivity()
         //setSupportActionBar(findViewById(R.id.toolbar))
 
         tabLayout = findViewById(R.id.dashboard_bar)
+        accountsTab = Accounts()
         swipe = findViewById(R.id.ViewPager)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         val adapter = SwipeAdapter(this, supportFragmentManager,
-                tabLayout.tabCount)
+                tabLayout.tabCount, accountsTab)
 
 
         swipe.adapter = adapter

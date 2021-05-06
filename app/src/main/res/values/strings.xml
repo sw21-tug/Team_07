@@ -51,4 +51,10 @@
     <string name="change_language_title" />
     <string name="change_theme_title">Enable Dark-Mode</string>
 
+
+    <!-- Posts strings -->
+    <string name="post_message">post message</string>
+    <string name="send">send</string>
+    <string name="refresh">Refresh</string>
+
 </resources>

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +13,10 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
-import kotlinx.android.synthetic.main.account_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 
 /* This class controls the logic in the "Accounts"-Tab
    New Methods can be implemented as needed.
@@ -66,7 +63,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
         }
 
-        fHandler = FacebookHandler(context, user)
+        fHandler = FacebookHandler(context, user, activity)
         fHandler.initApi(this)
         login_button_facebook = view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
@@ -146,6 +143,8 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             login_button_facebook.text = getString(R.string.facebook_link_text)
         }
         super.onActivityResult(requestCode, resultCode, data)
+
+
     }
 
     override fun loggedOut() {

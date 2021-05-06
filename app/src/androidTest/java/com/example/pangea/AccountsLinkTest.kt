@@ -3,7 +3,6 @@ package com.example.pangea
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -85,7 +84,7 @@ class AccountsLinkTest {
         var user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
-        val fbHandler = FacebookHandler(context, user)
+        val fbHandler = FacebookHandler(context, user, activity)
         fbHandler.logoutFacebook()
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))

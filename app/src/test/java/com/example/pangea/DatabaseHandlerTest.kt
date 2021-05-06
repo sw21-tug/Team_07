@@ -26,8 +26,6 @@ class DatabaseHandlerTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val errorCode = register.registerUser(email, pw, context)
         Assert.assertEquals(0, errorCode)
-
-
     }
 
     @Test

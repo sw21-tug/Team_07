@@ -2,14 +2,17 @@ package com.example.pangea
 
 import android.content.Context
 import android.util.Log
-import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.facebook.*
+import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
+import org.json.JSONObject
 
 
-class FacebookHandler(private val context: Context, private val user: User)
+class FacebookHandler(private val context: Context, private val user: User, private var activity1: FragmentActivity?)
 {
     lateinit var caller: IFacebookCallback
     var callbackManager: CallbackManager = CallbackManager.Factory.create();
@@ -29,10 +32,24 @@ class FacebookHandler(private val context: Context, private val user: User)
         accessTokenTracker.startTracking()
     }
 
+    fun getCurrentAccesToken(): AccessToken
+    {
+        return AccessToken.getCurrentAccessToken()
+    }
+
     fun isLoggedIn(): Boolean
     {
         val accessToken = AccessToken.getCurrentAccessToken()
         return accessToken != null && !accessToken.isExpired
+    }
+
+    fun isLoggedInWithWritePermissions(): Boolean
+    {
+        if(!isLoggedIn()) {
+            loginFacebook()
+        }
+        val permission = AccessToken.getCurrentAccessToken().permissions
+        return permission == arrayOf("publish_actions")
     }
 
     fun hasLinkedAccount(): Boolean
@@ -40,10 +57,12 @@ class FacebookHandler(private val context: Context, private val user: User)
         return !(user.facebookAuthToken == null)
     }
 
-    // onclickListener
     fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
+
+        var permissions: Array<String> = arrayOf("publish_actions")
+        LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
@@ -89,5 +108,27 @@ class FacebookHandler(private val context: Context, private val user: User)
     interface IFacebookCallback {
 
         fun loggedOut()
+    }
+
+    fun postMessage(msg: String) : Any
+    {
+        if(!isLoggedIn()) {
+            loginFacebook()
+        }
+
+        val jsonobj: JSONObject = JSONObject()
+        jsonobj.put("message", msg)
+
+        val request = GraphRequest.newPostRequest(
+            getCurrentAccesToken(),
+            "/100373638861088/feed",
+            jsonobj)
+        {
+            Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+
+
+        }
+        request.executeAsync()
+        return request.graphObject.get("id")
     }
 }

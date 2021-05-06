@@ -45,18 +45,22 @@ class TwitterHandler(private val context: Context, private val user: User) {
         twitter = factory.instance
     }
 
-    fun postTweet(tweet:String): String {
+    fun postTweet(tweet: String): String {
         if(twitter == null) {
             initTwitterApi()
         }
 
-        return try {
+        var statusId = ""
+         try {
             val status = twitter?.updateStatus(tweet)
+            statusId = (status!!.id).toString()
             "200"
         } catch (e: Exception) {
             Log.e("ERROR: ", e.toString())
-            "-1"
+            statusId = "-1"
         }
+
+        return statusId
     }
 
     fun hasLinkedAccount(): Boolean {

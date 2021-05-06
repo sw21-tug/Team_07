@@ -30,4 +30,5 @@ data class User(
         @ColumnInfo(name = "darMode")
         var darkMode: Boolean
 
+
 )
