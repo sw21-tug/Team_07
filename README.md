@@ -33,4 +33,10 @@ P14 - Accounts tab
 P4 - Settings  
 P25 - Chinese or Russian  
 P15 - Dark mode  
-P21 - Login/register refinement  
+P21 - Login/register refinement
+P13 – Initial dashboards  
+P5 – Post  
+P6 – Post tab  
+P19 – App icon and splash screen  
+P11 – Social logins dashboard  
+
