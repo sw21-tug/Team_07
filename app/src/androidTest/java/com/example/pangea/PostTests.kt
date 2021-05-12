@@ -16,6 +16,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pangea.Posts
 import com.example.pangea.R.id.sendpostbtn
+import com.facebook.FacebookSdk
 import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Test
@@ -64,5 +65,65 @@ class PostTests {
 //            onView(withId(R.id.twitterCheck)).perform(click())
 //            onView(withId(R.id.twitterCheck)).check(matches(isChecked()))
         }
+
+    @Test
+    fun testSelectAccount ()
+    {
+        //Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Assert.assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+
+        val emailt = "test.user@test.com"
+        val pwt = "1234abc"
+        val contextt = ApplicationProvider.getApplicationContext<Context>()
+        val dbHandlert = com.example.pangea.DatabaseHandler()
+        dbHandlert.registerUser(emailt, pwt, contextt)
+        var usert = dbHandlert.getRegisteredUser(emailt, contextt)
+
+        val handler = TwitterHandler(contextt, usert)
+        var hasAccount = handler.hasLinkedAccount()
+        if (hasAccount)
+        {
+            handler.unlinkAccount()
+        }
+
+        FacebookSdk.setApplicationId("171191854853298")
+        val email = "test.user@test.com"
+        val pw = "1234abc"
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        FacebookSdk.sdkInitialize(context)
+        val dbHandler = DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+        junit.framework.Assert.assertEquals(email, user.email)
+        junit.framework.Assert.assertEquals(pw, user.password)
+
+        val facebookOauthToken = "testtoken"
+        dbHandler.saveFacebookLink(user, facebookOauthToken, context)
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        onView(withId(sendpostbtn)).perform(click())
+
+        onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
+        onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.facebookCheck)).perform(click())
+        onView(withId(R.id.facebookCheck)).check(matches(isChecked()))
+
+        onView(withId(R.id.twitterCheck)).perform(click())
+        onView(withId(R.id.twitterCheck)).check(matches(isNotChecked()))
+    }
 
 }
