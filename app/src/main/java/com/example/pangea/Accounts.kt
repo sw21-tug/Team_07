@@ -10,9 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,6 +33,13 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var fHandler: FacebookHandler
     lateinit var login_button_facebook: Button
     lateinit var hidden_facebook_button: Button
+    lateinit var add_account_button: FloatingActionButton
+    lateinit var twitter_image: ImageView
+
+
+    /* delete if we don't need facebook - START */
+    lateinit var facebook_image: ImageView
+    /* delete if we don't need facebook - END */
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +54,54 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         val user = DatabaseHandler().getRegisteredUser(userMail, requireContext())
 
         twitter_login_btn = view.findViewById(R.id.twitter_login_btn)
+        login_button_facebook = view.findViewById(R.id.login_button_facebook)
+        hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
+
+        add_account_button = view.findViewById(R.id.addaccount)
+
+        facebook_image = view.findViewById(R.id.facebook_img2)
+        twitter_image = view.findViewById(R.id.imageView2)
+
+        add_account_button.setOnClickListener {
+
+
+
+            twitter_image.visibility = View.VISIBLE
+            twitter_image.isClickable = true
+
+            /* delete if we don't need facebook - START */
+
+            facebook_image.visibility = View.VISIBLE
+            facebook_image.isClickable = true
+            /* delete if we don't need facebook - END */
+
+
+        }
+
+        twitter_image.setOnClickListener {
+            twitter_login_btn.isClickable = true
+            twitter_login_btn.performClick()
+            twitter_login_btn.isClickable = false
+
+            twitter_image.visibility = View.INVISIBLE
+            facebook_image.visibility = View.INVISIBLE
+
+        }
+
+        facebook_image.setOnClickListener {
+            login_button_facebook.isClickable = true
+            login_button_facebook.performClick()
+            login_button_facebook.isClickable = false
+
+            twitter_image.visibility = View.INVISIBLE
+            facebook_image.visibility = View.INVISIBLE
+        }
+
+
+        //twitter_image.visibility = View.INVISIBLE
+        /* old copy start here  */
+
+
         val context = activity as AppCompatActivity
         tHandler = TwitterHandler(context, user)
         if(tHandler.hasLinkedAccount()) {
@@ -65,8 +123,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         fHandler = FacebookHandler(context, user, activity)
         fHandler.initApi(this)
-        login_button_facebook = view.findViewById(R.id.login_button_facebook)
-        hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
         if(fHandler.hasLinkedAccount())
         {
             login_button_facebook.text = getString(R.string.facebook_unlink_text)
