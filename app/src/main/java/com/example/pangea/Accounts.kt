@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -60,7 +59,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         add_account_button = view.findViewById(R.id.addaccount)
 
         facebook_image = view.findViewById(R.id.facebook_img2)
-        twitter_image = view.findViewById(R.id.imageView2)
+        twitter_image = view.findViewById(R.id.twitter_img)
 
         add_account_button.setOnClickListener {
 
