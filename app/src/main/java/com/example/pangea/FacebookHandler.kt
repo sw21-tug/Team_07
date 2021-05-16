@@ -9,6 +9,7 @@ import com.facebook.*
 import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import kotlinx.android.synthetic.main.posts_view.view.*
 import org.json.JSONObject
 
 

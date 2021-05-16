@@ -61,9 +61,9 @@ class PostTests {
 //            rule.scenario
             onView(withId(sendpostbtn)).perform(click())
 
-            onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
-            onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
-            onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
+            //onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
+           // onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
+           // onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
 
 //            onView(withId(R.id.facebookCheck)).perform(click())
 //            onView(withId(R.id.facebookCheck)).check(matches(isChecked()))
@@ -118,6 +118,16 @@ class PostTests {
         onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
             .perform(click())
             .check(matches(isDisplayed()))
+
+        onView(Matchers.allOf(ViewMatchers.withText("BOOKMARKED"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+
 
         onView(withId(sendpostbtn)).perform(click())
 
@@ -189,7 +199,7 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        onView(withId(sendpostbtn)).check(matches(not(isClickable())));
+        onView(withId(sendpostbtn)).check(matches(not(isEnabled())));
     }
 
 }

@@ -69,7 +69,6 @@
         android:layout_marginBottom="44dp"
         android:clickable="true"
         android:src="@drawable/ic_baseline_add_24"
-        android:tint="#FFFFFF"
         app:backgroundTint="#5B17D5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

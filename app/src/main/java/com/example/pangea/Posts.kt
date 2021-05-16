@@ -3,20 +3,20 @@ package com.example.pangea
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
-import android.transition.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.posts_popup.*
-import kotlinx.android.synthetic.main.posts_view.*
 import kotlinx.android.synthetic.main.posts_view.view.*
 
 
@@ -41,13 +41,16 @@ class Posts() : Fragment()
             StrictMode.setThreadPolicy(policy)
         }
 
+
         view.sendpostbtn.setOnClickListener {
             val intent = Intent(context, PostsPopup::class.java)
             if (email != null) {
                 intent.putExtra("loggedInUserMail", email)
             }
-            startActivity(intent)
+                startActivity(intent)
         }
+
+
 
         view.refresh.setOnClickListener{
             if(!email.isNullOrEmpty())
@@ -101,4 +104,63 @@ class Posts() : Fragment()
         return view
         
     }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+            val email = sharedPref.getString("current_user", "").toString()
+            val register = DatabaseHandler()
+
+            val curr_user: User? = context?.let { register.getRegisteredUser(email, it) }
+
+            val fhandler = FacebookHandler(requireContext(), curr_user!!, activity)
+
+            //fhandler.initApi(this)
+            val thandler = TwitterHandler(requireContext(), curr_user)
+            //thandler.initTwitterApi()
+            val hasFAccount = fhandler.hasLinkedAccount()
+            val hasTAccount = thandler.hasLinkedAccount()
+
+            if (!hasFAccount && !hasTAccount) {
+
+                view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                view?.sendpostbtn?.setEnabled(false)
+
+            }
+
+            else{
+                view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.MAGENTA));
+                view?.sendpostbtn?.setEnabled(true)
+            }
+        }
+    }
+
+//    override fun onResume() {
+//        super.onResume()
+//
+//        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+//        val email = sharedPref.getString("current_user", "").toString()
+//        val register = DatabaseHandler()
+//
+//        val curr_user: User? = context?.let { register.getRegisteredUser(email, it) }
+//
+//        val fhandler = FacebookHandler(requireContext(), curr_user!!, activity)
+//
+//        //fhandler.initApi(this)
+//        val thandler = TwitterHandler(requireContext(), curr_user)
+//        //thandler.initTwitterApi()
+//        val hasFAccount = fhandler.hasLinkedAccount()
+//        val hasTAccount = thandler.hasLinkedAccount()
+//
+//        if (!hasFAccount && !hasTAccount) {
+//
+//            view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+//
+//        }
+//
+//        else{
+//            view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.MAGENTA));
+//        }
+//    }
 }
