@@ -202,4 +202,39 @@ class PostTests {
         onView(withId(sendpostbtn)).check(matches(not(isEnabled())));
     }
 
+    @Test
+    fun basicPost() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test.user@test.com"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        register.addFBPost(email, message, image, context, "")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(withId(R.id.refresh)).perform(click())
+        onView(withId(R.id.bookmark)).check(matches(isDisplayed()))
+
+        PostDatabase.destroyInstance()
+    }
+
 }
