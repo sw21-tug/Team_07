@@ -3,18 +3,20 @@ package com.example.pangea
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.account_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,6 +36,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var hidden_facebook_button: Button
     lateinit var add_account_button: FloatingActionButton
     lateinit var twitter_image: ImageView
+    lateinit var account_view: View
 
 
     /* delete if we don't need facebook - START */
@@ -46,24 +49,25 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
         FacebookSdk.sdkInitialize(context);
-        val view = inflater.inflate(R.layout.account_view, container, false)
+        account_view = inflater.inflate(R.layout.account_view, container, false)
         val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
         val userMail = sharedPref.getString("current_user", "").toString()
 
         val user = DatabaseHandler().getRegisteredUser(userMail, requireContext())
 
-        twitter_login_btn = view.findViewById(R.id.twitter_login_btn)
-        login_button_facebook = view.findViewById(R.id.login_button_facebook)
-        hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
+        val context = activity as AppCompatActivity
+        tHandler = TwitterHandler(context, user)
 
-        add_account_button = view.findViewById(R.id.addaccount)
+        twitter_login_btn = account_view.findViewById(R.id.twitter_login_btn)
+        login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
+        hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
 
-        facebook_image = view.findViewById(R.id.facebook_img2)
-        twitter_image = view.findViewById(R.id.twitter_img)
+        add_account_button = account_view.findViewById(R.id.addaccount)
+
+        facebook_image = account_view.findViewById(R.id.facebook_img2)
+        twitter_image = account_view.findViewById(R.id.twitter_img)
 
         add_account_button.setOnClickListener {
-
-
 
             twitter_image.visibility = View.VISIBLE
             twitter_image.isClickable = true
@@ -101,8 +105,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         /* old copy start here  */
 
 
-        val context = activity as AppCompatActivity
-        tHandler = TwitterHandler(context, user)
+
         if(tHandler.hasLinkedAccount()) {
             twitter_login_btn.text = getString(R.string.twitter_unlink_text)
         }
@@ -114,10 +117,12 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             if(tHandler.hasLinkedAccount()) {
                 tHandler.unlinkAccount()
                 twitter_login_btn.text =getString(R.string.twitter_link_text)
+                add_account_button.isClickable = true
             }
             else {
                 setupDialogAndRequestAuthToken()
             }
+
         }
 
         fHandler = FacebookHandler(context, user, activity)
@@ -145,8 +150,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
         }
 
-
-        return view
+        return account_view
     }
 
     private fun setupDialogAndRequestAuthToken() {
@@ -183,6 +187,10 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             twitterDialog.dismiss()
             twitter_login_btn.text =  "Unlink twitter account"
             Log.d("TWITTER-Handler", "Logged in user and linked account")
+
+            //get username here
+            add_account_button.isClickable = false
+            refreshConnectedAccounts(account_view)
         }
     }
 
@@ -204,6 +212,76 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
     override fun loggedOut() {
         login_button_facebook.text = getString(R.string.facebook_link_text)
+    }
+
+    private fun refreshConnectedAccounts(view: View)
+    {
+        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+        val email = sharedPref.getString("current_user", "").toString()
+        val register = DatabaseHandler()
+        var connected_accounts = emptyList<String>()
+
+        /* setup button for logout the connected twitter account */
+        val logout_account: Button = Button(context)
+        logout_account.text = "Logout"
+
+        logout_account.setOnClickListener {
+            twitter_login_btn.performClick()
+        }
+
+        /* TODO
+        *  add database for registered accounts, right now it just adds
+        *  the current connected twitter account */
+        register.addSocialMediaAccount(tHandler.getTwitterUsername())
+
+        /*  get list of all connected social media accounts of this user from Database */
+        if(!email.isNullOrEmpty())
+        {
+            connected_accounts = activity?.let { register.getAllAccounts(email, it.applicationContext) }!!
+        }
+
+        val linearLayout : LinearLayout = view.findViewById(R.id.linearLayoutAccounts)
+        linearLayout.removeAllViews();
+
+        for (account in connected_accounts) {
+            var imageParams: RelativeLayout.LayoutParams
+            imageParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
+            val img = ImageView(context)
+            img.layoutParams = imageParams
+
+            /*if(account.facebook) {
+                img.setImageResource(R.drawable.facebookiconpreview)
+            }
+            else {*/
+            img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
+            //}
+            linearLayout.addView(img)
+
+
+            val cardView = activity?.applicationContext?.let { CardView(it) }
+            if (cardView != null) {
+                cardView.minimumWidth = 300
+                cardView.minimumHeight = 100
+                cardView.setContentPadding(15, 0, 15, 15)
+                cardView.setCardBackgroundColor(Color.LTGRAY)
+                cardView.radius = 20f
+            }
+
+            val textView = TextView(activity?.applicationContext)
+            //textView.text = tHandler.getTwitterUsername()
+            textView.text = account
+            textView.textSize = 18F
+            textView.setTextColor(Color.DKGRAY)
+            cardView?.addView(textView)
+            linearLayout.addView(cardView)
+            linearLayout.addView(logout_account)
+
+        }
     }
 
 }

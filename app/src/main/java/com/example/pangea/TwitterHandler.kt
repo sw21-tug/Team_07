@@ -85,6 +85,14 @@ class TwitterHandler(private val context: Context, private val user: User) {
         return twitter
     }
 
+    /* Method to get username from connected twitter account
+    *  Supports only one twitter account for now */
+    fun getTwitterUsername():String
+    {
+        //return username by the logged in user
+        return twitter!!.oAuthAccessToken.screenName.toString()
+    }
+
     inner class TwitterWebViewClient(private val caller: ITwitterCallback) : WebViewClient() {
 
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {

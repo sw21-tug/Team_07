@@ -4,6 +4,8 @@ import android.content.Context
 
 class DatabaseHandler
 {
+     var all_connected_accounts = mutableListOf<String>()
+
 
      fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
@@ -97,5 +99,14 @@ class DatabaseHandler
         val postDao = db.postDao()
 
         postDao.deletePostByID(postID)
+    }
+
+    fun getAllAccounts(userEmail: String, context: Context): List<String> {
+        return all_connected_accounts
+    }
+
+    fun addSocialMediaAccount(username: String)
+    {
+        all_connected_accounts.add(username)
     }
 }
