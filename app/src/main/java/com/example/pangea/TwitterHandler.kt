@@ -93,6 +93,16 @@ class TwitterHandler(private val context: Context, private val user: User) {
         return twitter!!.oAuthAccessToken.screenName.toString()
     }
 
+    /* Method to check if a Twitter user is logged in */
+    fun checkIfTwitterObjectValid(): Boolean
+    {
+        if(twitter == null)
+        {
+            return false
+        }
+        return true
+    }
+
     inner class TwitterWebViewClient(private val caller: ITwitterCallback) : WebViewClient() {
 
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {

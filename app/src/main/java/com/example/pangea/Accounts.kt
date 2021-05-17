@@ -13,6 +13,7 @@ import android.webkit.WebView
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.isNotEmpty
 import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.system.exitProcess
 
 /* This class controls the logic in the "Accounts"-Tab
    New Methods can be implemented as needed.
@@ -37,6 +39,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var add_account_button: FloatingActionButton
     lateinit var twitter_image: ImageView
     lateinit var account_view: View
+    lateinit var linear_connected_accounts : LinearLayout
 
 
     /* delete if we don't need facebook - START */
@@ -66,6 +69,14 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         facebook_image = account_view.findViewById(R.id.facebook_img2)
         twitter_image = account_view.findViewById(R.id.twitter_img)
+
+        /* If you open the app and didn't Logout your twitter account before
+        *  closing the app, the connected Account is shown after going to  accounts tab */
+        // TODO delete this comment in yellow when database for connected social media accounts are implemented
+        if(tHandler.hasLinkedAccount() && tHandler.checkIfTwitterObjectValid())
+        {
+            refreshConnectedAccounts(account_view)
+        }
 
         add_account_button.setOnClickListener {
 
@@ -101,10 +112,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         }
 
 
-        //twitter_image.visibility = View.INVISIBLE
-        /* old copy start here  */
-
-
 
         if(tHandler.hasLinkedAccount()) {
             twitter_login_btn.text = getString(R.string.twitter_unlink_text)
@@ -115,9 +122,13 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         twitter_login_btn.setOnClickListener {
             if(tHandler.hasLinkedAccount()) {
+                //clear before connected account from view
+                cleanUPCardViewAfterLogout(account_view)
+                add_account_button.isClickable = true
+
+                //now unlink account
                 tHandler.unlinkAccount()
                 twitter_login_btn.text =getString(R.string.twitter_link_text)
-                add_account_button.isClickable = true
             }
             else {
                 setupDialogAndRequestAuthToken()
@@ -214,6 +225,9 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         login_button_facebook.text = getString(R.string.facebook_link_text)
     }
 
+    /* this method shows the connected accounts as soon as you log in with a social media account
+    *  TODO works for now just for twitter, facebook untouched because unclear if facebooks gets removed from app
+    *  TODO also works now just for one connected account. */
     private fun refreshConnectedAccounts(view: View)
     {
         val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
@@ -240,8 +254,8 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             connected_accounts = activity?.let { register.getAllAccounts(email, it.applicationContext) }!!
         }
 
-        val linearLayout : LinearLayout = view.findViewById(R.id.linearLayoutAccounts)
-        linearLayout.removeAllViews();
+        linear_connected_accounts = view.findViewById(R.id.linearLayoutAccounts)
+        linear_connected_accounts.removeAllViews();
 
         for (account in connected_accounts) {
             var imageParams: RelativeLayout.LayoutParams
@@ -260,10 +274,11 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             else {*/
             img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
             //}
-            linearLayout.addView(img)
+            linear_connected_accounts.addView(img)
 
 
             val cardView = activity?.applicationContext?.let { CardView(it) }
+
             if (cardView != null) {
                 cardView.minimumWidth = 300
                 cardView.minimumHeight = 100
@@ -273,14 +288,22 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
 
             val textView = TextView(activity?.applicationContext)
-            //textView.text = tHandler.getTwitterUsername()
             textView.text = account
             textView.textSize = 18F
             textView.setTextColor(Color.DKGRAY)
             cardView?.addView(textView)
-            linearLayout.addView(cardView)
-            linearLayout.addView(logout_account)
+            linear_connected_accounts.addView(cardView)
+            linear_connected_accounts.addView(logout_account)
 
+        }
+    }
+
+    /* This Method deletes the information about the now logged out account */
+    private fun cleanUPCardViewAfterLogout (view: View)
+    {
+        if(tHandler.hasLinkedAccount() && this::linear_connected_accounts.isInitialized)
+        {
+            linear_connected_accounts.removeAllViews()
         }
     }
 
