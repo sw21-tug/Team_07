@@ -238,6 +238,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         /* setup button for logout the connected twitter account */
         val logout_account: Button = Button(context)
         logout_account.text = "Logout"
+        logout_account.setBackgroundColor(Color.RED);
 
         logout_account.setOnClickListener {
             twitter_login_btn.performClick()
