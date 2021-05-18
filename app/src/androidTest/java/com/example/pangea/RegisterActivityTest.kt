@@ -31,7 +31,7 @@ class RegisterActivityTest{
         onView(withId(R.id.password)).perform(clearText())
         onView(withId(R.id.password)).perform(typeText("12345"))
 
-        onView(withId(R.id.startRegisterButton)).perform(click())
+        onView(withId(R.id.registerButton)).perform(click())
     }
 
     @Test
@@ -48,13 +48,12 @@ class RegisterActivityTest{
         onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
         onView(withId(R.id.password)).perform(clearText())
         onView(withId(R.id.password)).perform(typeText("12345"))
-        onView(withId(R.id.startRegisterButton)).perform(click())
+        onView(withId(R.id.registerButton)).perform(click())
 
         //now we're registered and already in the dashboard
         intended(hasComponent(DashboardsActivity::class.java.name))
 
-        //go back twice to get back to login screen
-        pressBack()
+        //go back once to get back to login screen
         pressBack()
 
         //login

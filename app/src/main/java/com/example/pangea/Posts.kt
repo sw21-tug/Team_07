@@ -103,7 +103,8 @@ class Posts() : Fragment()
         return view
         
     }
-    
+
+
 
     override fun onResume() {
         super.onResume()

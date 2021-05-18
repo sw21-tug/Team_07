@@ -27,17 +27,8 @@ import org.junit.Rule
 @RunWith(AndroidJUnit4::class)
 class PostTests {
     @get:Rule
-    val mActivityTestRule: ActivityTestRule<DashboardsActivity> =
-        object : ActivityTestRule<DashboardsActivity>(DashboardsActivity::class.java, true, false) {
-            override fun getActivityIntent(): Intent {
-                val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-                val sharedPref = targetContext.getSharedPreferences("user", Context.MODE_PRIVATE)
-                sharedPref.edit().putString("current_user","test.user@test.com").apply()
-                return Intent(targetContext, DashboardsActivity::class.java)
-            }
-        }
-
-        @Test
+    val activityRule = ActivityScenarioRule(PostsPopup::class.java)
+    @Test
         fun testButton ()
         {
             val email = "test.user@test.com"
@@ -48,9 +39,6 @@ class PostTests {
             var user = dbHandler.getRegisteredUser(email, context)
             Assert.assertEquals(email, user.email)
             Assert.assertEquals(pw, user.password)
-
-            mActivityTestRule.launchActivity(null)
-            onView(withId(R.id.sendpostbtn)).perform(click())
 
             onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
             onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
