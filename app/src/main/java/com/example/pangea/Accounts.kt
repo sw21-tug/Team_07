@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -238,7 +239,9 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         /* setup button for logout the connected twitter account */
         val logout_account: Button = Button(context)
         logout_account.text = "Logout"
-        logout_account.setBackgroundColor(Color.RED);
+        logout_account.setBackgroundColor(Color.parseColor("#B86566"));
+        val draw: Drawable = Drawable.createFromPath( "@drawable/round_style")!!
+        logout_account.background =draw
 
         logout_account.setOnClickListener {
             twitter_login_btn.performClick()
