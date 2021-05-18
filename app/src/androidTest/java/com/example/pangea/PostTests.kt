@@ -1,6 +1,7 @@
 package com.example.pangea
 
 import android.content.Context
+import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
@@ -12,7 +13,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
 import com.example.pangea.Posts
+import junit.framework.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -23,12 +26,30 @@ import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
 class PostTests {
-        @get:Rule var rule = ActivityScenarioRule(DashboardsActivity::class.java)
+    @get:Rule
+    val mActivityTestRule: ActivityTestRule<DashboardsActivity> =
+        object : ActivityTestRule<DashboardsActivity>(DashboardsActivity::class.java, true, false) {
+            override fun getActivityIntent(): Intent {
+                val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+                val sharedPref = targetContext.getSharedPreferences("user", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("current_user","test.user@test.com").apply()
+                return Intent(targetContext, DashboardsActivity::class.java)
+            }
+        }
 
         @Test
         fun testButton ()
         {
-            rule.scenario
+            val email = "test.user@test.com"
+            val pw = "1234abc"
+            val context = ApplicationProvider.getApplicationContext<Context>()
+            val dbHandler = DatabaseHandler()
+            dbHandler.registerUser(email, pw, context)
+            var user = dbHandler.getRegisteredUser(email, context)
+            Assert.assertEquals(email, user.email)
+            Assert.assertEquals(pw, user.password)
+
+            mActivityTestRule.launchActivity(null)
             onView(withId(R.id.sendpostbtn)).perform(click())
 
             onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))

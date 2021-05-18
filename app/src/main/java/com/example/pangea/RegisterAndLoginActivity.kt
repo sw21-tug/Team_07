@@ -2,7 +2,6 @@ package com.example.pangea
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -10,8 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
 
 class RegisterAndLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +18,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         val userEmail = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
 
-        val registerButton = findViewById<Button>(R.id.registerButton);
+        val registerButton = findViewById<Button>(R.id.startRegisterButton);
 
         registerButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
