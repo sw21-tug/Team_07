@@ -9,8 +9,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.*
+import java.util.concurrent.TimeUnit
 
 class RegisterAndLoginActivity : AppCompatActivity() {
+    private val constraints = Constraints.Builder()
+        .setRequiresBatteryNotLow(true)
+        .build()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_login)
@@ -43,6 +48,14 @@ class RegisterAndLoginActivity : AppCompatActivity() {
                 myToast.show()
             }
         }
+
+        val periodWork = PeriodicWorkRequest.Builder(NotificationWorker::class.java,1,TimeUnit.DAYS)
+            .addTag("periodic-pending-notification")
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("periodic-pending-notification", ExistingPeriodicWorkPolicy.REPLACE, periodWork)
+
+
     }
 
     fun View.hideKeyboard() {
