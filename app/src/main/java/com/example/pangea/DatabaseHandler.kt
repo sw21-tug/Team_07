@@ -70,7 +70,7 @@ class DatabaseHandler {
     fun addFBPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()
-        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, postID = id)
+        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, postID = id, bookmarked = false)
         postDao.insertOne(post)
         return 0
     }
@@ -78,9 +78,17 @@ class DatabaseHandler {
     fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()
-        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, postID = id)
+        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, postID = id, bookmarked = false)
         postDao.insertOne(post)
         return 0
+    }
+
+    fun updatePostBookmarked(postId: String, bookmarked: Boolean, context: Context) {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        val post = postDao.selectPostbyID(postId)
+        post.bookmarked = bookmarked
+        postDao.updatePost(post)
     }
 
     //add image if needed

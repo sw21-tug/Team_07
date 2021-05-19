@@ -13,6 +13,12 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE email IS (:email)")
     fun selectAllPostsForUser(email: String): List<Post>
 
+    @Query("SELECT * FROM posts WHERE postID = :postID")
+    fun selectPostbyID(postID: String): Post
+
+    @Update
+    fun updatePost(vararg post : Post)
+
     @Insert
     fun insertAll(vararg posts: Post)
 

@@ -28,5 +28,5 @@ data class Post(
     val postID: String?,
 
     @ColumnInfo(name = "bookmarked")
-    val bookmarked: Boolean
+    var bookmarked: Boolean
 )
