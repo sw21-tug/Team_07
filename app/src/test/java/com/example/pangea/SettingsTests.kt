@@ -15,7 +15,7 @@ class SettingsTests {
     fun tearDown() {
         AppDatabase.destroyInstance()
     }
-
+    
     @Test
     fun testChangePassword(){
 
