@@ -13,6 +13,7 @@
         android:id="@+id/post_text_field"
         android:layout_width="249dp"
         android:layout_height="54dp"
+        android:maxLines="2"
         android:textSize="16sp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"

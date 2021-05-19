@@ -97,6 +97,12 @@ class Posts() : Fragment()
 
                 post_date.text = "01.01.1970"
 
+                textfield.setOnClickListener {
+                    val intent = Intent(context, PostExpanded::class.java)
+                    intent.putExtra("Text", post.message)
+                    startActivity(intent)
+                }
+
                 linearLayout.addView(cardview)
 
 //                var imageParams: RelativeLayout.LayoutParams

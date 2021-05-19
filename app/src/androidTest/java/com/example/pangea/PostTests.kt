@@ -268,9 +268,10 @@ class PostTests {
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.refresh)).perform(click())
-        onView(anyOf(withId(R.id.post_card_view))).perform(click())
+        onView(anyOf(withId(R.id.post_text_field))).perform(click())
 
-        Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
+       //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
+        onView(withId(R.id.TextViewPostExpanded)).check(matches(isDisplayed()))
 
         PostDatabase.destroyInstance()
     }
