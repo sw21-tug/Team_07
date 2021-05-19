@@ -23,6 +23,7 @@ import com.facebook.GraphRequest
 import com.facebook.HttpMethod
 import com.facebook.login.LoginManager
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Assert
 import org.junit.Test
@@ -232,7 +233,7 @@ class PostTests {
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.refresh)).perform(click())
-        onView(withId(R.id.bookmark)).check(matches(isDisplayed()))
+        onView(anyOf(withId(R.id.bookmark_checkbox)))
 
         PostDatabase.destroyInstance()
     }
