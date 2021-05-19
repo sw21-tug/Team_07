@@ -61,6 +61,12 @@ class DatabaseHandler {
         return postDao.selectAllPostsForUser(userEmail)
     }
 
+    fun getAllBookmarkedPosts(userEmail: String, context: Context): List<Post>{
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        return postDao.selectAllPostsForUserBookmarked(userEmail)
+    }
+
     fun addFBPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()

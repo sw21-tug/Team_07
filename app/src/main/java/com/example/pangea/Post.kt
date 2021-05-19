@@ -25,6 +25,8 @@ data class Post(
     val twitter: Boolean?,
 
     @ColumnInfo(name = "postID")
-    val postID: String?
+    val postID: String?,
 
+    @ColumnInfo(name = "bookmarked")
+    val bookmarked: Boolean
 )

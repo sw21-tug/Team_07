@@ -27,4 +27,7 @@ interface PostDao {
 
     @Query("DELETE FROM posts WHERE email = :email AND message = :message AND twitter = 1")
     fun deleteTwitterPostByUserIdWitText(email: String, message: String)
+
+    @Query("SELECT * FROM posts WHERE email IS (:email) AND bookmarked = 1")
+    fun selectAllPostsForUserBookmarked(email: String): List<Post>
 }
