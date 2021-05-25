@@ -281,7 +281,7 @@ class PostTests {
     }
 
     @Test
-    fun testLongclickDelete() {
+    fun testLongClickDelete() {
 
         Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -306,7 +306,7 @@ class PostTests {
         val message = "test"
         val image = null
 
-        val postslist = register.getAllPosts("test", context)
+        var postslist = register.getAllPosts(email, context)
 
         postslist.forEach{register.deletePostByID(it.postID!!, context)}
 
@@ -316,8 +316,12 @@ class PostTests {
         onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(longClick())
 
-        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
-        onView(withId(R.id.DeleteMenu)).check(matches(isDisplayed()))
+        onView(withText("Delete Post")).check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click());
+
+        postslist = register.getAllPosts(email, context)
+
+        require(postslist.isEmpty())
 
         PostDatabase.destroyInstance()
     }

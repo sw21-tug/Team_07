@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -103,66 +104,28 @@ class Posts() : Fragment()
                     startActivity(intent)
                 }
 
-                linearLayout.addView(cardview)
+                textfield.setOnLongClickListener {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("Delete Post")
+                    builder.setMessage("Do you want to delete this post?")
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
 
-//                var imageParams: RelativeLayout.LayoutParams
-//                imageParams = RelativeLayout.LayoutParams(
-//                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-//                    RelativeLayout.LayoutParams.WRAP_CONTENT
-//                )
-//
-//                imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-//                val img = ImageView(context)
-//                img.layoutParams = imageParams
-//
-//                if(post.facebook) {
-//                    img.setImageResource(R.drawable.facebookiconpreview)
-//                }
-//                else {
-//                    img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
-//                }
-//                linearLayout.addView(img)
-//
-//
-//                val cardView = activity?.applicationContext?.let { CardView(it) }
-//                if (cardView != null) {
-//                    cardView.minimumWidth = 300
-//                    cardView.minimumHeight = 300
-//                    cardView.setContentPadding(15, 0, 15, 15)
-//                    cardView.setCardBackgroundColor(Color.LTGRAY)
-//                    cardView.radius = 20f
-//                }
-//
-////                  USE THIS IF CHECKBOX DOESN'T WORK
-////                val bookmarked_btn = ImageButton(activity?.applicationContext)
-////                bookmarked_btn.setImageDrawable(
-////                    ContextCompat.getDrawable(
-////                        requireActivity().applicationContext, // Context
-////                        android.R.drawable.btn_star // Drawable
-////                    )
-////                )
-//
-//                val bookmark_checkbox = CheckBox(activity?.applicationContext)
-//                bookmark_checkbox.setButtonDrawable(
-//                    ContextCompat.getDrawable(
-//                    requireActivity().applicationContext, // Context
-//                    android.R.drawable.btn_star // Drawable
-//                ))
-//
-//                val textView = TextView(activity?.applicationContext)
-//                textView.text = post.message
-//
-//                textView.textSize = 18F
-//                textView.setTextColor(Color.DKGRAY)
-//                cardView?.addView(textView)
-//                cardView?.addView(bookmark_checkbox)
-//                val bookmark = cardView?.getChildAt(1)
-//                bookmark!!.measure(10,10)
-//                //bookmark!!.accessibilityLiveRegion
-//                bookmark!!.layout(0, 0, 0, 0)
-//                bookmark!!.alpha = 0.5F
-//
-//                linearLayout.addView(cardView)
+                    builder.setPositiveButton("Yes"){dialogInterface, which ->
+                        register.deletePostByID(post.postID!!, requireContext())
+                        Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
+                        //refresh directly??
+                    }
+
+                    builder.setNegativeButton("No"){dialogInterface, which ->
+                        Toast.makeText(context,"canceled",Toast.LENGTH_LONG).show()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                    true
+                }
+
+                linearLayout.addView(cardview)
             }
         }
 
@@ -196,7 +159,7 @@ class Posts() : Fragment()
             }
 
             else{
-                view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.MAGENTA));
+                view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
                 view?.sendpostbtn?.setEnabled(true)
             }
         }
