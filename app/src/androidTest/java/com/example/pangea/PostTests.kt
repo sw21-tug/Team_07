@@ -204,6 +204,27 @@ class PostTests {
     }
 
     @Test
+    fun testSearchButton ()
+    {
+        //Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Assert.assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        onView(withId(searchbutton)).check(matches(isDisplayed()));
+    }
+
+    @Test
     fun basicPost() {
 
         Intents.init()
