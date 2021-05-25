@@ -221,7 +221,7 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        onView(withId(searchbutton)).check(matches(isDisplayed()));
+        onView(withId(R.id.searchbtn)).check(matches(isDisplayed()));
     }
 
     @Test
