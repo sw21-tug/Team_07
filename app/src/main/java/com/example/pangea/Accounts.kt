@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.DialogFragment
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 import com.facebook.FacebookSdk
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.account_view.*
@@ -77,7 +79,11 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         // TODO delete this comment in yellow when database for connected social media accounts are implemented
         if(tHandler.hasLinkedAccount() && tHandler.checkIfTwitterObjectValid())
         {
-            refreshConnectedAccounts(account_view)
+            refreshConnectedAccounts(account_view, false)
+        }
+        if(fHandler.hasLinkedAccount() && fHandler.isLoggedIn())
+        {
+            refreshConnectedAccounts(account_view, true)
         }
 
         add_account_button.setOnClickListener {
@@ -207,7 +213,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
             //get username here
             add_account_button.isClickable = false
-            refreshConnectedAccounts(account_view)
+            refreshConnectedAccounts(account_view, false)
         }
     }
 
@@ -222,6 +228,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         {
             login_button_facebook.text = getString(R.string.facebook_link_text)
         }
+        refreshConnectedAccounts(account_view, true)
         super.onActivityResult(requestCode, resultCode, data)
 
 
@@ -234,12 +241,12 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     /* this method shows the connected accounts as soon as you log in with a social media account
     *  TODO works for now just for twitter, facebook untouched because unclear if facebooks gets removed from app
     *  TODO also works now just for one connected account. */
-    private fun refreshConnectedAccounts(view: View)
+    private fun refreshConnectedAccounts(view: View, bool_facebook: Boolean)
     {
         val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
         val email = sharedPref.getString("current_user", "").toString()
         val register = DatabaseHandler()
-        var connected_accounts = emptyList<String>()
+        var connected_accounts = emptyList<SocialMediaAccounts>()
 
         /* setup button for logout the connected twitter account */
         val logout_account: Button = Button(context)
@@ -251,17 +258,27 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         logout_account.setOnClickListener {
             twitter_login_btn.performClick()
         }
-        
+
 
         /* TODO
         *  add database for registered accounts, right now it just adds
         *  the current connected twitter account */
-        register.addSocialMediaAccount(tHandler.getTwitterUsername())
+
+        if(!bool_facebook) {
+            val social_media = SocialMediaAccounts(user_name = tHandler.getTwitterUsername(), facebook = false, twitter = true)
+            context?.let { register.addSocialMediaAccount(social_media, it) }
+        }
+        else
+        {
+            val social_media = SocialMediaAccounts(user_name = tHandler.getTwitterUsername(), facebook = true, twitter = false)
+            context?.let { register.addSocialMediaAccount(social_media, it) }
+        }
+
 
         /*  get list of all connected social media accounts of this user from Database */
         if(!email.isNullOrEmpty())
         {
-            connected_accounts = activity?.let { register.getAllAccounts(email, it.applicationContext) }!!
+            connected_accounts = activity?.let { register.getAllSocialMediaAccounts(it.applicationContext) }!!
         }
 
         linear_connected_accounts = view.findViewById(R.id.linearLayoutAccounts)
@@ -278,12 +295,14 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             val img = ImageView(context)
             img.layoutParams = imageParams
 
-            /*if(account.facebook) {
+            if(account.facebook)
+            {
                 img.setImageResource(R.drawable.facebookiconpreview)
             }
-            else {*/
-            img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
-            //}
+            else
+            {
+                img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
+            }
             linear_connected_accounts.addView(img)
 
 
@@ -298,7 +317,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             }
 
             val textView = TextView(activity?.applicationContext)
-            textView.text = account
+            textView.text = account.user_name
             textView.textSize = 18F
             textView.setTextColor(Color.DKGRAY)
             cardView?.addView(textView)

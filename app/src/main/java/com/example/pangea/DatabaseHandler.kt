@@ -1,10 +1,12 @@
 package com.example.pangea
 
 import android.content.Context
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 
 class DatabaseHandler
 {
-     var all_connected_accounts = mutableListOf<String>()
+     var all_connected_accounts = mutableListOf<SocialMediaAccounts>()
 
 
      fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
@@ -101,12 +103,16 @@ class DatabaseHandler
         postDao.deletePostByID(postID)
     }
 
-    fun getAllAccounts(userEmail: String, context: Context): List<String> {
-        return all_connected_accounts
+    fun getAllSocialMediaAccounts(context: Context): List<SocialMediaAccounts> {
+        val db = SocialMediaAccountsDatabase.getInstance(context)
+        val social_dao = db.socialMediaDao()
+        return social_dao.getAll()
     }
 
-    fun addSocialMediaAccount(username: String)
+    fun addSocialMediaAccount(socialMediaAccounts: SocialMediaAccounts, context: Context)
     {
-        all_connected_accounts.add(username)
+        val db = SocialMediaAccountsDatabase.getInstance(context)
+        val socialDao = db.socialMediaDao()
+        socialDao.insertOne(socialMediaAccounts)
     }
 }

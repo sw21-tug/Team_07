@@ -3,12 +3,11 @@ package com.example.pangea
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.facebook.*
-import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -41,12 +40,17 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         return AccessToken.getCurrentAccessToken()
     }
 
+
     fun isLoggedIn(): Boolean
     {
         val accessToken = AccessToken.getCurrentAccessToken()
         return accessToken != null && !accessToken.isExpired
     }
 
+    fun getUser() : String
+    {
+        return getCurrentAccesToken().userId
+    }
     fun isLoggedInWithWritePermissions(): Boolean
     {
         if(!isLoggedIn()) {

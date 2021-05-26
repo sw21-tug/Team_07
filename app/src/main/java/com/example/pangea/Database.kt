@@ -1,5 +1,6 @@
 package com.example.pangea
 
+import SocialMediaDao
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -57,6 +58,41 @@ abstract class PostDatabase : RoomDatabase() {
                         context.applicationContext,
                         PostDatabase::class.java,
                         "posts")
+                        .fallbackToDestructiveMigration()
+                        .allowMainThreadQueries()
+                        .build()
+                    INSTANCE = instance
+                }
+                return instance
+            }
+        }
+
+        fun destroyInstance() {
+            if (INSTANCE?.isOpen == true) {
+                INSTANCE?.close()
+            }
+
+            INSTANCE = null
+        }
+    }
+}
+
+@Database(entities = arrayOf(SocialMediaAccounts::class), version = 2)
+abstract class SocialMediaAccountsDatabase : RoomDatabase() {
+    abstract fun socialMediaDao(): SocialMediaDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: SocialMediaAccountsDatabase? = null
+
+        fun getInstance(context: Context): SocialMediaAccountsDatabase {
+            synchronized(this) {
+                var instance = INSTANCE
+                if (instance == null) {
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        SocialMediaAccountsDatabase::class.java,
+                        "SocialMediaAccounts")
                         .fallbackToDestructiveMigration()
                         .allowMainThreadQueries()
                         .build()
