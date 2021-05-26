@@ -7,25 +7,28 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.facebook.FacebookSdk
 import junit.framework.Assert
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class AccountsLinkTest {
-
-
 
     @get:Rule
     val mActivityTestRule: ActivityTestRule<DashboardsActivity> =
         object : ActivityTestRule<DashboardsActivity>(DashboardsActivity::class.java, true, false) {
             override fun getActivityIntent(): Intent {
                 val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-                return Intent(targetContext, DashboardsActivity::class.java).apply {
-                    putExtra("loggedInUserMail", "test.user@test.com")
-                }
+                val sharedPref = targetContext.getSharedPreferences("user", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("current_user","test.user@test.com").apply()
+                return Intent(targetContext, DashboardsActivity::class.java)
             }
         }
 
@@ -72,25 +75,25 @@ class AccountsLinkTest {
         onView(withId(R.id.twitter_login_btn)).check(matches(withText(resources.getString(R.string.twitter_unlink_text))))
     }
 
-//    @Test
-//    fun testFacebookLinkVisibleInAccountsFragment() {
-//        FacebookSdk.setApplicationId("171191854853298")
-//        val email = "test.user@test.com"
-//        val pw = "1234abc"
-//        val context = ApplicationProvider.getApplicationContext<Context>()
-//        FacebookSdk.sdkInitialize(context)
-//        val dbHandler = DatabaseHandler()
-//        dbHandler.registerUser(email, pw, context)
-//        var user = dbHandler.getRegisteredUser(email, context)
-//        Assert.assertEquals(email, user.email)
-//        Assert.assertEquals(pw, user.password)
-//        val fbHandler = FacebookHandler(context, user, activity)
-//        fbHandler.logoutFacebook()
-//        mActivityTestRule.launchActivity(null)
-//        onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
-//        onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
-//        onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_link_text))))
-//    }
+    @Test
+    fun testFacebookLinkVisibleInAccountsFragment() {
+        FacebookSdk.setApplicationId("171191854853298")
+        val email = "test.user@test.com"
+        val pw = "1234abc"
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        FacebookSdk.sdkInitialize(context)
+        val dbHandler = DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
+        var user = dbHandler.getRegisteredUser(email, context)
+        Assert.assertEquals(email, user.email)
+        Assert.assertEquals(pw, user.password)
+        val fbHandler = FacebookHandler(context, user, this.mActivityTestRule.activity)
+        fbHandler.logoutFacebook()
+        mActivityTestRule.launchActivity(null)
+        onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
+        onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
+        onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_link_text))))
+    }
 
     @Test
     fun testFacebookHasLinkedAccount() {
@@ -112,6 +115,12 @@ class AccountsLinkTest {
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_unlink_text))))
+    }
+
+    @After
+    fun destroyData()
+    {
+        AppDatabase.destroyInstance()
     }
 
 }

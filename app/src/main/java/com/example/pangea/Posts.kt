@@ -17,6 +17,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
+import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.posts_view.view.*
 import kotlinx.android.synthetic.main.single_post.*
@@ -164,32 +165,14 @@ class Posts() : Fragment()
             }
         }
     }
+  
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
-//        val email = sharedPref.getString("current_user", "").toString()
-//        val register = DatabaseHandler()
-//
-//        val curr_user: User? = context?.let { register.getRegisteredUser(email, it) }
-//
-//        val fhandler = FacebookHandler(requireContext(), curr_user!!, activity)
-//
-//        //fhandler.initApi(this)
-//        val thandler = TwitterHandler(requireContext(), curr_user)
-//        //thandler.initTwitterApi()
-//        val hasFAccount = fhandler.hasLinkedAccount()
-//        val hasTAccount = thandler.hasLinkedAccount()
-//
-//        if (!hasFAccount && !hasTAccount) {
-//
-//            view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-//
-//        }
-//
-//        else{
-//            view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.MAGENTA));
-//        }
-//    }
+
+    override fun onResume() {
+        super.onResume()
+        val view = getView()
+        if (view != null) {
+            view.findViewById<Button>(R.id.refresh).performClick()
+        }
+    }
 }

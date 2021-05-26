@@ -1,5 +1,7 @@
 package com.example.pangea
 
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -73,12 +75,23 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                 var postId = thandler.postTweet(message.toString())
                 register.addTwitterPost(userEmail, message.toString(), null, applicationContext, postId)
             }
-            else if (facebook_check && twitter_check)
-            {
+            else if (facebook_check && twitter_check) {
                 var postId = fhandler.postMessage(message.toString())
-                register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString())
+                register.addFBPost(
+                    userEmail,
+                    message.toString(),
+                    null,
+                    applicationContext,
+                    postId.toString()
+                )
                 var twitterId = thandler.postTweet(message.toString())
-                register.addTwitterPost(userEmail, message.toString(), null, applicationContext, twitterId)
+                register.addTwitterPost(
+                    userEmail,
+                    message.toString(),
+                    null,
+                    applicationContext,
+                    twitterId
+                )
             }
             finish()
         }

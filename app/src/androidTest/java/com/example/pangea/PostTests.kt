@@ -2,6 +2,7 @@ package com.example.pangea
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
@@ -15,6 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
 import com.example.pangea.Posts
 import com.example.pangea.R.id.sendpostbtn
 import com.facebook.AccessToken
@@ -26,6 +28,7 @@ import org.hamcrest.Matchers
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Assert
+import junit.framework.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
