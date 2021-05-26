@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
+import com.facebook.login.widget.LoginButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var twitter_login_btn: Button
     lateinit var fHandler: FacebookHandler
     lateinit var login_button_facebook: Button
-    lateinit var hidden_facebook_button: Button
+    lateinit var hidden_facebook_button: LoginButton
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +68,8 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         fHandler.initApi(this)
         login_button_facebook = view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = view.findViewById(R.id.hidden_facebook_button)
+        hidden_facebook_button.setPermissions("pages_show_list");
+
         if(fHandler.hasLinkedAccount())
         {
             login_button_facebook.text = getString(R.string.facebook_unlink_text)
