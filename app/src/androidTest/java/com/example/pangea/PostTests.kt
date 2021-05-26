@@ -3,6 +3,10 @@ package com.example.pangea
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Looper
+import android.widget.Toast
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.startActivity
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
@@ -18,6 +22,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.example.pangea.Posts
+import com.example.pangea.R.id.add_media_btn
 import com.example.pangea.R.id.sendpostbtn
 import com.facebook.AccessToken
 import com.facebook.FacebookSdk
@@ -375,6 +380,7 @@ class PostTests {
         val message = "test"
         val image = null
 
+
         onView(anyOf(withId(R.id.sendpostbtn))).perform(click())
 
         onView(withId(R.id.add_media_btn)).check(matches(isDisplayed()))
@@ -410,11 +416,10 @@ class PostTests {
 
         onView(anyOf(withId(R.id.sendpostbtn))).perform(click())
 
-        onView(withId(R.id.add_media_btn)).perform(click())
-
-        onView(withId(R.id.file)).check(matches(isDisplayed()))
+        onView(withId(R.id.preview_picture)).check(matches(isDisplayed()))
 
         PostDatabase.destroyInstance()
+
     }
 
 }
