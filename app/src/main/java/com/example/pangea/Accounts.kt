@@ -250,20 +250,11 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         var connected_accounts = emptyList<SocialMediaAccounts>()
 
         /* setup button for logout the connected twitter account */
-        val logout_account: Button = Button(context)
-        logout_account.text = "Logout"
-        logout_account.setBackgroundColor(Color.parseColor("#B86566"));
-        val draw: Drawable? = Drawable.createFromPath(R.drawable.round_style.toString())
-        logout_account.background = draw
 
-        logout_account.setOnClickListener {
-            twitter_login_btn.performClick()
-        }
 
         /* TODO
         *  add database for registered accounts, right now it just adds
         *  the current connected twitter account */
-
         if(!bool_facebook) {
             val social_media = SocialMediaAccounts(user_name = tHandler.getTwitterUsername(), facebook = false, twitter = true)
             context?.let { register.addSocialMediaAccount(social_media, it) }
@@ -284,6 +275,20 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         linear_connected_accounts = view.findViewById(R.id.linearLayoutAccounts)
         linear_connected_accounts.removeAllViews();
 
+        val logout_account: TextView = Button(context)
+        logout_account.text = "Logout"
+        logout_account.setBackgroundColor(Color.parseColor("#B86566"));
+        val draw: Drawable? = Drawable.createFromPath(R.drawable.round_style.toString())
+        logout_account.background = draw
+
+
+        logout_account.setOnClickListener {
+            if(!bool_facebook)
+                twitter_login_btn.performClick()
+            else
+                hidden_facebook_button.performClick()
+        }
+
         for (account in connected_accounts) {
             var imageParams: RelativeLayout.LayoutParams
             imageParams = RelativeLayout.LayoutParams(
@@ -293,7 +298,9 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
             val img = ImageView(context)
+            val img_logout = ImageView(context)
             img.layoutParams = imageParams
+            img_logout.layoutParams = imageParams
 
 
             if(account.facebook)
@@ -304,6 +311,9 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             {
                 img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
             }
+            img_logout.setImageResource(R.drawable.com_facebook_tooltip_black_xout)
+            img_logout.scaleX = 10F
+            img_logout.scaleY = 10F
             linear_connected_accounts.addView(img)
 
 
@@ -323,7 +333,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             textView.setTextColor(Color.DKGRAY)
             cardView?.addView(textView)
             linear_connected_accounts.addView(cardView)
-            linear_connected_accounts.addView(logout_account)
+            linear_connected_accounts.addView(img_logout)
 
         }
     }
