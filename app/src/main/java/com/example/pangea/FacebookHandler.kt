@@ -155,6 +155,11 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     }
 
     fun getReactions(postId: String?) : String {
+        if(postId == "" || postId == null)
+        {
+            return "0"
+        }
+
         val request = GraphRequest.newGraphPathRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/" + postId

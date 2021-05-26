@@ -376,6 +376,7 @@ class PostTests {
         val message = "test"
         val image = null
 
+        //val lin = onView(withId(R.id.linearLayoutPosts))
         val postslist = register.getAllPosts("test", context)
 
         postslist.forEach{register.deletePostByID(it.postID!!, context)}
@@ -391,7 +392,7 @@ class PostTests {
 
         onView(withId(R.id.FacebookLikes)).check(matches(isDisplayed()))
         onView(withId(R.id.TwitterLikes)).check(matches(not(isDisplayed())))
-        
+
         PostDatabase.destroyInstance()
     }
 

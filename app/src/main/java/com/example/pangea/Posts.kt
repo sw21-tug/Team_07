@@ -106,7 +106,24 @@ class Posts() : Fragment()
                     val curr_user: User = register.getRegisteredUser(email, requireContext())
                     val fhandler = FacebookHandler(requireContext(), curr_user, activity)
 
-                    intent.putExtra("FBReactions", fhandler.getReactions(post.postID))
+                    val thandler = TwitterHandler(requireContext(), curr_user)
+
+                    var twretweets = "0"
+                    var fblikes = "0"
+
+                    if(post.twitter == true) {
+                        twretweets = thandler.getFavorites(post.postID!!)
+                    }
+                    if(post.facebook) {
+                        fblikes = fhandler.getReactions(post.postID)
+                    }
+
+
+                    intent.putExtra("TwitterRetweets", twretweets)
+                    intent.putExtra("FBReactions", fblikes)
+
+                    intent.putExtra("twitter", post.twitter.toString())
+                    intent.putExtra("facebook", post.facebook.toString())
 
                     startActivity(intent)
                 }
@@ -120,7 +137,10 @@ class Posts() : Fragment()
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         register.deletePostByID(post.postID!!, requireContext())
                         Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
-                        //refresh directly??
+                        val view = getView()
+                        if (view != null) {
+                            view.findViewById<Button>(R.id.refresh).performClick()
+                        }
                     }
 
                     builder.setNegativeButton("No"){dialogInterface, which ->

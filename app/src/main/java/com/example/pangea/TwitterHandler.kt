@@ -85,6 +85,23 @@ class TwitterHandler(private val context: Context, private val user: User) {
         return twitter
     }
 
+    fun getFavorites(postId: String) : String {
+        if(postId == "")
+        {
+            return "0"
+        }
+
+        if(twitter == null) {
+            initTwitterApi()
+        }
+
+        var retweets = twitter?.getRetweets(postId.toLong())
+
+        var number_of_retweets = retweets?.size
+
+        return number_of_retweets.toString()
+    }
+
     inner class TwitterWebViewClient(private val caller: ITwitterCallback) : WebViewClient() {
 
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
