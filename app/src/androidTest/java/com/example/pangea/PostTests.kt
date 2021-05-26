@@ -28,7 +28,7 @@ import org.hamcrest.Matchers
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Assert
-import junit.framework.Assert
+//import junit.framework.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -256,7 +256,7 @@ class PostTests {
         register.addFBPost(email, message, image, context, "")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.refresh)).perform(click())
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.bookmark_checkbox)))
 
         PostDatabase.destroyInstance()
@@ -295,7 +295,7 @@ class PostTests {
         register.addFBPost(email, message, image, context, "")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.refresh)).perform(click())
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(click())
 
        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
@@ -337,7 +337,7 @@ class PostTests {
         register.addFBPost(email, message, image, context, "")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.refresh)).perform(click())
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(longClick())
 
         onView(withText("Delete Post")).check(matches(isDisplayed()))
@@ -347,6 +347,51 @@ class PostTests {
 
         require(postslist.isEmpty())
 
+        PostDatabase.destroyInstance()
+    }
+
+    @Test
+    fun testFeedback() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        val postslist = register.getAllPosts("test", context)
+
+        postslist.forEach{register.deletePostByID(it.postID!!, context)}
+
+        register.addFBPost(email, message, image, context, "")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        //onView(withId(R.id.refresh)).perform(click())
+        onView(anyOf(withId(R.id.post_text_field))).perform(click())
+
+        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
+        onView(withId(R.id.TextViewPostExpanded)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.FacebookLikes)).check(matches(isDisplayed()))
+        onView(withId(R.id.TwitterLikes)).check(matches(not(isDisplayed())))
+        
         PostDatabase.destroyInstance()
     }
 
