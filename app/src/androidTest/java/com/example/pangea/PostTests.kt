@@ -27,7 +27,6 @@ import com.facebook.login.LoginManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
-import org.junit.Assert
 import junit.framework.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
