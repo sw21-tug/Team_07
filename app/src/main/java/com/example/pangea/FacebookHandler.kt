@@ -98,7 +98,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         });
     }
 
-    fun logoutFacebook()
+    fun logoutFacebook(socialMediaAccounts: SocialMediaAccounts)
     {
         val dbHandler = DatabaseHandler()
         dbHandler.saveFacebookLink(user, null, context)
@@ -109,6 +109,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
                 GraphRequest.Callback {
                     AccessToken.setCurrentAccessToken(null);
                     LoginManager.getInstance().logOut()
+                    dbHandler.deleteSocialAccountByName(socialMediaAccounts.user_name, context)
                 })
         }
     }

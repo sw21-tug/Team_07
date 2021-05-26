@@ -11,10 +11,10 @@ interface SocialMediaDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(social: SocialMediaAccounts)
 
-    /*@Query("DELETE FROM posts WHERE postID = :postID")
-    fun deletePostByID(postID: String)
+    @Query("DELETE FROM SocialMediaAccounts WHERE user_name = :userName")
+    fun deleteByUserName(userName: String)
 
-    @Query("DELETE FROM posts WHERE email = :email AND message = :message AND facebook = 1")
+    /*@Query("DELETE FROM posts WHERE email = :email AND message = :message AND facebook = 1")
     fun deleteFBPostByUserIdWitText(email: String, message: String)
 
     @Query("DELETE FROM posts WHERE email = :email AND message = :message AND twitter = 1")

@@ -115,4 +115,12 @@ class DatabaseHandler
         val socialDao = db.socialMediaDao()
         socialDao.insertOne(socialMediaAccounts)
     }
+
+    fun deleteSocialAccountByName(userName: String,  context: Context) {
+        val db = SocialMediaAccountsDatabase.getInstance(context)
+        val socialDao = db.socialMediaDao()
+        socialDao.deleteByUserName(userName)
+    }
+
+
 }

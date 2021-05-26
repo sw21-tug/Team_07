@@ -164,14 +164,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         }
 
         hidden_facebook_button.setOnClickListener {
-            if(fHandler.isLoggedIn())
-            {
-                fHandler.logoutFacebook();
-            }
-            else
-            {
-                fHandler.loginFacebook();
-            }
+            fHandler.loginFacebook();
         }
 
         return account_view
@@ -312,8 +305,14 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
                 img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
             }
             img_logout.setImageResource(R.drawable.com_facebook_tooltip_black_xout)
-            img_logout.scaleX = 10F
-            img_logout.scaleY = 10F
+            img_logout.setOnClickListener {
+                if(account.facebook)
+                {
+                    fHandler.logoutFacebook(account)
+                }
+                else
+                    tHandler.unlinkAccount()
+            }
             linear_connected_accounts.addView(img)
 
 
