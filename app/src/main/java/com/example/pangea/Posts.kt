@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
 import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.posts_view.*
 import kotlinx.android.synthetic.main.posts_view.view.*
 import kotlinx.android.synthetic.main.single_post.*
 
@@ -51,6 +52,14 @@ class Posts() : Fragment()
                 intent.putExtra("loggedInUserMail", email)
             }
                 startActivity(intent)
+        }
+
+        view.searchbtn.setOnClickListener {
+            val intent = Intent(context, FilterPosts::class.java)
+            if (email != null) {
+                intent.putExtra("loggedInUserMail", email)
+            }
+            startActivity(intent)
         }
 
 
@@ -97,7 +106,7 @@ class Posts() : Fragment()
                     posted_to_tw.alpha = 1.0F
                 }
 
-                post_date.text = "01.01.1970"
+                post_date.text = post.date
 
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)

@@ -9,6 +9,7 @@ import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers
@@ -396,18 +397,21 @@ class PostTests {
         onView(withText("testmessage 1")).check(matches(isDisplayed()))
 
         onView(withId(R.id.searchbtn)).perform(click())
-        onView(anyOf(withId(R.id.filter_post_date))).perform(typeText("26-05-2021"))
+        onView(anyOf(withId(R.id.dpFilter))).perform(PickerActions.setDate(2021, 5, 26))
         onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
+        onView(anyOf(withId(R.id.toggleByDate))).perform(click())
         onView(withText("testmessage 2")).check(matches(isDisplayed()))
         onView(withText("testmessage 4")).check(matches(isDisplayed()))
 
         onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.toggleByPlatform))).perform(click())
         onView(anyOf(withId(R.id.rb_filter_facebook))).perform(click())
         onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
         onView(withText("testmessage 1")).check(matches(isDisplayed()))
         onView(withText("testmessage 2")).check(matches(isDisplayed()))
 
         onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.toggleByPlatform))).perform(click())
         onView(anyOf(withId(R.id.rb_filter_twitter))).perform(click())
         onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
         onView(withText("testmessage 3")).check(matches(isDisplayed()))
