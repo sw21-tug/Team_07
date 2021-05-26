@@ -24,6 +24,6 @@ class PostExpanded : AppCompatActivity()
         }
 
         TextViewPostExpanded.text = getIntent().getStringExtra("Text")
-
+        FacebookLikes.text = getIntent().getStringExtra("FBReactions")
     }
 }

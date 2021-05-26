@@ -102,6 +102,12 @@ class Posts() : Fragment()
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
+
+                    val curr_user: User = register.getRegisteredUser(email, requireContext())
+                    val fhandler = FacebookHandler(requireContext(), curr_user, activity)
+
+                    intent.putExtra("FBReactions", fhandler.getReactions(post.postID))
+
                     startActivity(intent)
                 }
 
