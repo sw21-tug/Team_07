@@ -9,12 +9,16 @@ import com.facebook.*
 import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import org.json.JSONArray
 import org.json.JSONObject
 
 
 class FacebookHandler(private val context: Context, private val user: User, private var activity1: FragmentActivity?)
 {
     lateinit var caller: IFacebookCallback
+    lateinit var acces_token_string: String
+    lateinit var id: String
+
     var callbackManager: CallbackManager = CallbackManager.Factory.create();
     var accessTokenTracker: AccessTokenTracker = object : AccessTokenTracker() {
         override fun onCurrentAccessTokenChanged(
@@ -116,19 +120,37 @@ class FacebookHandler(private val context: Context, private val user: User, priv
             loginFacebook()
         }
 
+
+        GraphRequest(
+            AccessToken.getCurrentAccessToken(),
+            "/me/accounts",
+            null,
+            HttpMethod.GET,
+            GraphRequest.Callback { response ->
+                acces_token_string = (((response.jsonObject["data"] as JSONArray)[0]) as JSONObject).get("access_token").toString()
+
+                id = (((response.jsonObject["data"] as JSONArray)[0]) as JSONObject).get("id").toString()
+            }
+        ).executeAndWait()
+
+        val permissions: Collection<String>? = mutableListOf("pages_read_engagement", "pages_manage_engagement")
+        val page_acces = AccessToken(acces_token_string, "171191854853298", getCurrentAccesToken().userId,permissions, null, null, null, null, null, null, null)
+        val page_id ="/"+id +"/feed"
+
+
         val jsonobj: JSONObject = JSONObject()
         jsonobj.put("message", msg)
 
+
         val request = GraphRequest.newPostRequest(
-            getCurrentAccesToken(),
-            "/100373638861088/feed",
+            page_acces,
+            page_id,
             jsonobj)
         {
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
 
-
         }
         request.executeAsync()
-        return request.graphObject.get("id")
+        return 0
     }
 }
