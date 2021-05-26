@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.posts_popup.*
@@ -46,6 +47,7 @@ class Posts() : Fragment()
                 intent.putExtra("loggedInUserMail", email)
             }
             startActivity(intent)
+
         }
 
         view.refresh.setOnClickListener{
@@ -99,5 +101,15 @@ class Posts() : Fragment()
 
         return view
         
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
+        val view = getView()
+        if (view != null) {
+            view.findViewById<Button>(R.id.refresh).performClick()
+        }
     }
 }

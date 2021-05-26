@@ -30,9 +30,9 @@ class PostsTabInstrumentedTests {
             object : ActivityTestRule<DashboardsActivity>(DashboardsActivity::class.java, true, false) {
                 override fun getActivityIntent(): Intent {
                     val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-                    return Intent(targetContext, DashboardsActivity::class.java).apply {
-                        putExtra("loggedInUserMail", "test.user@test.com")
-                    }
+                    val sharedPref = targetContext.getSharedPreferences("user", Context.MODE_PRIVATE)
+                    sharedPref.edit().putString("current_user","test.user@test.com").apply()
+                    return Intent(targetContext, DashboardsActivity::class.java)
                 }
             }
 

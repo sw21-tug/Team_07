@@ -16,6 +16,11 @@ import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
+import com.example.pangea.DashboardsActivity
+import com.example.pangea.DatabaseHandler
+import com.example.pangea.TwitterHandler
+import org.junit.After
+
 class AccountsLinkTest {
 
 
@@ -120,6 +125,13 @@ class AccountsLinkTest {
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_unlink_text))))
+    }
+
+    
+    @After
+    fun destroyData()
+    {
+        AppDatabase.destroyInstance()
     }
 
 }

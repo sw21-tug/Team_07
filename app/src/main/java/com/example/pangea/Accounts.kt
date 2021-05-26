@@ -19,6 +19,7 @@ import androidx.fragment.app.DialogFragment
 import com.facebook.FacebookSdk
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.account_view.*
+import com.facebook.login.widget.LoginButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,7 +37,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var twitter_login_btn: Button
     lateinit var fHandler: FacebookHandler
     lateinit var login_button_facebook: Button
-    lateinit var hidden_facebook_button: Button
     lateinit var add_account_button: FloatingActionButton
     lateinit var twitter_image: ImageView
     lateinit var account_view: View
@@ -46,6 +46,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     /* delete if we don't need facebook - START */
     lateinit var facebook_image: ImageView
     /* delete if we don't need facebook - END */
+    lateinit var hidden_facebook_button: LoginButton
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -139,6 +140,10 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         fHandler = FacebookHandler(context, user, activity)
         fHandler.initApi(this)
+        login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
+        hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
+        hidden_facebook_button.setPermissions("pages_show_list");
+
         if(fHandler.hasLinkedAccount())
         {
             login_button_facebook.text = getString(R.string.facebook_unlink_text)
