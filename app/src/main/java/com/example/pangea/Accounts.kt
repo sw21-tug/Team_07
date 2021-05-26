@@ -251,6 +251,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         logout_account.setOnClickListener {
             twitter_login_btn.performClick()
         }
+        
 
         /* TODO
         *  add database for registered accounts, right now it just adds
