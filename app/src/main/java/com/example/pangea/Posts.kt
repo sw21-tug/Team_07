@@ -63,16 +63,6 @@ class Posts() : Fragment()
 
             val linearLayout : LinearLayout = view.findViewById(R.id.linearLayoutPosts)
             linearLayout.removeAllViews();
-//            linearLayout.setDividerDrawable(
-//                ContextCompat.getDrawable(
-//                      requireActivity().applicationContext, // Context
-//                      android.R.drawable.divider_horizontal_dark // Drawable
-//                    )
-//            )
-//
-//            linearLayout.dividerDrawable.setBounds(0, 0, 50, 50);
-//
-//            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_END)
 
             for (post in posts) {
 
@@ -114,7 +104,7 @@ class Posts() : Fragment()
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         register.deletePostByID(post.postID!!, requireContext())
                         Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
-                        //refresh directly??
+                        view.findViewById<Button>(R.id.refresh).performClick()
                     }
 
                     builder.setNegativeButton("No"){dialogInterface, which ->
@@ -163,6 +153,7 @@ class Posts() : Fragment()
                 view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
                 view?.sendpostbtn?.setEnabled(true)
             }
+
         }
     }
   
