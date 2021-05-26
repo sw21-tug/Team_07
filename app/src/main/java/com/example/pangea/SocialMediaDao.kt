@@ -1,3 +1,4 @@
+package com.example.pangea
 
 import androidx.room.*
 import com.example.pangea.SocialMediaAccounts

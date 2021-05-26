@@ -1,6 +1,5 @@
 package com.example.pangea
 
-import SocialMediaDao
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room

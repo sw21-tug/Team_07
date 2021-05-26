@@ -81,10 +81,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         {
             refreshConnectedAccounts(account_view, false)
         }
-        if(fHandler.hasLinkedAccount() && fHandler.isLoggedIn())
-        {
-            refreshConnectedAccounts(account_view, true)
-        }
+
 
         add_account_button.setOnClickListener {
 
@@ -145,6 +142,10 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         }
 
         fHandler = FacebookHandler(context, user, activity)
+        if(fHandler.hasLinkedAccount() && fHandler.isLoggedIn())
+        {
+            refreshConnectedAccounts(account_view, true)
+        }
         fHandler.initApi(this)
         login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
@@ -252,13 +253,12 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         val logout_account: Button = Button(context)
         logout_account.text = "Logout"
         logout_account.setBackgroundColor(Color.parseColor("#B86566"));
-        val draw: Drawable = Drawable.createFromPath( "@drawable/round_style")!!
-        logout_account.background =draw
+        val draw: Drawable? = Drawable.createFromPath(R.drawable.round_style.toString())
+        logout_account.background = draw
 
         logout_account.setOnClickListener {
             twitter_login_btn.performClick()
         }
-
 
         /* TODO
         *  add database for registered accounts, right now it just adds
@@ -270,7 +270,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         }
         else
         {
-            val social_media = SocialMediaAccounts(user_name = tHandler.getTwitterUsername(), facebook = true, twitter = false)
+            val social_media = SocialMediaAccounts(user_name = fHandler.getUser(), facebook = true, twitter = false)
             context?.let { register.addSocialMediaAccount(social_media, it) }
         }
 
@@ -294,6 +294,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
             val img = ImageView(context)
             img.layoutParams = imageParams
+
 
             if(account.facebook)
             {
