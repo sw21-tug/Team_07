@@ -109,9 +109,11 @@ class FacebookHandler(private val context: Context, private val user: User, priv
                 GraphRequest.Callback {
                     AccessToken.setCurrentAccessToken(null);
                     LoginManager.getInstance().logOut()
-                    dbHandler.deleteSocialAccountByName(socialMediaAccounts.user_name, context)
+
                 })
         }
+        dbHandler.deleteSocialAccountByName(socialMediaAccounts.user_name, context)
+        Toast.makeText(context, "logout successful" + socialMediaAccounts.user_name, Toast.LENGTH_LONG).show()
     }
 
     interface IFacebookCallback {

@@ -262,7 +262,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         /*  get list of all connected social media accounts of this user from Database */
         if(!email.isNullOrEmpty())
         {
-            connected_accounts = activity?.let { register.getAllSocialMediaAccounts(it.applicationContext) }!!
+            connected_accounts = context?.let { register.getAllSocialMediaAccounts(it) }!!
         }
 
         linear_connected_accounts = view.findViewById(R.id.linearLayoutAccounts)
