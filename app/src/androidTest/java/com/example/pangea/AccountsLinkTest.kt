@@ -127,7 +127,7 @@ class AccountsLinkTest {
         onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_unlink_text))))
     }
 
-    
+
     @After
     fun destroyData()
     {
