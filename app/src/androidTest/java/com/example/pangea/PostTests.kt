@@ -382,4 +382,39 @@ class PostTests {
         PostDatabase.destroyInstance()
     }
 
+    @Test
+    fun testMediaButton() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        onView(anyOf(withId(R.id.sendpostbtn))).perform(click())
+
+        onView(withId(R.id.add_media_btn)).perform(click())
+
+        onView(withId(R.id.file)).check(matches(isDisplayed()))
+
+        PostDatabase.destroyInstance()
+    }
+
 }
