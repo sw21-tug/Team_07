@@ -1,9 +1,13 @@
 package com.example.pangea
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.nfc.Tag
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.startActivity
@@ -39,6 +43,7 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -420,6 +425,51 @@ class PostTests {
 
         PostDatabase.destroyInstance()
 
+    }
+
+    @Test
+    fun ImagePost() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test.user@test.com"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test with image"
+
+        val image = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(R.drawable.splash)
+                + '/' + context.getResources().getResourceTypeName(R.drawable.splash) + '/' + context.getResources().getResourceEntryName(R.drawable.splash))
+
+        var postslist = register.getAllPosts(email, context)
+
+        postslist.forEach{register.deletePostByID(it.postID!!, context)}
+
+        assertFalse(image == null)
+
+        register.addFBPost(email, message, image.toString(), context, "")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(anyOf(withId(R.id.bookmark_checkbox)))
+
+
+
+        PostDatabase.destroyInstance()
     }
 
 }

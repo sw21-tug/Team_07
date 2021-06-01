@@ -5,12 +5,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.graphics.Bitmap
 import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import android.provider.MediaStore
 import android.text.Editable
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +24,7 @@ import java.net.URI
 
 class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, FacebookHandler.IFacebookCallback
 {
+    lateinit var image : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,26 +83,35 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
             // call facebook or twitter post message here
             if(facebook_check) {
                 var postId = fhandler.postMessage(message.toString())
-                register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString())
+                register.addFBPost(userEmail, message.toString(), image, applicationContext, postId.toString())
             }
             else if(twitter_check) {
-                var postId = thandler.postTweet(message.toString())
-                register.addTwitterPost(userEmail, message.toString(), null, applicationContext, postId)
+                if(!this::image.isInitialized)
+                {
+                    image = ""
+                }
+                var postId = thandler.postTweet(message.toString(), image)
+                register.addTwitterPost(userEmail, message.toString(), image, applicationContext, postId)
             }
             else if (facebook_check && twitter_check) {
+                if(!this::image.isInitialized)
+                {
+                    image = ""
+                }
+
                 var postId = fhandler.postMessage(message.toString())
                 register.addFBPost(
                     userEmail,
                     message.toString(),
-                    null,
+                    image,
                     applicationContext,
                     postId.toString()
                 )
-                var twitterId = thandler.postTweet(message.toString())
+                var twitterId = thandler.postTweet(message.toString(), image)
                 register.addTwitterPost(
                     userEmail,
                     message.toString(),
-                    null,
+                    image,
                     applicationContext,
                     twitterId
                 )
@@ -163,7 +177,21 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
             preview_picture.setImageURI(data?.data)
+
+            if(data != null)
+            {
+                image = getRealPathFromURI(data.data!!)
+            }
         }
+    }
+
+    fun getRealPathFromURI(uri: Uri): String
+    {
+        val cursor: Cursor = getContentResolver().query(uri, null, null, null, null)!!
+
+        cursor.moveToFirst()
+        val idx: Int = cursor.getColumnIndex (MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 
     override fun oAuthResponse() {
