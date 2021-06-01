@@ -472,4 +472,48 @@ class PostTests {
         PostDatabase.destroyInstance()
     }
 
+    @Test
+    fun testExpandPostWithImage() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(R.drawable.splash)
+                + '/' + context.getResources().getResourceTypeName(R.drawable.splash) + '/' + context.getResources().getResourceEntryName(R.drawable.splash))
+
+        val postslist = register.getAllPosts("test", context)
+
+        postslist.forEach{register.deletePostByID(it.postID!!, context)}
+
+        register.addFBPost(email, message, image.toString(), context, "")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(withId(R.id.refresh)).perform(click())
+        onView(anyOf(withId(R.id.post_text_field))).perform(click())
+
+        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
+        onView(withId(R.id.ImagePostExpanded)).check(matches(isDisplayed()))
+
+        PostDatabase.destroyInstance()
+    }
+
 }
