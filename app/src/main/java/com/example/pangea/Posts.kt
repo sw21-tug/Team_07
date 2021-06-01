@@ -84,6 +84,7 @@ class Posts() : Fragment()
                 val posted_to_fb = new_view.findViewById<ImageView>(R.id.posted_to_fb)
                 val posted_to_tw = new_view.findViewById<ImageView>(R.id.posted_to_tw)
                 val post_date = new_view.findViewById<TextView>(R.id.post_date)
+                bookmark_checkbox.isChecked = post.bookmarked
 
                 textfield.text = post.message
 

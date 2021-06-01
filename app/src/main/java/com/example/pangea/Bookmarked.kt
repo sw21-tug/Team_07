@@ -3,17 +3,17 @@ package com.example.pangea
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.bookmarked_view.view.*
 import kotlinx.android.synthetic.main.posts_view.view.*
@@ -49,44 +49,70 @@ class Bookmarked : Fragment()
             linearLayout.removeAllViews();
 
             for (post in posts) {
-                var imageParams: RelativeLayout.LayoutParams
-                imageParams = RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
-                )
 
-                imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-                val img = ImageView(context)
-                img.layoutParams = imageParams
+                val layoutInflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val new_view = layoutInflater!!.inflate(R.layout.single_post, null)
 
-                if(post.facebook) {
-                    img.setImageResource(R.drawable.facebookiconpreview)
+                val cardview = new_view.findViewById<ConstraintLayout>(R.id.post_card_view)
+                val textfield = new_view.findViewById<TextView>(R.id.post_text_field)
+                val bookmark_checkbox = new_view.findViewById<CheckBox>(R.id.bookmark_checkbox)
+                val posted_to_fb = new_view.findViewById<ImageView>(R.id.posted_to_fb)
+                val posted_to_tw = new_view.findViewById<ImageView>(R.id.posted_to_tw)
+                val post_date = new_view.findViewById<TextView>(R.id.post_date)
+                bookmark_checkbox.visibility = View.INVISIBLE
+
+                textfield.text = post.message
+
+                if(post.facebook)
+                {
+                    posted_to_fb.alpha = 1.0F
                 }
-                else {
-                    img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
-                }
-                linearLayout.addView(img)
-
-
-                val cardView = activity?.applicationContext?.let { CardView(it) }
-                if (cardView != null) {
-                    cardView.minimumWidth = 300
-                    cardView.minimumHeight = 100
-                    cardView.setContentPadding(15, 0, 15, 15)
-                    cardView.setCardBackgroundColor(Color.LTGRAY)
-                    cardView.radius = 20f
+                if(post.twitter == true)
+                {
+                    posted_to_tw.alpha = 1.0F
                 }
 
-                val textView = TextView(activity?.applicationContext)
-                textView.text = post.message
+                post_date.text = "01.01.1970"
 
-                textView.textSize = 18F
-                textView.setTextColor(Color.DKGRAY)
-                cardView?.addView(textView)
-                linearLayout.addView(cardView)
+                textfield.setOnClickListener {
+                    val intent = Intent(context, PostExpanded::class.java)
+                    intent.putExtra("Text", post.message)
+                    startActivity(intent)
+                }
+
+                textfield.setOnLongClickListener {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("Delete Post")
+                    builder.setMessage("Do you want to delete this post?")
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+                    builder.setPositiveButton("Yes"){dialogInterface, which ->
+                        register.deletePostByID(post.postID!!, requireContext())
+                        Toast.makeText(context,"Deleted post", Toast.LENGTH_LONG).show()
+                        //refresh directly??
+                    }
+
+                    builder.setNegativeButton("No"){dialogInterface, which ->
+                        Toast.makeText(context,"canceled", Toast.LENGTH_LONG).show()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                    true
+                }
+
+                linearLayout.addView(cardview)
             }
         }
         return view
 
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        val refreshButton = view?.findViewById<Button>(R.id.bookmarkedRefreshButton)
+        if (refreshButton != null) {
+            refreshButton.performClick()
+        }
     }
 }
