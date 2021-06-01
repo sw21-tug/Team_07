@@ -1,5 +1,6 @@
 package com.example.pangea
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -24,6 +25,7 @@ class PostExpanded : AppCompatActivity()
         }
 
         TextViewPostExpanded.text = getIntent().getStringExtra("Text")
+        ImagePostExpanded.setImageURI(Uri.parse(getIntent().getStringExtra("Image")))
 
     }
 }

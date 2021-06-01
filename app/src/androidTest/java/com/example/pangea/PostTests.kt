@@ -507,7 +507,7 @@ class PostTests {
         register.addFBPost(email, message, image.toString(), context, "")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.refresh)).perform(click())
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(click())
 
         //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))

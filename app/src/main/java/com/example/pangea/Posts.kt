@@ -94,6 +94,7 @@ class Posts() : Fragment()
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
+                    intent.putExtra("Image", post.image)
                     startActivity(intent)
                 }
 
