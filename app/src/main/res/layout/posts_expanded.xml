@@ -42,7 +42,7 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text="Likes on FaceBook"
+        android:text="@string/fb_likes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FacebookLikes" />
 
@@ -51,7 +51,7 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:text="Retweets on Twitter"
+        android:text="@string/retweets"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TwitterLikes" />
 
