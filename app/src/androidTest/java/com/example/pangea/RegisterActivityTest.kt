@@ -1,6 +1,5 @@
 package com.example.pangea
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
@@ -25,7 +24,7 @@ class RegisterActivityTest{
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         Assert.assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.registerButton)).perform(click())
+        onView(withId(R.id.startRegisterButton)).perform(click())
         
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
@@ -42,7 +41,7 @@ class RegisterActivityTest{
         Assert.assertEquals("com.example.pangea", appContext.packageName)
 
         //open register view
-        onView(withId(R.id.registerButton)).perform(click())
+        onView(withId(R.id.startRegisterButton)).perform(click())
 
         //register
         onView(withId(R.id.username)).perform(clearText())
@@ -54,8 +53,7 @@ class RegisterActivityTest{
         //now we're registered and already in the dashboard
         intended(hasComponent(DashboardsActivity::class.java.name))
 
-        //go back twice to get back to login screen
-        pressBack()
+        //go back once to get back to login screen
         pressBack()
 
         //login

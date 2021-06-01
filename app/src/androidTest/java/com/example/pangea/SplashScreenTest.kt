@@ -36,6 +36,6 @@ class SplashScreenTest{
         intended(hasComponent(SplashActivity::class.java!!.getName()))
 
         Thread.sleep(2500)
-        intended(hasComponent(RegisterAndLoginActivity::class.java!!.getName()), times(2))
+        intended(hasComponent(RegisterAndLoginActivity::class.java!!.getName()))
     }
 }
