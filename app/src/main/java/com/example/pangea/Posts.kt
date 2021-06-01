@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.posts_view.view.*
 import kotlinx.android.synthetic.main.single_post.*
+import kotlinx.android.synthetic.main.single_post.view.*
 
 
 /* This class controls the logic in the "Posts"-Tab
@@ -52,8 +53,6 @@ class Posts() : Fragment()
             }
                 startActivity(intent)
         }
-
-
 
         view.refresh.setOnClickListener{
             if(!email.isNullOrEmpty())
@@ -126,6 +125,11 @@ class Posts() : Fragment()
                     true
                 }
 
+                bookmark_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                    val register = com.example.pangea.DatabaseHandler()
+                    context?.let { it1 -> register.updatePostBookmarked(post.postID.toString(), isChecked, it1) }
+                }
+
                 linearLayout.addView(cardview)
             }
         }
@@ -175,4 +179,6 @@ class Posts() : Fragment()
             view.findViewById<Button>(R.id.refresh).performClick()
         }
     }
+
+
 }
