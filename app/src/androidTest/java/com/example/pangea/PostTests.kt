@@ -352,9 +352,17 @@ class PostTests {
 
     @Test
     fun testFeedback() {
-
         Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        register.deleteAllPosts(appContext)
+        register.addFBPost(email, message, image, context, "")
 
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("test"))
@@ -370,24 +378,7 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        val email = "test"
-        val register = DatabaseHandler()
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val message = "test"
-        val image = null
-
-        //val lin = onView(withId(R.id.linearLayoutPosts))
-        val postslist = register.getAllPosts("test", context)
-
-        postslist.forEach{register.deletePostByID(it.postID!!, context)}
-
-        register.addFBPost(email, message, image, context, "")
-        assertEquals("com.example.pangea", appContext.packageName)
-
-        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(click())
-
-        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
         onView(withId(R.id.TextViewPostExpanded)).check(matches(isDisplayed()))
 
         onView(withId(R.id.FacebookLikes)).check(matches(isDisplayed()))
@@ -395,5 +386,4 @@ class PostTests {
 
         PostDatabase.destroyInstance()
     }
-
 }

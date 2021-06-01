@@ -19,6 +19,9 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(post: Post)
 
+    @Query("DELETE FROM posts WHERE postID IN (SELECT postID FROM posts)")
+    fun deleteAllPosts()
+
     @Query("DELETE FROM posts WHERE postID = :postID")
     fun deletePostByID(postID: String)
 
