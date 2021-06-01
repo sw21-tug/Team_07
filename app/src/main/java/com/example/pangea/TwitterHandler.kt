@@ -2,11 +2,13 @@ package com.example.pangea
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -86,7 +88,7 @@ class TwitterHandler(private val context: Context, private val user: User) {
     }
 
     fun getFavorites(postId: String) : String {
-        if(postId == "")
+        if(postId == "" || user.twitterAuthToken == null || user.twitterAuthSecret == null)
         {
             return "0"
         }
@@ -104,6 +106,7 @@ class TwitterHandler(private val context: Context, private val user: User) {
 
     inner class TwitterWebViewClient(private val caller: ITwitterCallback) : WebViewClient() {
 
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
             val url = request!!.url.toString()
             if (url.contains(TwitterConstants.CALLBACK_URL)) {

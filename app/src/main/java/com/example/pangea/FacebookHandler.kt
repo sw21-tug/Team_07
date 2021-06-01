@@ -155,7 +155,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     }
 
     fun getReactions(postId: String?) : String {
-        if(postId == "" || postId == null)
+        if(postId == "" || postId == null || !isLoggedIn())
         {
             return "0"
         }
