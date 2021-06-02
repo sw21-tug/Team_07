@@ -78,7 +78,7 @@ class TwitterHandler(private val context: Context, private val user: User) {
                 status.setMedia(imgFile)
 
                 val finished_post = twitter?.updateStatus(status)
-                statusId = "111111111111" //(finished_post!!.id).toString()
+                statusId = (finished_post!!.id).toString()
 
 
             } catch (e: Exception) {

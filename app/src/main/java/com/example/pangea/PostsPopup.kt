@@ -81,25 +81,14 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
             thandler.initTwitterApi()
 
             // call facebook or twitter post message here
-            if(facebook_check) {
-                var postId = fhandler.postMessage(message.toString())
-                register.addFBPost(userEmail, message.toString(), image, applicationContext, postId.toString())
-            }
-            else if(twitter_check) {
-                if(!this::image.isInitialized)
-                {
-                    image = ""
-                }
-                var postId = thandler.postTweet(message.toString(), image)
-                register.addTwitterPost(userEmail, message.toString(), image, applicationContext, postId)
-            }
-            else if (facebook_check && twitter_check) {
+
+            if (facebook_check && twitter_check) {
                 if(!this::image.isInitialized)
                 {
                     image = ""
                 }
 
-                var postId = fhandler.postMessage(message.toString())
+                var postId = fhandler.postMessage(message.toString(), image)
                 register.addFBPost(
                     userEmail,
                     message.toString(),
@@ -115,6 +104,22 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                     applicationContext,
                     twitterId
                 )
+            }
+            else if(facebook_check) {
+                if(!this::image.isInitialized)
+                {
+                    image = ""
+                }
+                var postId = fhandler.postMessage(message.toString(), image)
+                register.addFBPost(userEmail, message.toString(), image, applicationContext, postId.toString())
+            }
+            else if(twitter_check) {
+                if(!this::image.isInitialized)
+                {
+                    image = ""
+                }
+                var postId = thandler.postTweet(message.toString(), image)
+                register.addTwitterPost(userEmail, message.toString(), image, applicationContext, postId)
             }
             finish()
         }

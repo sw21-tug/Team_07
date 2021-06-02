@@ -1,6 +1,9 @@
 package com.example.pangea
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,8 @@ import com.facebook.login.LoginResult
 import kotlinx.android.synthetic.main.posts_view.view.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class FacebookHandler(private val context: Context, private val user: User, private var activity1: FragmentActivity?)
@@ -66,8 +71,8 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     {
         Log.d("TAG", "LoginFacebook")
 
-        var permissions: Array<String> = arrayOf("publish_actions")
-        LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
+        //var permissions: Array<String> = arrayOf("publish_actions")
+        //LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
@@ -115,12 +120,11 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         fun loggedOut()
     }
 
-    fun postMessage(msg: String) : Any
+    fun postMessage(msg: String, image_path: String) : Any
     {
         if(!isLoggedIn()) {
             loginFacebook()
         }
-
 
         GraphRequest(
             AccessToken.getCurrentAccessToken(),
@@ -143,15 +147,37 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         jsonobj.put("message", msg)
 
 
-        val request = GraphRequest.newPostRequest(
-            page_acces,
-            page_id,
-            jsonobj)
+        if(image_path.isNullOrBlank())
         {
-            Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+            val request = GraphRequest.newPostRequest(
+                page_acces,
+                page_id,
+                jsonobj)
+            {
+                Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
 
+            }
+            request.executeAsync()
         }
-        request.executeAsync()
+        else
+        {
+            val page_photo_id = "/"+id +"/photos"
+            val file_to_upload = File(image_path)
+            val request = GraphRequest.newUploadPhotoRequest(
+                page_acces,
+                page_photo_id,
+                file_to_upload,
+                msg,
+                null)
+            {
+                Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+
+            }
+            request.executeAsync()
+        }
+
+
+
         return 0
     }
 }
