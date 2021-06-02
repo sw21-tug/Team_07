@@ -295,6 +295,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
                 val img_logout = ImageView(context)
                 img.layoutParams = imageParams
                 img_logout.layoutParams = imageParams
+                img_logout.si
 
 
                 if (account.facebook) {
