@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.posts_view.view.*
 import kotlinx.android.synthetic.main.single_post.*
+import kotlinx.android.synthetic.main.single_post.view.*
 
 
 /* This class controls the logic in the "Posts"-Tab
@@ -53,8 +54,6 @@ class Posts() : Fragment()
                 startActivity(intent)
         }
 
-
-
         view.refresh.setOnClickListener{
             if(!email.isNullOrEmpty())
             {
@@ -85,6 +84,7 @@ class Posts() : Fragment()
                 val posted_to_fb = new_view.findViewById<ImageView>(R.id.posted_to_fb)
                 val posted_to_tw = new_view.findViewById<ImageView>(R.id.posted_to_tw)
                 val post_date = new_view.findViewById<TextView>(R.id.post_date)
+                bookmark_checkbox.isChecked = post.bookmarked
 
                 textfield.text = post.message
 
@@ -102,6 +102,29 @@ class Posts() : Fragment()
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
+
+                    val curr_user: User = register.getRegisteredUser(email, requireContext())
+                    val fhandler = FacebookHandler(requireContext(), curr_user, activity)
+
+                    val thandler = TwitterHandler(requireContext(), curr_user)
+
+                    var twretweets = "0"
+                    var fblikes = "0"
+
+                    if(post.twitter == true) {
+                        twretweets = thandler.getFavorites(post.postID!!)
+                    }
+                    if(post.facebook) {
+                        fblikes = fhandler.getReactions(post.postID)
+                    }
+
+
+                    intent.putExtra("TwitterRetweets", twretweets)
+                    intent.putExtra("FBReactions", fblikes)
+
+                    intent.putExtra("twitter", post.twitter.toString())
+                    intent.putExtra("facebook", post.facebook.toString())
+
                     startActivity(intent)
                 }
 
@@ -114,7 +137,10 @@ class Posts() : Fragment()
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         register.deletePostByID(post.postID!!, requireContext())
                         Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
-                        //refresh directly??
+                        val view = getView()
+                        if (view != null) {
+                            view.findViewById<Button>(R.id.refresh).performClick()
+                        }
                     }
 
                     builder.setNegativeButton("No"){dialogInterface, which ->
@@ -124,6 +150,11 @@ class Posts() : Fragment()
                     alertDialog.setCancelable(false)
                     alertDialog.show()
                     true
+                }
+
+                bookmark_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                    val register = com.example.pangea.DatabaseHandler()
+                    context?.let { it1 -> register.updatePostBookmarked(post.postID.toString(), isChecked, it1) }
                 }
 
                 linearLayout.addView(cardview)
@@ -175,4 +206,6 @@ class Posts() : Fragment()
             view.findViewById<Button>(R.id.refresh).performClick()
         }
     }
+
+
 }
