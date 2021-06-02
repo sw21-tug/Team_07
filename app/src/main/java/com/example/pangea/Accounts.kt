@@ -40,14 +40,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var fHandler: FacebookHandler
     lateinit var login_button_facebook: Button
     lateinit var add_account_button: FloatingActionButton
-    lateinit var twitter_image: ImageView
     lateinit var account_view: View
-    lateinit var linear_connected_accounts : LinearLayout
-
-
-    /* delete if we don't need facebook - START */
-    lateinit var facebook_image: ImageView
-    /* delete if we don't need facebook - END */
     lateinit var hidden_facebook_button: LoginButton
 
     override fun onCreateView(
@@ -71,9 +64,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         add_account_button = account_view.findViewById(R.id.addaccount)
 
-        facebook_image = account_view.findViewById(R.id.facebook_img2)
-        twitter_image = account_view.findViewById(R.id.twitter_img)
-
         /* If you open the app and didn't Logout your twitter account before
         *  closing the app, the connected Account is shown after going to  accounts tab */
         // TODO delete this comment in yellow when database for connected social media accounts are implemented
@@ -82,38 +72,40 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             refreshConnectedAccounts(account_view, false)
         }
 
+        val addTwitter = account_view.findViewById<FloatingActionButton>(R.id.addTwitter)
+        val addFacebook = account_view.findViewById<FloatingActionButton>(R.id.addFacebook)
 
         add_account_button.setOnClickListener {
 
-            twitter_image.visibility = View.VISIBLE
-            twitter_image.isClickable = true
-
-            /* delete if we don't need facebook - START */
-
-            facebook_image.visibility = View.VISIBLE
-            facebook_image.isClickable = true
-            /* delete if we don't need facebook - END */
+            if(addTwitter.visibility == View.VISIBLE){
+                addFacebook.visibility = View.GONE
+                addTwitter.visibility  = View.GONE
+                add_account_button.setImageResource(R.drawable.ic_baseline_add_24)
+            }
+            else {
+                addTwitter.visibility = View.VISIBLE
+                addFacebook.visibility = View.VISIBLE
+                add_account_button.setImageResource(R.drawable.ic_baseline_close_24)
+            }
 
 
         }
 
-        twitter_image.setOnClickListener {
-            twitter_login_btn.isClickable = true
+
+        addTwitter.setOnClickListener {
             twitter_login_btn.performClick()
-            twitter_login_btn.isClickable = false
-
-            twitter_image.visibility = View.INVISIBLE
-            facebook_image.visibility = View.INVISIBLE
-
+            addTwitter.visibility = View.GONE
+            addFacebook.visibility = View.GONE
+            add_account_button.setImageResource(R.drawable.ic_baseline_add_24)
         }
 
-        facebook_image.setOnClickListener {
-            login_button_facebook.isClickable = true
-            login_button_facebook.performClick()
-            login_button_facebook.isClickable = false
 
-            twitter_image.visibility = View.INVISIBLE
-            facebook_image.visibility = View.INVISIBLE
+        addFacebook.setOnClickListener {
+            login_button_facebook.performClick()
+
+            addTwitter.visibility = View.GONE
+            addFacebook.visibility = View.GONE
+            add_account_button.setImageResource(R.drawable.ic_baseline_add_24)
         }
 
 
@@ -128,7 +120,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         twitter_login_btn.setOnClickListener {
             if(tHandler.hasLinkedAccount()) {
                 //clear before connected account from view
-                cleanUPCardViewAfterLogout(account_view)
                 add_account_button.isClickable = true
 
                 //now unlink account
@@ -265,86 +256,9 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             if (!email.isNullOrEmpty()) {
                 connected_accounts = context?.let { register.getAllSocialMediaAccounts(it) }!!
             }
-
-            linear_connected_accounts = view.findViewById(R.id.linearLayoutAccounts)
-            linear_connected_accounts.removeAllViews();
-
-            val logout_account: TextView = Button(context)
-            logout_account.text = "Logout"
-            logout_account.setBackgroundColor(Color.parseColor("#B86566"));
-            val draw: Drawable? = Drawable.createFromPath(R.drawable.round_style.toString())
-            logout_account.background = draw
-
-
-            logout_account.setOnClickListener {
-                if (!bool_facebook)
-                    twitter_login_btn.performClick()
-                else
-                    hidden_facebook_button.performClick()
-            }
-
-            for (account in connected_accounts) {
-                var imageParams: RelativeLayout.LayoutParams
-                imageParams = RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
-                )
-
-                imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-                val img = ImageView(context)
-                val img_logout = ImageView(context)
-                img.layoutParams = imageParams
-                img_logout.layoutParams = imageParams
-                img_logout.si
-
-
-                if (account.facebook) {
-                    img.setImageResource(R.drawable.facebookiconpreview)
-                } else {
-                    img.setImageResource(R.drawable.twitter_bird_logo_2012_svg)
-                }
-                img_logout.setImageResource(R.drawable.com_facebook_tooltip_black_xout)
-                img_logout.setOnClickListener {
-                    if (account.facebook) {
-                        fHandler.logoutFacebook(account)
-                        button_refresh_account.performClick()
-                    } else
-                        tHandler.unlinkAccount()
-                }
-                linear_connected_accounts.addView(img)
-
-
-                val cardView = activity?.applicationContext?.let { CardView(it) }
-
-                if (cardView != null) {
-                    cardView.minimumWidth = 300
-                    cardView.minimumHeight = 100
-                    cardView.setContentPadding(15, 0, 15, 15)
-                    cardView.setCardBackgroundColor(Color.LTGRAY)
-                    cardView.radius = 20f
-                }
-
-                val textView = TextView(activity?.applicationContext)
-                textView.text = account.user_name
-                textView.textSize = 18F
-                textView.setTextColor(Color.DKGRAY)
-                cardView?.addView(textView)
-                linear_connected_accounts.addView(cardView)
-                linear_connected_accounts.addView(img_logout)
-
-            }
         }
 
         button_refresh_account.performClick()
-    }
-
-    /* This Method deletes the information about the now logged out account */
-    private fun cleanUPCardViewAfterLogout (view: View)
-    {
-        if(tHandler.hasLinkedAccount() && this::linear_connected_accounts.isInitialized)
-        {
-            linear_connected_accounts.removeAllViews()
-        }
     }
 
 }
