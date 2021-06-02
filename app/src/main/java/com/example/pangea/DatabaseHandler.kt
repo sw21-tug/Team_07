@@ -110,4 +110,11 @@ class DatabaseHandler {
 
         postDao.deletePostByID(postID)
     }
+
+    fun deletUserByEmail(userEmail: String, context: Context){
+        val db = AppDatabase.getInstance(context)
+        val userDao = db.userDao()
+        val user = getRegisteredUser(userEmail, context)
+        userDao.delete(user)
+    }
 }
