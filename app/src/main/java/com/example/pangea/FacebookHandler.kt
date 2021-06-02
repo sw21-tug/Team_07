@@ -67,8 +67,6 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     {
         Log.d("TAG", "LoginFacebook")
 
-        var permissions: Array<String> = arrayOf("publish_actions")
-        LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
