@@ -110,4 +110,12 @@ class DatabaseHandler {
 
         postDao.deletePostByID(postID)
     }
+
+    fun deleteAllPosts(context: Context)
+    {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+
+        postDao.deleteAllPosts()
+    }
 }

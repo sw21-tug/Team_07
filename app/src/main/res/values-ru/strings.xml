@@ -54,4 +54,10 @@
     <string name="send">Отправить</string>
     <string name="refresh">освежить</string>
 
+
+    <!-- Feedback -->
+    <string name="fb_likes">Нравится на Facebook</string>
+    <string name="retweets">Ретвиты в твиттере</string>
+
+
 </resources>

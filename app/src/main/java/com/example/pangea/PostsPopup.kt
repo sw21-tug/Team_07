@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.text.Editable
+import android.util.Log
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.posts_popup.*
@@ -69,7 +70,8 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
             // call facebook or twitter post message here
             if(facebook_check) {
                 var postId = fhandler.postMessage(message.toString())
-                register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString())
+                Log.d("POST ID", postId)
+                register.addFBPost(userEmail, message.toString(), null, applicationContext, postId)
             }
             else if(twitter_check) {
                 var postId = thandler.postTweet(message.toString())
@@ -82,7 +84,7 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                     message.toString(),
                     null,
                     applicationContext,
-                    postId.toString()
+                    postId
                 )
                 var twitterId = thandler.postTweet(message.toString())
                 register.addTwitterPost(
