@@ -1,21 +1,14 @@
 package com.example.pangea
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.facebook.*
-import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import kotlinx.android.synthetic.main.posts_view.view.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -70,9 +63,6 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
-
-        //var permissions: Array<String> = arrayOf("publish_actions")
-        //LoginManager.getInstance().logInWithPublishPermissions(activity1, permissions.asList())
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
         {
@@ -175,8 +165,6 @@ class FacebookHandler(private val context: Context, private val user: User, priv
             }
             request.executeAsync()
         }
-
-
 
         return 0
     }
