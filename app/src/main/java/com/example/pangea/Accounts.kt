@@ -42,6 +42,13 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     lateinit var add_account_button: FloatingActionButton
     lateinit var account_view: View
     lateinit var hidden_facebook_button: LoginButton
+    lateinit var rlLayoutTwitter: RelativeLayout
+    lateinit var rlLayoutFacebook: RelativeLayout
+    lateinit var twitterUserName: TextView
+    lateinit var facebookUserName: TextView
+    lateinit var disconnectFacebook: Button
+    lateinit var disconnectTwitter: Button
+
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +68,15 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         twitter_login_btn = account_view.findViewById(R.id.twitter_login_btn)
         login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
+
+        rlLayoutFacebook = account_view.findViewById(R.id.rlConnectedFacebookAccount)
+        rlLayoutTwitter = account_view.findViewById(R.id.rlConnectedTwitterAccount)
+
+        facebookUserName = account_view.findViewById(R.id.txtFacebookUserName)
+        twitterUserName = account_view.findViewById(R.id.txtTwitterUserName)
+
+        disconnectFacebook = account_view.findViewById(R.id.removeFacebookbtn)
+        disconnectTwitter = account_view.findViewById(R.id.removeTwitterbtn)
 
         add_account_button = account_view.findViewById(R.id.addaccount)
 
@@ -140,7 +156,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         fHandler.initApi(this)
         login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
-        hidden_facebook_button.setPermissions("pages_show_list");
+        hidden_facebook_button.setPermissions("pages_show_list", "public_profile");
 
         if(fHandler.hasLinkedAccount())
         {
@@ -156,6 +172,16 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         hidden_facebook_button.setOnClickListener {
             fHandler.loginFacebook();
+        }
+
+        disconnectFacebook.setOnClickListener {
+            rlLayoutFacebook.visibility = View.GONE
+            fHandler.logoutFacebook()
+        }
+
+        disconnectTwitter.setOnClickListener {
+            rlLayoutTwitter.visibility = View.GONE
+            tHandler.unlinkAccount()
         }
 
         return account_view
@@ -197,7 +223,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             Log.d("TWITTER-Handler", "Logged in user and linked account")
 
             //get username here
-            add_account_button.isClickable = false
             refreshConnectedAccounts(account_view, false)
         }
     }
@@ -228,37 +253,18 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     *  TODO also works now just for one connected account. */
     private fun refreshConnectedAccounts(view: View, bool_facebook: Boolean)
     {
-        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
-        val email = sharedPref.getString("current_user", "").toString()
-        val register = DatabaseHandler()
-        var connected_accounts = emptyList<SocialMediaAccounts>()
+        if(!bool_facebook)
+        {
+            rlLayoutTwitter.visibility = View.VISIBLE
+            twitterUserName.text = tHandler.getTwitterUsername()
 
-        /* setup button for logout the connected twitter account */
-
-
-        /* TODO
-        *  add database for registered accounts, right now it just adds
-        *  the current connected twitter account */
-        if(!bool_facebook) {
-            val social_media = SocialMediaAccounts(user_name = tHandler.getTwitterUsername(), facebook = false, twitter = true)
-            context?.let { register.addSocialMediaAccount(social_media, it) }
         }
         else
         {
-            val social_media = SocialMediaAccounts(user_name = fHandler.getUser(), facebook = true, twitter = false)
-            context?.let { register.addSocialMediaAccount(social_media, it) }
+            rlLayoutFacebook.visibility = View.VISIBLE
+            facebookUserName.text = fHandler.getUser()
 
         }
-
-        /*  get list of all connected social media accounts of this user from Database */
-        //val refresh_button_account = account_view.findViewById(R.id.button_refresh_account)
-        button_refresh_account.setOnClickListener {
-            if (!email.isNullOrEmpty()) {
-                connected_accounts = context?.let { register.getAllSocialMediaAccounts(it) }!!
-            }
-        }
-
-        button_refresh_account.performClick()
     }
 
 }

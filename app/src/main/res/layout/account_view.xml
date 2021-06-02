@@ -102,12 +102,13 @@
 
 
     <RelativeLayout
-        android:layout_below="@id/txtHeader"
+        android:id="@+id/rlConnectedTwitterAccount"
         android:layout_width="match_parent"
         android:layout_height="150sp"
+        android:layout_below="@id/txtHeader"
         android:layout_marginTop="20sp"
         android:background="@drawable/border_round"
-        android:id="@+id/rlConnectedTwitterAccount">
+        android:visibility="gone">
 
 
         <ImageView
@@ -116,19 +117,19 @@
             android:layout_height="40sp"
             android:layout_marginStart="10sp"
             android:layout_marginTop="10sp"
-            android:src="@drawable/twitter_bird_logo_2012_svg"
-            />
+            android:src="@drawable/twitter_bird_logo_2012_svg" />
 
 
         <TextView
-            android:layout_centerInParent="true"
             android:id="@+id/txtTwitterUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Twitter"/>
+            android:layout_centerInParent="true"
+            android:text="Twitter"
+            android:textSize="18sp" />
 
         <Button
+            android:id="@+id/removeTwitterbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -140,12 +141,13 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_below="@id/rlConnectedTwitterAccount"
+        android:id="@+id/rlConnectedFacebookAccount"
         android:layout_width="match_parent"
         android:layout_height="150sp"
+        android:layout_below="@id/rlConnectedTwitterAccount"
         android:layout_marginTop="20sp"
         android:background="@drawable/border_round"
-        android:id="@+id/rlConnectedFacebookAccount">
+        android:visibility="gone">
 
 
         <ImageView
@@ -154,19 +156,19 @@
             android:layout_height="40sp"
             android:layout_marginStart="10sp"
             android:layout_marginTop="10sp"
-            android:src="@drawable/facebook_icon"
-            />
+            android:src="@drawable/facebook_icon" />
 
 
         <TextView
-            android:layout_centerInParent="true"
             android:id="@+id/txtFacebookUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Facebook"/>
+            android:layout_centerInParent="true"
+            android:text="Facebook"
+            android:textSize="18sp" />
 
         <Button
+            android:id="@+id/removeFacebookbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

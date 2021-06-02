@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentActivity
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -98,7 +97,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         });
     }
 
-    fun logoutFacebook(socialMediaAccounts: SocialMediaAccounts)
+    fun logoutFacebook()
     {
         val dbHandler = DatabaseHandler()
         dbHandler.saveFacebookLink(user, null, context)
@@ -112,8 +111,6 @@ class FacebookHandler(private val context: Context, private val user: User, priv
 
                 })
         }
-        dbHandler.deleteSocialAccountByName(socialMediaAccounts.user_name, context)
-        Toast.makeText(context, "logout successful" + socialMediaAccounts.user_name, Toast.LENGTH_LONG).show()
     }
 
     interface IFacebookCallback {
@@ -155,7 +152,6 @@ class FacebookHandler(private val context: Context, private val user: User, priv
             jsonobj)
         {
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
-
         }
         request.executeAsync()
         return 0

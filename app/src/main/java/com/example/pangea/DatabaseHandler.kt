@@ -6,9 +6,6 @@ import androidx.room.PrimaryKey
 
 class DatabaseHandler
 {
-     var all_connected_accounts = mutableListOf<SocialMediaAccounts>()
-
-
      fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
@@ -102,25 +99,4 @@ class DatabaseHandler
 
         postDao.deletePostByID(postID)
     }
-
-    fun getAllSocialMediaAccounts(context: Context): List<SocialMediaAccounts> {
-        val db = SocialMediaAccountsDatabase.getInstance(context)
-        val social_dao = db.socialMediaDao()
-        return social_dao.getAll()
-    }
-
-    fun addSocialMediaAccount(socialMediaAccounts: SocialMediaAccounts, context: Context)
-    {
-        val db = SocialMediaAccountsDatabase.getInstance(context)
-        val socialDao = db.socialMediaDao()
-        socialDao.insertOne(socialMediaAccounts)
-    }
-
-    fun deleteSocialAccountByName(userName: String,  context: Context) {
-        val db = SocialMediaAccountsDatabase.getInstance(context)
-        val socialDao = db.socialMediaDao()
-        socialDao.deleteByUserName(userName)
-    }
-
-
 }
