@@ -89,8 +89,10 @@ class TwitterHandler(private val context: Context, private val user: User) {
     *  Supports only one twitter account for now */
     fun getTwitterUsername():String
     {
-        //return username by the logged in user
-        return twitter!!.oAuthAccessToken.screenName.toString()
+        if(twitter == null) {
+            initTwitterApi()
+        }
+        return twitter?.oAuthAccessToken?.userId.toString()
     }
 
     /* Method to check if a Twitter user is logged in */

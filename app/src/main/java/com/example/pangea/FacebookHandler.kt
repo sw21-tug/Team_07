@@ -101,16 +101,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     {
         val dbHandler = DatabaseHandler()
         dbHandler.saveFacebookLink(user, null, context)
-        if(AccessToken.getCurrentAccessToken() != null)
-        {
-            GraphRequest(AccessToken.getCurrentAccessToken(),
-                "/me/permissions/", null, HttpMethod.DELETE,
-                GraphRequest.Callback {
-                    AccessToken.setCurrentAccessToken(null);
-                    LoginManager.getInstance().logOut()
-
-                })
-        }
+        LoginManager.getInstance().logOut()
     }
 
     interface IFacebookCallback {

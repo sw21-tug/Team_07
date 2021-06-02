@@ -57,13 +57,8 @@ class AccountsLinkTest {
         onView(withId(R.id.addaccount)).check(matches(isDisplayed()))
         onView(withId(R.id.addaccount)).perform(click())
 
-        onView(withId(R.id.twitter_img)).check(matches(isDisplayed()))
-        onView(withId(R.id.twitter_img)).check(matches(isClickable()))
-
-        // delete if facebook does not work
-        onView(withId(R.id.facebook_img2)).check(matches(isDisplayed()))
-        onView(withId(R.id.facebook_img2)).check(matches(isClickable()))
-
+        onView(withId(R.id.addTwitter)).check(matches(isDisplayed()))
+        onView(withId(R.id.addFacebook)).check(matches(isDisplayed()))
     }
 
     @Test

@@ -64,7 +64,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         val context = activity as AppCompatActivity
         tHandler = TwitterHandler(context, user)
-
+        tHandler.initTwitterApi()
         twitter_login_btn = account_view.findViewById(R.id.twitter_login_btn)
         login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
@@ -80,13 +80,8 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         add_account_button = account_view.findViewById(R.id.addaccount)
 
-        /* If you open the app and didn't Logout your twitter account before
-        *  closing the app, the connected Account is shown after going to  accounts tab */
-        // TODO delete this comment in yellow when database for connected social media accounts are implemented
-        if(tHandler.hasLinkedAccount() && tHandler.checkIfTwitterObjectValid())
-        {
-            refreshConnectedAccounts(account_view, false)
-        }
+
+
 
         val addTwitter = account_view.findViewById<FloatingActionButton>(R.id.addTwitter)
         val addFacebook = account_view.findViewById<FloatingActionButton>(R.id.addFacebook)
@@ -103,8 +98,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
                 addFacebook.visibility = View.VISIBLE
                 add_account_button.setImageResource(R.drawable.ic_baseline_close_24)
             }
-
-
         }
 
 
@@ -149,10 +142,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         }
 
         fHandler = FacebookHandler(context, user, activity)
-        if(fHandler.hasLinkedAccount() && fHandler.isLoggedIn())
-        {
-            refreshConnectedAccounts(account_view, true)
-        }
+
         fHandler.initApi(this)
         login_button_facebook = account_view.findViewById(R.id.login_button_facebook)
         hidden_facebook_button = account_view.findViewById(R.id.hidden_facebook_button)
@@ -177,13 +167,14 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         disconnectFacebook.setOnClickListener {
             rlLayoutFacebook.visibility = View.GONE
             fHandler.logoutFacebook()
+
         }
 
         disconnectTwitter.setOnClickListener {
             rlLayoutTwitter.visibility = View.GONE
             tHandler.unlinkAccount()
         }
-
+        refreshConnectedAccounts()
         return account_view
     }
 
@@ -223,7 +214,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             Log.d("TWITTER-Handler", "Logged in user and linked account")
 
             //get username here
-            refreshConnectedAccounts(account_view, false)
+            refreshConnectedAccounts()
         }
     }
 
@@ -238,7 +229,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         {
             login_button_facebook.text = getString(R.string.facebook_link_text)
         }
-        refreshConnectedAccounts(account_view, true)
+        refreshConnectedAccounts()
         super.onActivityResult(requestCode, resultCode, data)
 
 
@@ -251,15 +242,15 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     /* this method shows the connected accounts as soon as you log in with a social media account
     *  TODO works for now just for twitter, facebook untouched because unclear if facebooks gets removed from app
     *  TODO also works now just for one connected account. */
-    private fun refreshConnectedAccounts(view: View, bool_facebook: Boolean)
+    private fun refreshConnectedAccounts()
     {
-        if(!bool_facebook)
+        if(tHandler.hasLinkedAccount())
         {
             rlLayoutTwitter.visibility = View.VISIBLE
             twitterUserName.text = tHandler.getTwitterUsername()
 
         }
-        else
+        if(fHandler.hasLinkedAccount())
         {
             rlLayoutFacebook.visibility = View.VISIBLE
             facebookUserName.text = fHandler.getUser()
