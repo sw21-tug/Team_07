@@ -9,7 +9,9 @@ import android.text.Editable
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scaleMatrix
+import kotlinx.android.synthetic.main.activity_filter_posts.*
 import kotlinx.android.synthetic.main.posts_popup.*
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
@@ -71,21 +73,24 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
 
             // call facebook or twitter post message here
             if(facebook_check) {
-                val cal = Calendar.getInstance()
-                val date = cal.get(Calendar.DATE).toString()+ "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR)
-                var postId = fhandler.postMessage(message.toString())
+                val calender = Calendar.getInstance()
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
+                val postId = fhandler.postMessage(message.toString())
                 register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString(), date)
             }
             else if(twitter_check) {
-                val cal = Calendar.getInstance()
-                val date = cal.get(Calendar.DATE).toString()+ "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR)
-                var postId = thandler.postTweet(message.toString())
+                val calender = Calendar.getInstance()
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
+                val postId = thandler.postTweet(message.toString())
                 register.addTwitterPost(userEmail, message.toString(), null, applicationContext, postId, date)
             }
             else if (facebook_check && twitter_check) {
-                val cal = Calendar.getInstance()
-                val date = cal.get(Calendar.DATE).toString()+ "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR)
-                var postId = fhandler.postMessage(message.toString())
+                val calender = Calendar.getInstance()
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
+                val postId = fhandler.postMessage(message.toString())
                 register.addFBPost(
                     userEmail,
                     message.toString(),

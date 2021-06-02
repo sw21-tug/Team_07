@@ -5,8 +5,13 @@ import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import kotlinx.android.synthetic.main.activity_filter_posts.*
 import kotlinx.android.synthetic.main.posts_popup.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FilterPosts : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,23 +79,67 @@ class FilterPosts : AppCompatActivity() {
         btn_set_filter.setOnClickListener {
 
             if(toggleByContent.isChecked){
+                GlobalVariable.Companion.matchedPosts = emptyList()
                 val userEmail = intent.getStringExtra("loggedInUserMail").toString()
-                var register = DatabaseHandler()
-                var postsLists = register.getAllPosts(userEmail, this)
+                val register = DatabaseHandler()
+                val postsLists = register.getAllPosts(userEmail, this)
                 postsLists.forEach{
                     if(it.message.toString().contains(filter_post_content.text.toString())){
                         GlobalVariable.Companion.matchedPosts += it
                     }
                 }
+
+                if (GlobalVariable.Companion.matchedPosts.isEmpty())
+                {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("INFO")
+                    builder.setMessage("No matching posts found.")
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+                    builder.setNeutralButton("Ok"){dialogInterface, which ->
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
             }
-            else if(!toggleByContent.isChecked){
-                GlobalVariable.Companion.matchedPosts = emptyList()
-            }
+
             else if (toggleByDate.isChecked){
+                GlobalVariable.Companion.matchedPosts = emptyList()
+                val calender = Calendar.getInstance()
+                calender.set(dpFilter.year, dpFilter.month, dpFilter.dayOfMonth)
+                var sdate = SimpleDateFormat("dd-MM-yyyy")
+                var date = sdate.format(calender.time)
+                val userEmail = intent.getStringExtra("loggedInUserMail").toString()
+                var register = DatabaseHandler()
+                var postsLists = register.getAllPosts(userEmail, this)
+                postsLists.forEach{
+                    if(it.date.toString().equals(date)){
+                        GlobalVariable.Companion.matchedPosts += it
+                    }
+                }
+                if (GlobalVariable.Companion.matchedPosts.isEmpty())
+                {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("INFO")
+                    builder.setMessage("No matching posts found.")
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+                    builder.setNeutralButton("Ok"){dialogInterface, which ->
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+            }
+
+            else if(toggleByPlatform.isChecked) {
+                GlobalVariable.Companion.matchedPosts = emptyList()
 
             }
-            else if(toggleByPlatform.isChecked) {
 
+            else {
+                GlobalVariable.Companion.matchedPosts = emptyList()
             }
         }
     }
