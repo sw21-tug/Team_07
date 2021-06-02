@@ -1,5 +1,6 @@
 package com.example.pangea
 
+import android.content.Context
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,7 @@ class FilterPosts : AppCompatActivity() {
                 toggleByDate.isChecked = false
                 toggleByPlatform.isChecked = false
                 filter_post_content.visibility = View.VISIBLE
+
             }
             else{
                 filter_post_content.visibility = View.GONE
@@ -72,7 +74,17 @@ class FilterPosts : AppCompatActivity() {
         btn_set_filter.setOnClickListener {
 
             if(toggleByContent.isChecked){
-
+                val userEmail = intent.getStringExtra("loggedInUserMail").toString()
+                var register = DatabaseHandler()
+                var postsLists = register.getAllPosts(userEmail, this)
+                postsLists.forEach{
+                    if(it.message.toString().contains(filter_post_content.text.toString())){
+                        GlobalVariable.Companion.matchedPosts += it
+                    }
+                }
+            }
+            else if(!toggleByContent.isChecked){
+                GlobalVariable.Companion.matchedPosts = emptyList()
             }
             else if (toggleByDate.isChecked){
 
@@ -80,7 +92,6 @@ class FilterPosts : AppCompatActivity() {
             else if(toggleByPlatform.isChecked) {
 
             }
-
         }
     }
 }

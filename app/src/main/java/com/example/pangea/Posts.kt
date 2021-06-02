@@ -65,7 +65,10 @@ class Posts() : Fragment()
 
 
         view.refresh.setOnClickListener{
-            if(!email.isNullOrEmpty())
+            if(GlobalVariable.Companion.matchedPosts.isNotEmpty()) {
+                posts = GlobalVariable.Companion.matchedPosts
+            }
+            else if(!email.isNullOrEmpty())
             {
                 posts = activity?.let { register.getAllPosts(email, it.applicationContext) }!!
             }
