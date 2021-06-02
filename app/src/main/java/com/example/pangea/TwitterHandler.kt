@@ -98,8 +98,13 @@ class TwitterHandler(private val context: Context, private val user: User) {
         }
 
         var retweets = twitter?.getRetweets(postId.toLong())
+        var number_of_retweets = 0
+        if(!retweets.isNullOrEmpty())
+        {
+            number_of_retweets = retweets.get(0).retweetCount
+        }
+        
 
-        var number_of_retweets = retweets?.size
 
         return number_of_retweets.toString()
     }
