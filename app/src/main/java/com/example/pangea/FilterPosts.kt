@@ -102,17 +102,21 @@ class FilterPosts : AppCompatActivity() {
                     alertDialog.setCancelable(false)
                     alertDialog.show()
                 }
+                else
+                {
+                    finish()
+                }
             }
 
             else if (toggleByDate.isChecked){
                 GlobalVariable.Companion.matchedPosts = emptyList()
                 val calender = Calendar.getInstance()
                 calender.set(dpFilter.year, dpFilter.month, dpFilter.dayOfMonth)
-                var sdate = SimpleDateFormat("dd-MM-yyyy")
-                var date = sdate.format(calender.time)
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
                 val userEmail = intent.getStringExtra("loggedInUserMail").toString()
-                var register = DatabaseHandler()
-                var postsLists = register.getAllPosts(userEmail, this)
+                val register = DatabaseHandler()
+                val postsLists = register.getAllPosts(userEmail, this)
                 postsLists.forEach{
                     if(it.date.toString().equals(date)){
                         GlobalVariable.Companion.matchedPosts += it
@@ -131,16 +135,46 @@ class FilterPosts : AppCompatActivity() {
                     alertDialog.setCancelable(false)
                     alertDialog.show()
                 }
+                else
+                {
+                    finish()
+                }
             }
 
             else if(toggleByPlatform.isChecked) {
                 GlobalVariable.Companion.matchedPosts = emptyList()
+                val userEmail = intent.getStringExtra("loggedInUserMail").toString()
+                val register = DatabaseHandler()
+                val postsLists = register.getAllPosts(userEmail, this)
+                postsLists.forEach {
+                    if ((rb_filter_facebook.isChecked && it.facebook.equals(true)) || (rb_filter_twitter.isChecked && it.twitter!!.equals(true))) {
+                        GlobalVariable.Companion.matchedPosts += it
+                    }
+                }
+                if (GlobalVariable.Companion.matchedPosts.isEmpty())
+                {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("INFO")
+                    builder.setMessage("No matching posts found.")
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
 
+                    builder.setNeutralButton("Ok"){dialogInterface, which ->
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+                else
+                {
+                    finish()
+                }
             }
 
             else {
                 GlobalVariable.Companion.matchedPosts = emptyList()
+                finish()
             }
+
         }
     }
 }

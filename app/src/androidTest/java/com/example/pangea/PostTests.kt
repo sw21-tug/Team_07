@@ -393,13 +393,14 @@ class PostTests {
 
         onView(withId(R.id.searchbtn)).perform(click())
         onView(anyOf(withId(R.id.filter_post_content))).perform(typeText("testmessage 1"))
+        onView(anyOf(withId(R.id.filter_post_content))).perform(pressBack())
         onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
         onView(withText("testmessage 1")).check(matches(isDisplayed()))
 
         onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.toggleByDate))).perform(click())
         onView(anyOf(withId(R.id.dpFilter))).perform(PickerActions.setDate(2021, 5, 26))
         onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
-        onView(anyOf(withId(R.id.toggleByDate))).perform(click())
         onView(withText("testmessage 2")).check(matches(isDisplayed()))
         onView(withText("testmessage 4")).check(matches(isDisplayed()))
 
@@ -416,9 +417,6 @@ class PostTests {
         onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
         onView(withText("testmessage 3")).check(matches(isDisplayed()))
         onView(withText("testmessage 4")).check(matches(isDisplayed()))
-
-        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
-        onView(withId(R.id.TextViewPostExpanded)).check(matches(isDisplayed()))
 
         PostDatabase.destroyInstance()
     }
