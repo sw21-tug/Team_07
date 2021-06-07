@@ -13,8 +13,4 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-
-    <declare-styleable name="com_facebook_login_view_com_facebook_confirm_logout">
-        false
-    </declare-styleable>
 </resources>

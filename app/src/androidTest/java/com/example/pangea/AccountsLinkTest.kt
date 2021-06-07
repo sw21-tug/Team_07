@@ -5,34 +5,30 @@ import android.content.Intent
 import android.content.res.Resources
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.facebook.FacebookSdk
 import junit.framework.Assert
-import junit.framework.TestCase.assertEquals
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
-import com.example.pangea.DashboardsActivity
-import com.example.pangea.DatabaseHandler
-import com.example.pangea.TwitterHandler
-import org.junit.After
-
+@RunWith(AndroidJUnit4::class)
 class AccountsLinkTest {
-
-
 
     @get:Rule
     val mActivityTestRule: ActivityTestRule<DashboardsActivity> =
         object : ActivityTestRule<DashboardsActivity>(DashboardsActivity::class.java, true, false) {
             override fun getActivityIntent(): Intent {
                 val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-                return Intent(targetContext, DashboardsActivity::class.java).apply {
-                    putExtra("loggedInUserMail", "test.user@test.com")
-                }
+                val sharedPref = targetContext.getSharedPreferences("user", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("current_user","test.user@test.com").apply()
+                return Intent(targetContext, DashboardsActivity::class.java)
             }
         }
 
@@ -46,19 +42,16 @@ class AccountsLinkTest {
         val dbHandler = DatabaseHandler()
         dbHandler.registerUser(email, pw, context)
         var user = dbHandler.getRegisteredUser(email, context)
-        assertEquals(email, user.email)
-        assertEquals(pw, user.password)
+        Assert.assertEquals(email, user.email)
+        Assert.assertEquals(pw, user.password)
 
         var tHandler = TwitterHandler(context, user)
         tHandler.unlinkAccount()
 
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
-        onView(withId(R.id.addaccount)).check(matches(isDisplayed()))
-        onView(withId(R.id.addaccount)).perform(click())
-
-        onView(withId(R.id.addTwitter)).check(matches(isDisplayed()))
-        onView(withId(R.id.addFacebook)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitter_login_btn)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitter_login_btn)).check(matches(withText(resources.getString(R.string.twitter_link_text))))
     }
 
     @Test
@@ -78,11 +71,13 @@ class AccountsLinkTest {
 
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitter_login_btn)).check(matches(isDisplayed()))
+        onView(withId(R.id.twitter_login_btn)).check(matches(withText(resources.getString(R.string.twitter_unlink_text))))
     }
 
     @Test
     fun testFacebookLinkVisibleInAccountsFragment() {
-        /*FacebookSdk.setApplicationId("171191854853298")
+        FacebookSdk.setApplicationId("171191854853298")
         val email = "test.user@test.com"
         val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -92,12 +87,12 @@ class AccountsLinkTest {
         var user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
-        val fbHandler = FacebookHandler(context, user, this)
+        val fbHandler = FacebookHandler(context, user, this.mActivityTestRule.activity)
         fbHandler.logoutFacebook()
         mActivityTestRule.launchActivity(null)
         onView(withId(R.id.ViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
-        onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_link_text))))*/
+        onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_link_text))))
     }
 
     @Test
@@ -121,7 +116,6 @@ class AccountsLinkTest {
         onView(withId(R.id.login_button_facebook)).check(matches(isDisplayed()))
         onView(withId(R.id.login_button_facebook)).check(matches(withText(resources.getString(R.string.facebook_unlink_text))))
     }
-
 
     @After
     fun destroyData()

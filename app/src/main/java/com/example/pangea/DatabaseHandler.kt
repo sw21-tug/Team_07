@@ -1,11 +1,8 @@
 package com.example.pangea
 
 import android.content.Context
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 
-class DatabaseHandler
-{
+class DatabaseHandler {
      fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
