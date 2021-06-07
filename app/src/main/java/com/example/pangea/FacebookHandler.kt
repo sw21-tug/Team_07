@@ -1,6 +1,7 @@
 package com.example.pangea
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
@@ -17,6 +18,9 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     lateinit var caller: IFacebookCallback
     lateinit var acces_token_string: String
     lateinit var id: String
+    lateinit var facebookPostId: String
+    lateinit var facebookReactions: String
+
 
     var callbackManager: CallbackManager = CallbackManager.Factory.create();
     var accessTokenTracker: AccessTokenTracker = object : AccessTokenTracker() {
@@ -75,18 +79,16 @@ class FacebookHandler(private val context: Context, private val user: User, priv
                     AccessToken.setCurrentAccessToken(access_token); // set Current accessToken
                 }
 
-                override fun onCancel()
-                {
-                    // user closes login popup, safe to ignore
-                    Log.d("TAG", "Cancel Login");
-                }
+            override fun onCancel() {
+                // user closes login popup, safe to ignore
+                Log.d("TAG", "Cancel Login");
+            }
 
-                override fun onError(error: FacebookException?)
-                {
-                    Log.d("TAG", "Error with Facebook Login: " + error.toString());
-                    //Toast.makeText(context, "error: "+error.toString(), Toast.LENGTH_LONG).show();
-                    TODO("Not yet implemented")
-                }
+            override fun onError(error: FacebookException?) {
+                Log.d("TAG", "Error with Facebook Login: " + error.toString());
+                //Toast.makeText(context, "error: "+error.toString(), Toast.LENGTH_LONG).show();
+                TODO("Not yet implemented")
+            }
         });
     }
 
@@ -97,11 +99,11 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         if(AccessToken.getCurrentAccessToken() != null)
         {
             GraphRequest(AccessToken.getCurrentAccessToken(),
-                "/me/permissions/", null, HttpMethod.DELETE,
-                GraphRequest.Callback {
-                    AccessToken.setCurrentAccessToken(null);
-                    LoginManager.getInstance().logOut()
-                })
+                    "/me/permissions/", null, HttpMethod.DELETE,
+                    GraphRequest.Callback {
+                        AccessToken.setCurrentAccessToken(null);
+                        LoginManager.getInstance().logOut()
+                    })
         }
     }
 
@@ -117,19 +119,19 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         }
 
         GraphRequest(
-            AccessToken.getCurrentAccessToken(),
-            "/me/accounts",
-            null,
-            HttpMethod.GET,
-            GraphRequest.Callback { response ->
-                acces_token_string = (((response.jsonObject["data"] as JSONArray)[0]) as JSONObject).get("access_token").toString()
+                AccessToken.getCurrentAccessToken(),
+                "/me/accounts",
+                null,
+                HttpMethod.GET,
+                GraphRequest.Callback { response ->
+                    acces_token_string = (((response.jsonObject["data"] as JSONArray)[0]) as JSONObject).get("access_token").toString()
 
-                id = (((response.jsonObject["data"] as JSONArray)[0]) as JSONObject).get("id").toString()
-            }
+                    id = (((response.jsonObject["data"] as JSONArray)[0]) as JSONObject).get("id").toString()
+                }
         ).executeAndWait()
 
         val permissions: Collection<String>? = mutableListOf("pages_read_engagement", "pages_manage_engagement")
-        val page_acces = AccessToken(acces_token_string, "171191854853298", getCurrentAccesToken().userId,permissions, null, null, null, null, null, null, null)
+        val page_acces = AccessToken(acces_token_string, "171191854853298", getCurrentAccesToken().userId, permissions, null, null, null, null, null, null, null)
         val page_id ="/"+id +"/feed"
 
 
@@ -139,12 +141,13 @@ class FacebookHandler(private val context: Context, private val user: User, priv
 
         if(image_path.isNullOrBlank())
         {
-            val request = GraphRequest.newPostRequest(
+        val request = GraphRequest.newPostRequest(
                 page_acces,
                 page_id,
                 jsonobj)
-            {
-                Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+        { response ->
+            Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+            facebookPostId = response.jsonObject.get("id").toString()
 
             }
             request.executeAsync()
@@ -167,5 +170,27 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         }
 
         return 0
+    }
+
+    fun getReactions(postId: String?) : String {
+        if(postId == "" || postId == null || !isLoggedIn())
+        {
+            return "0"
+        }
+
+        val request = GraphRequest.newGraphPathRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + postId
+        ) {
+            response ->
+            facebookReactions = ((response.jsonObject.get("reactions") as JSONObject).get("summary") as JSONObject).get("total_count").toString()
+        }
+
+        val parameters = Bundle()
+        parameters.putString("fields", "reactions.summary(total_count)")
+        request.parameters = parameters
+        request.executeAndWait()
+
+        return facebookReactions
     }
 }

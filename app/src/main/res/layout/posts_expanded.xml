@@ -8,16 +8,23 @@
 
     <TextView
         android:id="@+id/TextViewPostExpanded"
-        android:layout_width="341dp"
-        android:layout_height="300dp"
-        android:textAlignment="center"
+        android:layout_width="358dp"
+        android:layout_height="wrap_content"
+        android:background="#CDEDFB"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:textAlignment="textStart"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.096" />
+        app:layout_constraintVertical_bias="0.154" />
 
     <ImageView
         android:id="@+id/ImagePostExpanded"
@@ -31,6 +38,45 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
+    <TextView
+        android:id="@+id/FacebookLikes"
+        android:layout_width="130dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="46dp"
+        android:text="TextView"
+        android:textSize="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewPostExpanded" />
+
+    <TextView
+        android:id="@+id/fblikestext"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/fb_likes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FacebookLikes" />
+
+    <TextView
+        android:id="@+id/twlikestext"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/retweets"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TwitterLikes" />
+
+    <TextView
+        android:id="@+id/TwitterLikes"
+        android:layout_width="130dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="24dp"
+        android:text="TextView"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewPostExpanded" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

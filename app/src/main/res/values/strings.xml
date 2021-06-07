@@ -58,4 +58,8 @@
     <string name="refresh">Refresh</string>
     <string name="Attach">Attach</string>
 
+    <!-- Feedback -->
+    <string name="fb_likes">Likes on Facebook</string>
+    <string name="retweets">Retweets on Twitter</string>
+
 </resources>

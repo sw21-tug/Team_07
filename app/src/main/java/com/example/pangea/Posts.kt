@@ -95,6 +95,29 @@ class Posts() : Fragment()
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
                     intent.putExtra("Image", post.image)
+
+                    val curr_user: User = register.getRegisteredUser(email, requireContext())
+                    val fhandler = FacebookHandler(requireContext(), curr_user, activity)
+
+                    val thandler = TwitterHandler(requireContext(), curr_user)
+
+                    var twretweets = "0"
+                    var fblikes = "0"
+
+                    if(post.twitter == true) {
+                        twretweets = thandler.getFavorites(post.postID!!)
+                    }
+                    if(post.facebook) {
+                        fblikes = fhandler.getReactions(post.postID)
+                    }
+
+
+                    intent.putExtra("TwitterRetweets", twretweets)
+                    intent.putExtra("FBReactions", fblikes)
+
+                    intent.putExtra("twitter", post.twitter.toString())
+                    intent.putExtra("facebook", post.facebook.toString())
+
                     startActivity(intent)
                 }
 

@@ -55,4 +55,10 @@
     <string name="refresh">освежить</string>
     <string name="Attach">Прикреплять</string>
 
+
+    <!-- Feedback -->
+    <string name="fb_likes">Нравится на Facebook</string>
+    <string name="retweets">Ретвиты в твиттере</string>
+
+
 </resources>
