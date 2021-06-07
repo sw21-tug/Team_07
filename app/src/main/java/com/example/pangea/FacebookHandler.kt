@@ -43,12 +43,17 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         return AccessToken.getCurrentAccessToken()
     }
 
+
     fun isLoggedIn(): Boolean
     {
         val accessToken = AccessToken.getCurrentAccessToken()
         return accessToken != null && !accessToken.isExpired
     }
 
+    fun getUser() : String
+    {
+        return getCurrentAccesToken().userId
+    }
     fun isLoggedInWithWritePermissions(): Boolean
     {
         if(!isLoggedIn()) {
@@ -66,8 +71,6 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
-
-
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
                 Log.d("TAG", "Success Login")
@@ -94,15 +97,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     {
         val dbHandler = DatabaseHandler()
         dbHandler.saveFacebookLink(user, null, context)
-        if(AccessToken.getCurrentAccessToken() != null)
-        {
-            GraphRequest(AccessToken.getCurrentAccessToken(),
-                    "/me/permissions/", null, HttpMethod.DELETE,
-                    GraphRequest.Callback {
-                        AccessToken.setCurrentAccessToken(null);
-                        LoginManager.getInstance().logOut()
-                    })
-        }
+        LoginManager.getInstance().logOut()
     }
 
     interface IFacebookCallback {
@@ -144,8 +139,8 @@ class FacebookHandler(private val context: Context, private val user: User, priv
                 jsonobj)
         { response ->
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
-            facebookPostId = response.jsonObject.get("id").toString()
 
+            facebookPostId = response.jsonObject.get("id").toString()
         }
         request.executeAndWait()
 

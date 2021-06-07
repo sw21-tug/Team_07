@@ -61,6 +61,7 @@
     <string name="filter_by_date_header">Filter by Date</string>
     <string name="filter_by_platform_header">Filter by Platform</string>
     <string name="btn_apply_filter">Apply Filter</string>
+    <string name="disconnect_button">Disconnect</string>
 
     <!-- Feedback -->
     <string name="fb_likes">Likes on Facebook</string>
