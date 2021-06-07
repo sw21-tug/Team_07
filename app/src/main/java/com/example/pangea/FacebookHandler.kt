@@ -161,11 +161,12 @@ class FacebookHandler(private val context: Context, private val user: User, priv
                 file_to_upload,
                 msg,
                 null)
-            {
+            {   response ->
                 Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+                facebookPostId = response.jsonObject.get("post_id").toString()
 
             }
-            request.executeAsync()
+            request.executeAndWait()
         }
 
         return facebookPostId
