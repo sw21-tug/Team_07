@@ -30,4 +30,6 @@ data class Post(
     @ColumnInfo(name = "date")
     val date: String?
 
+    @ColumnInfo(name = "bookmarked")
+    var bookmarked: Boolean
 )

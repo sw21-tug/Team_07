@@ -62,4 +62,8 @@
     <string name="filter_by_platform_header">Filter by Platform</string>
     <string name="btn_apply_filter">Apply Filter</string>
 
+    <!-- Feedback -->
+    <string name="fb_likes">Likes on Facebook</string>
+    <string name="retweets">Retweets on Twitter</string>
+
 </resources>

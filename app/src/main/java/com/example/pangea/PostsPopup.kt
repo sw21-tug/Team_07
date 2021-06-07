@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.text.Editable
+import android.util.Log
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scaleMatrix
@@ -77,7 +78,9 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                 val sdate = SimpleDateFormat("dd-MM-yyyy")
                 val date = sdate.format(calender.time)
                 val postId = fhandler.postMessage(message.toString())
+                Log.d("POST ID", postId)
                 register.addFBPost(userEmail, message.toString(), null, applicationContext, postId.toString(), date)
+
             }
             else if(twitter_check) {
                 val calender = Calendar.getInstance()
