@@ -56,6 +56,11 @@
     <string name="post_message">post message</string>
     <string name="send">send</string>
     <string name="refresh">Refresh</string>
+    <string name="filter_posts_header">Filter Posts</string>
+    <string name="filter_by_content_header">Filter by Content</string>
+    <string name="filter_by_date_header">Filter by Date</string>
+    <string name="filter_by_platform_header">Filter by Platform</string>
+    <string name="btn_apply_filter">Apply Filter</string>
     <string name="disconnect_button">Disconnect</string>
 
     <!-- Feedback -->

@@ -62,7 +62,7 @@ class PostsTabInstrumentedTests {
         val message = "test"
         val image = null
 
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "26-05-2021")
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
@@ -83,8 +83,8 @@ class PostsTabInstrumentedTests {
         val messageFB = "testFB"
         val messageTwitter = "testTwitter"
         val image = null
-        register.addFBPost(email, messageFB, image, context, "")
-        register.addTwitterPost(email, messageTwitter, image, context, "")
+        register.addFBPost(email, messageFB, image, context, "", "26-05-2021")
+        register.addTwitterPost(email, messageTwitter, image, context, "", "26-05-2021")
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
