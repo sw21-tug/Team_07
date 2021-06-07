@@ -53,6 +53,7 @@
     <string name="post_message">отправить сообщениеe</string>
     <string name="send">Отправить</string>
     <string name="refresh">освежить</string>
+    <string name="disconnect_button">Отключить</string>
 
 
     <!-- Feedback -->
