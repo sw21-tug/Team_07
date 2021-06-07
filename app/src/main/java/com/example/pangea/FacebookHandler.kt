@@ -148,9 +148,8 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         { response ->
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
             facebookPostId = response.jsonObject.get("id").toString()
-
             }
-            request.executeAsync()
+            request.executeAndWait()
         }
         else
         {
@@ -169,7 +168,7 @@ class FacebookHandler(private val context: Context, private val user: User, priv
             request.executeAsync()
         }
 
-        return 0
+        return facebookPostId
     }
 
     fun getReactions(postId: String?) : String {

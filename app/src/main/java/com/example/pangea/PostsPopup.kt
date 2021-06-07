@@ -94,7 +94,7 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                     message.toString(),
                     image,
                     applicationContext,
-                    postId
+                    postId.toString()
                 )
                 var twitterId = thandler.postTweet(message.toString(), image)
                 register.addTwitterPost(
