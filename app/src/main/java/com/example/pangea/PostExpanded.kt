@@ -1,5 +1,6 @@
 package com.example.pangea
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -27,6 +28,7 @@ class PostExpanded : AppCompatActivity()
         TextViewPostExpanded.text = getIntent().getStringExtra("Text")
         FacebookLikes.text = getIntent().getStringExtra("FBReactions")
         TwitterLikes.text = getIntent().getStringExtra("TwitterRetweets")
+        ImagePostExpanded.setImageURI(Uri.parse(getIntent().getStringExtra("Image")))
 
         var facebook = getIntent().getStringExtra("facebook")!!.toBoolean()
         var twitter = getIntent().getStringExtra("twitter")!!.toBoolean()

@@ -56,6 +56,7 @@
     <string name="post_message">post message</string>
     <string name="send">send</string>
     <string name="refresh">Refresh</string>
+    <string name="Attach">Attach</string>
     <string name="filter_posts_header">Filter Posts</string>
     <string name="filter_by_content_header">Filter by Content</string>
     <string name="filter_by_date_header">Filter by Date</string>

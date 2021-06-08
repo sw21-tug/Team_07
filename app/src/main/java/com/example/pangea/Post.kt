@@ -28,7 +28,7 @@ data class Post(
     val postID: String?,
 
     @ColumnInfo(name = "date")
-    val date: String?
+    val date: String?,
 
     @ColumnInfo(name = "bookmarked")
     var bookmarked: Boolean

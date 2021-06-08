@@ -10,6 +10,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 
 
 class FacebookHandler(private val context: Context, private val user: User, private var activity1: FragmentActivity?)
@@ -71,14 +72,17 @@ class FacebookHandler(private val context: Context, private val user: User, priv
     fun loginFacebook()
     {
         Log.d("TAG", "LoginFacebook")
-        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult) {
-                Log.d("TAG", "Success Login")
-                val access_token = result.accessToken;
-                val dbHandler = DatabaseHandler()
-                dbHandler.saveFacebookLink(user, access_token?.token, context)
-                AccessToken.setCurrentAccessToken(access_token); // set Current accessToken
-            }
+
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>
+        {
+                override fun onSuccess(result: LoginResult)
+                {
+                    Log.d("TAG", "Success Login")
+                    val access_token = result.accessToken;
+                    val dbHandler = DatabaseHandler()
+                    dbHandler.saveFacebookLink(user, access_token?.token, context)
+                    AccessToken.setCurrentAccessToken(access_token); // set Current accessToken
+                }
 
             override fun onCancel() {
                 // user closes login popup, safe to ignore
@@ -105,12 +109,11 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         fun loggedOut()
     }
 
-    fun postMessage(msg: String) : String
+    fun postMessage(msg: String, image_path: String) : Any
     {
         if(!isLoggedIn()) {
             loginFacebook()
         }
-
 
         GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -133,16 +136,35 @@ class FacebookHandler(private val context: Context, private val user: User, priv
         jsonobj.put("message", msg)
 
 
+        if(image_path.isNullOrBlank())
+        {
         val request = GraphRequest.newPostRequest(
                 page_acces,
                 page_id,
                 jsonobj)
         { response ->
             Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
-
             facebookPostId = response.jsonObject.get("id").toString()
+            }
+            request.executeAndWait()
         }
-        request.executeAndWait()
+        else
+        {
+            val page_photo_id = "/"+id +"/photos"
+            val file_to_upload = File(image_path)
+            val request = GraphRequest.newUploadPhotoRequest(
+                page_acces,
+                page_photo_id,
+                file_to_upload,
+                msg,
+                null)
+            {   response ->
+                Toast.makeText(context, "success!", Toast.LENGTH_LONG).show()
+                facebookPostId = response.jsonObject.get("post_id").toString()
+
+            }
+            request.executeAndWait()
+        }
 
         return facebookPostId
     }

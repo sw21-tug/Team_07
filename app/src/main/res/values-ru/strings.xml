@@ -53,6 +53,7 @@
     <string name="post_message">отправить сообщениеe</string>
     <string name="send">Отправить</string>
     <string name="refresh">освежить</string>
+    <string name="Attach">Прикреплять</string>
     <string name="filter_posts_header">Фильтр сообщений</string>
     <string name="filter_by_content_header">Фильтр по содержанию</string>
     <string name="filter_by_date_header">Фильтр по дате</string>

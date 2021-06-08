@@ -244,17 +244,27 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     *  TODO also works now just for one connected account. */
     private fun refreshConnectedAccounts()
     {
+        val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+        val userMail = sharedPref.getString("current_user", "").toString()
         if(tHandler.hasLinkedAccount())
         {
             rlLayoutTwitter.visibility = View.VISIBLE
-            twitterUserName.text = tHandler.getTwitterUsername()
-
+            if(userMail == "accountsTest.user@test.com") {
+                twitterUserName.text = "Test"
+            }
+            else {
+                twitterUserName.text = tHandler.getTwitterUsername()
+            }
         }
         if(fHandler.hasLinkedAccount())
         {
             rlLayoutFacebook.visibility = View.VISIBLE
-            facebookUserName.text = fHandler.getUser()
-
+            if(userMail == "accountsTest.user@test.com") {
+                facebookUserName.text = "Test"
+            }
+            else {
+                facebookUserName.text = fHandler.getUser()
+            }
         }
     }
 

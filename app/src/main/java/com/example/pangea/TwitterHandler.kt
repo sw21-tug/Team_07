@@ -12,9 +12,12 @@ import androidx.annotation.RequiresApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.conf.ConfigurationBuilder
+import java.io.File
+import java.net.URI
 
 class TwitterHandler(private val context: Context, private val user: User) {
 
@@ -47,20 +50,45 @@ class TwitterHandler(private val context: Context, private val user: User) {
         twitter = factory.instance
     }
 
-    fun postTweet(tweet: String): String {
+    fun postTweet(tweet: String, image_path: String): String {
         if(twitter == null) {
             initTwitterApi()
         }
-
         var statusId = ""
-         try {
-            val status = twitter?.updateStatus(tweet)
-            statusId = (status!!.id).toString()
-            "200"
-        } catch (e: Exception) {
-            Log.e("ERROR: ", e.toString())
-            statusId = "-1"
+
+        if(image_path.isNullOrEmpty())
+        {
+
+            try {
+                val status = twitter?.updateStatus(tweet)
+                statusId = (status!!.id).toString()
+                "200"
+
+            } catch (e: Exception) {
+                Log.e("ERROR: ", e.toString())
+                statusId = "-1"
+            }
         }
+        else
+        {
+            val imgFile: File = File(image_path)
+
+            try {
+
+                val status = StatusUpdate(tweet)
+
+                status.setMedia(imgFile)
+
+                val finished_post = twitter?.updateStatus(status)
+                statusId = (finished_post!!.id).toString()
+
+
+            } catch (e: Exception) {
+                Log.e("ERROR: ", e.toString())
+                statusId = "-1"
+            }
+        }
+
 
         return statusId
     }

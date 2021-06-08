@@ -1,13 +1,16 @@
 package com.example.pangea
 
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +49,6 @@ class Posts() : Fragment()
             StrictMode.setThreadPolicy(policy)
         }
 
-
         view.sendpostbtn.setOnClickListener {
             val intent = Intent(context, PostsPopup::class.java)
             if (email != null) {
@@ -75,16 +77,6 @@ class Posts() : Fragment()
 
             val linearLayout : LinearLayout = view.findViewById(R.id.linearLayoutPosts)
             linearLayout.removeAllViews();
-//            linearLayout.setDividerDrawable(
-//                ContextCompat.getDrawable(
-//                      requireActivity().applicationContext, // Context
-//                      android.R.drawable.divider_horizontal_dark // Drawable
-//                    )
-//            )
-//
-//            linearLayout.dividerDrawable.setBounds(0, 0, 50, 50);
-//
-//            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_END)
 
             for (post in posts) {
 
@@ -115,6 +107,7 @@ class Posts() : Fragment()
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
+                    intent.putExtra("Image", post.image)
 
                     val curr_user: User = register.getRegisteredUser(email, requireContext())
                     val fhandler = FacebookHandler(requireContext(), curr_user, activity)
@@ -150,10 +143,7 @@ class Posts() : Fragment()
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         register.deletePostByID(post.postID!!, requireContext())
                         Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
-                        val view = getView()
-                        if (view != null) {
-                            view.findViewById<Button>(R.id.refresh).performClick()
-                        }
+                        view.findViewById<Button>(R.id.refresh).performClick()
                     }
 
                     builder.setNegativeButton("No"){dialogInterface, which ->
@@ -207,6 +197,7 @@ class Posts() : Fragment()
                 view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
                 view?.sendpostbtn?.setEnabled(true)
             }
+
         }
     }
   

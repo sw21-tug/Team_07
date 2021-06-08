@@ -2,8 +2,6 @@ package com.example.pangea
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -12,11 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.bookmarked_view.view.*
-import kotlinx.android.synthetic.main.posts_view.view.*
 
 /* This class controls the logic in the "Bookmarked"-Tab
    New Methods can be implemented as needed.
@@ -72,11 +68,34 @@ class Bookmarked : Fragment()
                     posted_to_tw.alpha = 1.0F
                 }
 
-                post_date.text = "01.01.1970"
+                post_date.text = post.date
 
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
+                    intent.putExtra("Image", post.image)
+                    val curr_user: User = register.getRegisteredUser(email, requireContext())
+                    val fhandler = FacebookHandler(requireContext(), curr_user, activity)
+
+                    val thandler = TwitterHandler(requireContext(), curr_user)
+
+                    var twretweets = "0"
+                    var fblikes = "0"
+
+                    if(post.twitter == true) {
+                        twretweets = thandler.getFavorites(post.postID!!)
+                    }
+                    if(post.facebook) {
+                        fblikes = fhandler.getReactions(post.postID)
+                    }
+
+
+                    intent.putExtra("TwitterRetweets", twretweets)
+                    intent.putExtra("FBReactions", fblikes)
+
+                    intent.putExtra("twitter", post.twitter.toString())
+                    intent.putExtra("facebook", post.facebook.toString())
+
                     startActivity(intent)
                 }
 
@@ -88,17 +107,22 @@ class Bookmarked : Fragment()
 
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         register.deletePostByID(post.postID!!, requireContext())
-                        Toast.makeText(context,"Deleted post", Toast.LENGTH_LONG).show()
-                        //refresh directly??
+                        Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
+                        view.findViewById<Button>(R.id.refresh).performClick()
                     }
 
                     builder.setNegativeButton("No"){dialogInterface, which ->
-                        Toast.makeText(context,"canceled", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context,"canceled",Toast.LENGTH_LONG).show()
                     }
                     val alertDialog: AlertDialog = builder.create()
                     alertDialog.setCancelable(false)
                     alertDialog.show()
                     true
+                }
+
+                bookmark_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                    val register = com.example.pangea.DatabaseHandler()
+                    context?.let { it1 -> register.updatePostBookmarked(post.postID.toString(), isChecked, it1) }
                 }
 
                 linearLayout.addView(cardview)

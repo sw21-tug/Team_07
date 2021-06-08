@@ -1,8 +1,16 @@
 package com.example.pangea
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.nfc.Tag
+import android.os.Looper
+import android.util.Log
+import android.widget.Toast
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.startActivity
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
@@ -19,6 +27,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.example.pangea.Posts
+import com.example.pangea.R.id.add_media_btn
 import com.example.pangea.R.id.sendpostbtn
 import com.facebook.AccessToken
 import com.facebook.FacebookSdk
@@ -35,6 +44,7 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -434,7 +444,7 @@ class PostTests {
         val image = null
 
         register.deleteAllPosts(appContext)
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "08-06-2021")
 
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("test"))
@@ -458,4 +468,161 @@ class PostTests {
 
         PostDatabase.destroyInstance()
     }
+    @Test
+    fun testIfMediaButtonVisible() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+
+        onView(anyOf(withId(R.id.sendpostbtn))).perform(click())
+
+        onView(withId(R.id.add_media_btn)).check(matches(isDisplayed()))
+
+        PostDatabase.destroyInstance()
+    }
+
+    @Test
+    fun testMediaButton() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        onView(anyOf(withId(R.id.sendpostbtn))).perform(click())
+
+        onView(withId(R.id.preview_picture)).check(matches(isDisplayed()))
+
+        PostDatabase.destroyInstance()
+
+    }
+
+    @Test
+    fun ImagePost() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test.user@test.com"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test with image"
+
+        val image = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(R.drawable.splash)
+                + '/' + context.getResources().getResourceTypeName(R.drawable.splash) + '/' + context.getResources().getResourceEntryName(R.drawable.splash))
+
+        var postslist = register.getAllPosts(email, context)
+
+        postslist.forEach{register.deletePostByID(it.postID!!, context)}
+
+        assertFalse(image == null)
+
+        register.addFBPost(email, message, image.toString(), context, "", "08-06-2021")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(anyOf(withId(R.id.bookmark_checkbox)))
+
+
+
+        PostDatabase.destroyInstance()
+    }
+
+    @Test
+    fun testExpandPostWithImage() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(R.drawable.splash)
+                + '/' + context.getResources().getResourceTypeName(R.drawable.splash) + '/' + context.getResources().getResourceEntryName(R.drawable.splash))
+
+        val postslist = register.getAllPosts("test", context)
+
+        postslist.forEach{register.deletePostByID(it.postID!!, context)}
+
+        register.addFBPost(email, message, image.toString(), context, "", "08-06-2021")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        //onView(withId(R.id.refresh)).perform(click())
+        onView(anyOf(withId(R.id.post_text_field))).perform(click())
+
+        //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
+        onView(withId(R.id.ImagePostExpanded)).check(matches(isDisplayed()))
+
+        PostDatabase.destroyInstance()
+    }
+
 }

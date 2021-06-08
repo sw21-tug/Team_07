@@ -125,6 +125,7 @@ class DatabaseHandler
 
     fun filterPostsByDate(email: String, context: Context?, s: String): List<Post>? {
         return null
+    }
 
     fun deleteAllPosts(context: Context)
     {
