@@ -68,7 +68,7 @@ class Bookmarked : Fragment()
                     posted_to_tw.alpha = 1.0F
                 }
 
-                post_date.text = "01.01.1970"
+                post_date.text = post.date
 
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
