@@ -444,7 +444,7 @@ class PostTests {
         val image = null
 
         register.deleteAllPosts(appContext)
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "08-06-2021")
 
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("test"))
@@ -571,7 +571,7 @@ class PostTests {
 
         assertFalse(image == null)
 
-        register.addFBPost(email, message, image.toString(), context, "")
+        register.addFBPost(email, message, image.toString(), context, "", "08-06-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(anyOf(withId(R.id.bookmark_checkbox)))
@@ -613,7 +613,7 @@ class PostTests {
 
         postslist.forEach{register.deletePostByID(it.postID!!, context)}
 
-        register.addFBPost(email, message, image.toString(), context, "")
+        register.addFBPost(email, message, image.toString(), context, "", "08-06-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
         //onView(withId(R.id.refresh)).perform(click())
