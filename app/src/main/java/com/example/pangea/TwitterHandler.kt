@@ -115,6 +115,26 @@ class TwitterHandler(private val context: Context, private val user: User) {
         return twitter
     }
 
+    /* Method to get username from connected twitter account
+    *  Supports only one twitter account for now */
+    fun getTwitterUsername():String
+    {
+        if(twitter == null) {
+            initTwitterApi()
+        }
+        return twitter?.oAuthAccessToken?.userId.toString()
+    }
+
+    /* Method to check if a Twitter user is logged in */
+    fun checkIfTwitterObjectValid(): Boolean
+    {
+        if(twitter == null)
+        {
+            return false
+        }
+        return true
+    }
+    
     fun getFavorites(postId: String) : String {
         if(postId == "" || user.twitterAuthToken == null || user.twitterAuthSecret == null)
         {
@@ -131,9 +151,7 @@ class TwitterHandler(private val context: Context, private val user: User) {
         {
             number_of_retweets = retweets.get(0).retweetCount
         }
-        
-
-
+       
         return number_of_retweets.toString()
     }
 

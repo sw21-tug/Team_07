@@ -1,8 +1,11 @@
 package com.example.pangea
 
 import android.content.Context
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 
-class DatabaseHandler {
+class DatabaseHandler
+{
      fun registerUser(userEmail: String, userPassword: String, context: Context): Int {
             val db = AppDatabase.getInstance(context)
             val userDao = db.userDao()
@@ -61,24 +64,25 @@ class DatabaseHandler {
         return postDao.selectAllPostsForUser(userEmail)
     }
 
+
+    fun addFBPost(userEmail: String, message: String, image: String?, context: Context, id: String?, datePosted: String?): Int {
+        val db = PostDatabase.getInstance(context)
+        val postDao = db.postDao()
+        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, postID = id, date = datePosted, bookmarked = false)
+        postDao.insertOne(post)
+        return 0
+    }
+
     fun getAllBookmarkedPosts(userEmail: String, context: Context): List<Post>{
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()
         return postDao.selectAllPostsForUserBookmarked(userEmail)
     }
 
-    fun addFBPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
+    fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context, id: String?, datePosted: String?): Int {
         val db = PostDatabase.getInstance(context)
         val postDao = db.postDao()
-        val post = Post(email = userEmail, message = message, image =  image, facebook = true, twitter = false, postID = id, bookmarked = false)
-        postDao.insertOne(post)
-        return 0
-    }
-
-    fun addTwitterPost(userEmail: String, message: String, image: String?, context: Context, id: String?): Int {
-        val db = PostDatabase.getInstance(context)
-        val postDao = db.postDao()
-        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, postID = id, bookmarked = false)
+        val post = Post(email = userEmail, message = message, image =  image, facebook =  false, twitter = true, postID = id, date = datePosted, bookmarked = false)
         postDao.insertOne(post)
         return 0
     }
@@ -109,6 +113,18 @@ class DatabaseHandler {
         val postDao = db.postDao()
 
         postDao.deletePostByID(postID)
+    }
+
+    fun filterPostsByContent(email: String, context: Context?, s: String): List<Post>? {
+        return null
+    }
+
+    fun filterPostsByPlatform(email: String, context: Context?, b: Boolean): List<Post>? {
+        return null
+    }
+
+    fun filterPostsByDate(email: String, context: Context?, s: String): List<Post>? {
+        return null
     }
 
     fun deleteAllPosts(context: Context)

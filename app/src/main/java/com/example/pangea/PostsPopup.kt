@@ -18,9 +18,14 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.scaleMatrix
+import kotlinx.android.synthetic.main.activity_filter_posts.*
 import kotlinx.android.synthetic.main.posts_popup.*
 import java.io.File
 import java.net.URI
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, FacebookHandler.IFacebookCallback
 {
@@ -81,20 +86,23 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
             thandler.initTwitterApi()
 
             // call facebook or twitter post message here
-
             if (facebook_check && twitter_check) {
                 if(!this::image.isInitialized)
                 {
                     image = ""
                 }
 
-                var postId = fhandler.postMessage(message.toString(), image)
+                val calender = Calendar.getInstance()
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
+                val postId = fhandler.postMessage(message.toString(), image)
                 register.addFBPost(
                     userEmail,
                     message.toString(),
                     image,
                     applicationContext,
-                    postId.toString()
+                    postId.toString(),
+                    date
                 )
                 var twitterId = thandler.postTweet(message.toString(), image)
                 register.addTwitterPost(
@@ -102,7 +110,8 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                     message.toString(),
                     image,
                     applicationContext,
-                    twitterId
+                    twitterId,
+                    date
                 )
             }
             else if(facebook_check) {
@@ -110,16 +119,22 @@ class PostsPopup : AppCompatActivity(), TwitterHandler.ITwitterCallback, Faceboo
                 {
                     image = ""
                 }
+                val calender = Calendar.getInstance()
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
                 var postId = fhandler.postMessage(message.toString(), image)
-                register.addFBPost(userEmail, message.toString(), image, applicationContext, postId.toString())
+                register.addFBPost(userEmail, message.toString(), image, applicationContext, postId.toString(), date)
             }
             else if(twitter_check) {
                 if(!this::image.isInitialized)
                 {
                     image = ""
                 }
+                val calender = Calendar.getInstance()
+                val sdate = SimpleDateFormat("dd-MM-yyyy")
+                val date = sdate.format(calender.time)
                 var postId = thandler.postTweet(message.toString(), image)
-                register.addTwitterPost(userEmail, message.toString(), image, applicationContext, postId)
+                register.addTwitterPost(userEmail, message.toString(), image, applicationContext, postId, date)
             }
             finish()
         }

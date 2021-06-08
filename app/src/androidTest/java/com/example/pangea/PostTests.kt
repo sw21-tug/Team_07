@@ -17,6 +17,7 @@ import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers
@@ -36,7 +37,7 @@ import com.facebook.login.LoginManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -55,7 +56,7 @@ class PostTests {
         {
             Intents.init()
             val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-            Assert.assertEquals("com.example.pangea", appContext.packageName)
+            assertEquals("com.example.pangea", appContext.packageName)
 
             onView(withId(R.id.username)).perform(clearText())
             onView(withId(R.id.username)).perform(typeText("test"))
@@ -90,7 +91,7 @@ class PostTests {
     {
         //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Assert.assertEquals("com.example.pangea", appContext.packageName)
+        assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("test"))
@@ -160,7 +161,7 @@ class PostTests {
     {
         //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Assert.assertEquals("com.example.pangea", appContext.packageName)
+        assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("test"))
@@ -220,7 +221,7 @@ class PostTests {
     {
         //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Assert.assertEquals("com.example.pangea", appContext.packageName)
+        assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("test"))
@@ -262,7 +263,7 @@ class PostTests {
         val message = "test"
         val image = null
 
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "26-05-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
         //onView(withId(R.id.refresh)).perform(click())
@@ -301,7 +302,7 @@ class PostTests {
 
         postslist.forEach{register.deletePostByID(it.postID!!, context)}
 
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "26-05-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
         //onView(withId(R.id.refresh)).perform(click())
@@ -343,7 +344,7 @@ class PostTests {
 
         postslist.forEach{register.deletePostByID(it.postID!!, context)}
 
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "26-05-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
         //onView(withId(R.id.refresh)).perform(click())
@@ -355,6 +356,78 @@ class PostTests {
         postslist = register.getAllPosts(email, context)
 
         require(postslist.isEmpty())
+
+        PostDatabase.destroyInstance()
+    }
+
+    @Test
+    fun testFilterPosts() {
+
+        Intents.init()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+      
+        onView(withId(R.id.username)).perform(clearText())
+        onView(withId(R.id.username)).perform(typeText("test"))
+        onView(withId(R.id.password)).perform(clearText())
+        onView(withId(R.id.password)).perform(typeText("test"))
+
+        onView(withId(R.id.loginButton)).perform(click())
+
+        //check if Dashboard is shown after login
+        Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+        
+        val email = "test"
+        val dbhandler = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        val postslist = dbhandler.getAllPosts("test", context)
+
+        postslist.forEach{dbhandler.deletePostByID(it.postID!!, context)}
+
+        dbhandler.addFBPost(email, "testmessage 1", null, context, "", "21-05-2021")
+        dbhandler.addFBPost(email, "testmessage 2", null, context, "", "26-05-2021")
+        dbhandler.addTwitterPost(email, "testmessage 3", null, context, "", "24-05-2021")
+        dbhandler.addTwitterPost(email, "testmessage 4", null, context, "", "26-05-2021")
+
+        onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+                .perform(click())
+                .check(matches(isDisplayed()))
+
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(withText("testmessage 1")).check(matches(isDisplayed()))
+        onView(withText("testmessage 2")).check(matches(isDisplayed()))
+        onView(withText("testmessage 3")).check(matches(isDisplayed()))
+        onView(withText("testmessage 4")).check(matches(isDisplayed()))
+
+        onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.filter_post_content))).perform(typeText("testmessage 1"))
+        onView(anyOf(withId(R.id.filter_post_content))).perform(pressBack())
+        onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
+        onView(withText("testmessage 1")).check(matches(isDisplayed()))
+
+        onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.toggleByDate))).perform(click())
+        onView(anyOf(withId(R.id.dpFilter))).perform(PickerActions.setDate(2021, 5, 26))
+        onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
+        onView(withText("testmessage 2")).check(matches(isDisplayed()))
+        onView(withText("testmessage 4")).check(matches(isDisplayed()))
+
+        onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.toggleByPlatform))).perform(click())
+        onView(anyOf(withId(R.id.rb_filter_facebook))).perform(click())
+        onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
+        onView(withText("testmessage 1")).check(matches(isDisplayed()))
+        onView(withText("testmessage 2")).check(matches(isDisplayed()))
+
+        onView(withId(R.id.searchbtn)).perform(click())
+        onView(anyOf(withId(R.id.toggleByPlatform))).perform(click())
+        onView(anyOf(withId(R.id.rb_filter_twitter))).perform(click())
+        onView(anyOf(withId(R.id.btn_set_filter))).perform(click())
+        onView(withText("testmessage 3")).check(matches(isDisplayed()))
+        onView(withText("testmessage 4")).check(matches(isDisplayed()))
 
         PostDatabase.destroyInstance()
     }
