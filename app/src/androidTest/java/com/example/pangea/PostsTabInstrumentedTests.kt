@@ -2,17 +2,16 @@ package com.example.pangea
 
 import android.content.Context
 import android.content.Intent
-import androidx.room.Database
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
@@ -26,7 +25,6 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
-import java.util.regex.Pattern.matches
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -77,7 +75,7 @@ class PostsTabInstrumentedTests {
         val message = "test"
         val image = null
 
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "26-05-2021")
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
@@ -102,8 +100,8 @@ class PostsTabInstrumentedTests {
         val messageFB = "testFB"
         val messageTwitter = "testTwitter"
         val image = null
-        register.addFBPost(email, messageFB, image, context, "")
-        register.addTwitterPost(email, messageTwitter, image, context, "")
+        register.addFBPost(email, messageFB, image, context, "", "26-05-2021")
+        register.addTwitterPost(email, messageTwitter, image, context, "", "26-05-2021")
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 

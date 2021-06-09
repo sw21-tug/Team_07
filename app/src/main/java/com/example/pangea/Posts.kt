@@ -1,13 +1,16 @@
 package com.example.pangea
 
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
 import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.posts_view.*
 import kotlinx.android.synthetic.main.posts_view.view.*
 import kotlinx.android.synthetic.main.single_post.*
 import kotlinx.android.synthetic.main.single_post.view.*
@@ -45,7 +49,6 @@ class Posts() : Fragment()
             StrictMode.setThreadPolicy(policy)
         }
 
-
         view.sendpostbtn.setOnClickListener {
             val intent = Intent(context, PostsPopup::class.java)
             if (email != null) {
@@ -54,24 +57,26 @@ class Posts() : Fragment()
                 startActivity(intent)
         }
 
+
+        view.searchbtn.setOnClickListener {
+            val intent = Intent(context, FilterPosts::class.java)
+            if (email != null) {
+                intent.putExtra("loggedInUserMail", email)
+            }
+            startActivity(intent)
+        }
+
         view.refresh.setOnClickListener{
-            if(!email.isNullOrEmpty())
+            if(GlobalVariable.Companion.matchedPosts.isNotEmpty()) {
+                posts = GlobalVariable.Companion.matchedPosts
+            }
+            else if(!email.isNullOrEmpty())
             {
                 posts = activity?.let { register.getAllPosts(email, it.applicationContext) }!!
             }
 
             val linearLayout : LinearLayout = view.findViewById(R.id.linearLayoutPosts)
             linearLayout.removeAllViews();
-//            linearLayout.setDividerDrawable(
-//                ContextCompat.getDrawable(
-//                      requireActivity().applicationContext, // Context
-//                      android.R.drawable.divider_horizontal_dark // Drawable
-//                    )
-//            )
-//
-//            linearLayout.dividerDrawable.setBounds(0, 0, 50, 50);
-//
-//            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_END)
 
             for (post in posts) {
 
@@ -97,11 +102,35 @@ class Posts() : Fragment()
                     posted_to_tw.alpha = 1.0F
                 }
 
-                post_date.text = "01.01.1970"
+                post_date.text = post.date
 
                 textfield.setOnClickListener {
                     val intent = Intent(context, PostExpanded::class.java)
                     intent.putExtra("Text", post.message)
+                    intent.putExtra("Image", post.image)
+
+                    val curr_user: User = register.getRegisteredUser(email, requireContext())
+                    val fhandler = FacebookHandler(requireContext(), curr_user, activity)
+
+                    val thandler = TwitterHandler(requireContext(), curr_user)
+
+                    var twretweets = "0"
+                    var fblikes = "0"
+
+                    if(post.twitter == true) {
+                        twretweets = thandler.getFavorites(post.postID!!)
+                    }
+                    if(post.facebook) {
+                        fblikes = fhandler.getReactions(post.postID)
+                    }
+
+
+                    intent.putExtra("TwitterRetweets", twretweets)
+                    intent.putExtra("FBReactions", fblikes)
+
+                    intent.putExtra("twitter", post.twitter.toString())
+                    intent.putExtra("facebook", post.facebook.toString())
+
                     startActivity(intent)
                 }
 
@@ -114,7 +143,7 @@ class Posts() : Fragment()
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         register.deletePostByID(post.postID!!, requireContext())
                         Toast.makeText(context,"Deleted post",Toast.LENGTH_LONG).show()
-                        //refresh directly??
+                        view.findViewById<Button>(R.id.refresh).performClick()
                     }
 
                     builder.setNegativeButton("No"){dialogInterface, which ->
@@ -168,6 +197,7 @@ class Posts() : Fragment()
                 view?.sendpostbtn?.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
                 view?.sendpostbtn?.setEnabled(true)
             }
+
         }
     }
   

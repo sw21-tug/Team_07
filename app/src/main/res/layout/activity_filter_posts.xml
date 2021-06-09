@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10sp"
+    tools:context=".FilterPosts">
+
+    <TextView
+        android:id="@+id/txtFilterHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_posts_header"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"/>
+
+    <RelativeLayout
+        android:layout_below="@id/txtFilterHeader"
+        android:id="@+id/rlFilterByContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:id="@+id/txtContentHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_by_content_header"
+            android:textStyle="bold"
+            android:layout_marginTop="20sp"
+            android:layout_marginStart="20sp"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggleByContent"
+            android:layout_alignParentEnd="true"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/filter_post_content"
+            android:layout_below="@id/txtContentHeader"
+            android:layout_width="match_parent"
+            android:layout_marginStart="50sp"
+            android:layout_marginEnd="50sp"
+            android:layout_marginTop="20sp"
+            android:layout_height="60sp"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/txtDateHeader"
+        android:layout_below="@id/rlFilterByContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_by_date_header"
+        android:textStyle="bold"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="20sp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/toggleByDate"
+        android:layout_below="@id/rlFilterByContent"
+        android:layout_alignParentEnd="true"
+        android:checked="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <DatePicker
+        android:id="@+id/dpFilter"
+        android:layout_marginTop="20sp"
+        android:visibility="gone"
+        android:layout_below="@id/txtDateHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/txtPlatform"
+        android:layout_below="@id/dpFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_by_platform_header"
+        android:textStyle="bold"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="20sp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/toggleByPlatform"
+        android:layout_below="@id/dpFilter"
+        android:layout_alignParentEnd="true"
+        android:checked="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/rb_filter_facebook"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="20sp"
+        android:visibility="gone"
+        android:layout_below="@id/txtPlatform"/>
+
+    <ImageView
+        android:id="@+id/fb_icon"
+        android:layout_below="@id/txtPlatform"
+        android:layout_toEndOf="@id/rb_filter_facebook"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="20sp"
+        android:visibility="gone"
+        android:src="@drawable/com_facebook_favicon_blue"/>
+
+    <CheckBox
+        android:id="@+id/rb_filter_twitter"
+        android:layout_centerHorizontal="true"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="20sp"
+        android:visibility="gone"
+        android:layout_below="@id/txtPlatform"/>
+
+    <ImageView
+        android:id="@+id/twitter_icon"
+        android:layout_below="@id/txtPlatform"
+        android:layout_toEndOf="@id/rb_filter_twitter"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="20sp"
+        android:visibility="gone"
+
+        android:src="@drawable/twitter_bird_logo_2012_svg"/>
+
+    <Button
+        android:id="@+id/btn_set_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_apply_filter"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>
