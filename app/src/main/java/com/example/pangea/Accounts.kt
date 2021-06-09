@@ -1,10 +1,8 @@
-
 package com.example.pangea
 
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -16,7 +14,6 @@ import android.webkit.WebView
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.DialogFragment
 import androidx.room.ColumnInfo
@@ -170,21 +167,14 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         disconnectFacebook.setOnClickListener {
             rlLayoutFacebook.visibility = View.GONE
             fHandler.logoutFacebook()
-            add_account_button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_700)));
-            add_account_button.isClickable = true
+
         }
 
         disconnectTwitter.setOnClickListener {
             rlLayoutTwitter.visibility = View.GONE
             tHandler.unlinkAccount()
-            add_account_button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_700)));
-            add_account_button.isClickable = true
         }
         refreshConnectedAccounts()
-        if(rlLayoutFacebook.visibility == View.VISIBLE &&  rlLayoutTwitter.visibility == View.VISIBLE){
-            add_account_button.isClickable = false
-            add_account_button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
-        }
         return account_view
     }
 
@@ -275,10 +265,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             else {
                 facebookUserName.text = fHandler.getUser()
             }
-        }
-        if(rlLayoutFacebook.visibility == View.VISIBLE &&  rlLayoutTwitter.visibility == View.VISIBLE){
-            add_account_button.isClickable = false
-            add_account_button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
         }
     }
 

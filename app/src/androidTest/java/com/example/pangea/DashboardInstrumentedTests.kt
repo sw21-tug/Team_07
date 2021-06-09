@@ -48,11 +48,10 @@ class DashboardInstrumentedTests {
     }
 
     @Test
-    @UiThread
     fun checkTabSwitch() {
-        // doesn't work anymore since we need to login first
-        onView(Matchers.allOf(ViewMatchers.withText("ACCOUNTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+        activityRule.launchActivity(null)
 
+        onView(Matchers.allOf(ViewMatchers.withText("ACCOUNTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
                 .perform(click())
                 .check(matches(isDisplayed()))
         onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))

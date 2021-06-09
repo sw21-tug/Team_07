@@ -37,7 +37,8 @@ import com.facebook.login.LoginManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
-import org.junit.Assert
+import junit.framework.Assert
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -86,7 +87,6 @@ class PostTests {
         @Test
         fun testButton ()
         {
-            Intents.init()
             val appContext = InstrumentationRegistry.getInstrumentation().targetContext
             assertEquals("com.example.pangea", appContext.packageName)
 
@@ -104,24 +104,12 @@ class PostTests {
                 .perform(click())
                 .check(matches(isDisplayed()))
 
-//            rule.scenario
             onView(withId(sendpostbtn)).perform(click())
-
-            //onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
-           // onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
-           // onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
-
-//            onView(withId(R.id.facebookCheck)).perform(click())
-//            onView(withId(R.id.facebookCheck)).check(matches(isChecked()))
-//
-//            onView(withId(R.id.twitterCheck)).perform(click())
-//            onView(withId(R.id.twitterCheck)).check(matches(isChecked()))
         }
 
     @Test
     fun testSelectAccount ()
     {
-        //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
@@ -137,7 +125,6 @@ class PostTests {
         val pwt = userPassword
         val contextt = ApplicationProvider.getApplicationContext<Context>()
         val dbHandlert = com.example.pangea.DatabaseHandler()
-        dbHandlert.registerUser(emailt, pwt, contextt)
         var usert = dbHandlert.getRegisteredUser(emailt, contextt)
 
         val handler = TwitterHandler(contextt, usert)
@@ -165,7 +152,6 @@ class PostTests {
 
 
         onView(withId(sendpostbtn)).perform(click())
-
         onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
         onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
         onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
@@ -180,7 +166,6 @@ class PostTests {
     @Test
     fun testPlusButtonNoAcc ()
     {
-        //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
@@ -215,7 +200,6 @@ class PostTests {
         junit.framework.Assert.assertEquals(email, user.email)
         junit.framework.Assert.assertEquals(pw, user.password)
 
-
         dbHandler.saveFacebookLink(user, null, context)
         if(AccessToken.getCurrentAccessToken() != null)
         {
@@ -238,7 +222,6 @@ class PostTests {
     @Test
     fun testSearchButton ()
     {
-        //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
@@ -253,13 +236,11 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        onView(withId(R.id.searchbtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.searchbtn)).check(matches(isDisplayed()))
     }
 
     @Test
     fun basicPost() {
-
-        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         onView(withId(R.id.username)).perform(clearText())
@@ -279,14 +260,11 @@ class PostTests {
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(anyOf(withId(R.id.bookmark_checkbox)))
-
         PostDatabase.destroyInstance()
     }
 
     @Test
     fun testExpandPost() {
-
-        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         onView(withId(R.id.username)).perform(clearText())
@@ -298,23 +276,23 @@ class PostTests {
 
         //check if Dashboard is shown after login
         Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        onView(Matchers.allOf(ViewMatchers.withText("ACCOUNTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
+                .perform(click())
+                .check(matches(isDisplayed()))
 
         onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
-            .perform(click())
-            .check(matches(isDisplayed()))
+                .perform(click())
+                .check(matches(isDisplayed()))
 
         onView(anyOf(withId(R.id.post_text_field))).perform(click())
-
-       //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
         onView(withId(R.id.TextViewPostExpanded)).check(matches(isDisplayed()))
-
         PostDatabase.destroyInstance()
     }
 
     @Test
     fun testLongClickDelete() {
-
-        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         onView(withId(R.id.username)).perform(clearText())
@@ -334,8 +312,6 @@ class PostTests {
         val email = userEmail
         val register = DatabaseHandler()
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val message = "test"
-        val image = null
 
         assertEquals("com.example.pangea", appContext.packageName)
 
@@ -344,10 +320,8 @@ class PostTests {
         onView(withText("Delete Post")).check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click());
 
-        postslist = register.getAllPosts(email, context)
-
+        var postslist = register.getAllPosts(email, context)
         require(postslist.isEmpty())
-
         PostDatabase.destroyInstance()
     }
 
