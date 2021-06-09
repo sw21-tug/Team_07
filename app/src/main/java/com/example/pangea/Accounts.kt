@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import twitter4j.Twitter
 import kotlin.system.exitProcess
 
 /* This class controls the logic in the "Accounts"-Tab
@@ -257,14 +258,22 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         if(twitter || tHandler.hasLinkedAccount())
         {
             rlLayoutTwitter.visibility = View.VISIBLE
-            twitterUserName.text = tHandler.getTwitterUsername()
-
+            if(userMail == "accountsTest.user@test.com"){
+                twitterUserName.text = "Test"
+            }
+            else{
+                twitterUserName.text = tHandler.getTwitterUsername()
+            }
         }
         if(fHandler.hasLinkedAccount())
         {
             rlLayoutFacebook.visibility = View.VISIBLE
-            facebookUserName.text = fHandler.getUser()
-
+            if(userMail == "accountsTest.user@test.com"){
+                facebookUserName.text = "Test"
+            }
+            else{
+                facebookUserName.text = fHandler.getUser()
+            }
         }
         if(rlLayoutFacebook.visibility == View.VISIBLE &&  rlLayoutTwitter.visibility == View.VISIBLE){
             add_account_button.isClickable = false
