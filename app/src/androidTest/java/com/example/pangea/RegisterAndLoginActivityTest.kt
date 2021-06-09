@@ -69,7 +69,6 @@ class RegisterAndLoginActivityTest{
 
         //now we're registered and already in the dashboard
         intended(hasComponent(DashboardsActivity::class.java.name))
-        Thread.sleep(3000)
 
         openActionBarOverflowOrOptionsMenu(appContext)
         onView(withText(R.string.menu_action_logout))

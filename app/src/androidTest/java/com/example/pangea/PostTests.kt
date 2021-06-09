@@ -37,8 +37,7 @@ import com.facebook.login.LoginManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
-import junit.framework.Assert
-import org.junit.After
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -52,39 +51,17 @@ import java.io.File
 class PostTests {
         @get:Rule var rule = ActivityScenarioRule(RegisterAndLoginActivity::class.java)
 
-        @Before
-        fun setUp() {
-            Intents.init()
-            val email = "postTestUser"
-            val contextt = ApplicationProvider.getApplicationContext<Context>()
-            val dbHandlert = com.example.pangea.DatabaseHandler()
-            dbHandlert.registerUser(email, "postTest342", contextt)
-            val register = DatabaseHandler()
-            val postslist = register.getAllPosts(email, contextt)
-            postslist.forEach{register.deletePostByID(it.postID!!, contextt)}
-            val message = "test"
-            val image = null
-            register.addFBPost(email, message, image, contextt, "")
-        }
-
-        @After
-        fun cleanUp() {
-            Intents.release()
-            val contextt = ApplicationProvider.getApplicationContext<Context>()
-            val dbHandlert = com.example.pangea.DatabaseHandler()
-            dbHandlert.deletUserByEmail("postTestUser", contextt)
-        }
-
         @Test
         fun testButton ()
         {
+            Intents.init()
             val appContext = InstrumentationRegistry.getInstrumentation().targetContext
             assertEquals("com.example.pangea", appContext.packageName)
 
             onView(withId(R.id.username)).perform(clearText())
-            onView(withId(R.id.username)).perform(typeText("postTestUser"))
+            onView(withId(R.id.username)).perform(typeText("test"))
             onView(withId(R.id.password)).perform(clearText())
-            onView(withId(R.id.password)).perform(typeText("postTest342"))
+            onView(withId(R.id.password)).perform(typeText("test"))
 
             onView(withId(R.id.loginButton)).perform(click())
 
@@ -95,27 +72,40 @@ class PostTests {
                 .perform(click())
                 .check(matches(isDisplayed()))
 
+//            rule.scenario
             onView(withId(sendpostbtn)).perform(click())
+
+            //onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
+           // onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
+           // onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
+
+//            onView(withId(R.id.facebookCheck)).perform(click())
+//            onView(withId(R.id.facebookCheck)).check(matches(isChecked()))
+//
+//            onView(withId(R.id.twitterCheck)).perform(click())
+//            onView(withId(R.id.twitterCheck)).check(matches(isChecked()))
         }
 
     @Test
     fun testSelectAccount ()
     {
+        //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("postTestUser"))
+        onView(withId(R.id.username)).perform(typeText("test"))
         onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("postTest342"))
+        onView(withId(R.id.password)).perform(typeText("test"))
 
         onView(withId(R.id.loginButton)).perform(click())
 
 
-        val emailt = "postTestUser"
-        val pwt = "postTest342"
+        val emailt = "test.user@test.com"
+        val pwt = "1234abc"
         val contextt = ApplicationProvider.getApplicationContext<Context>()
         val dbHandlert = com.example.pangea.DatabaseHandler()
+        dbHandlert.registerUser(emailt, pwt, contextt)
         var usert = dbHandlert.getRegisteredUser(emailt, contextt)
 
         val handler = TwitterHandler(contextt, usert)
@@ -126,8 +116,8 @@ class PostTests {
         }
 
         FacebookSdk.setApplicationId("171191854853298")
-        val email = "postTestUser"
-        val pw = "postTest342"
+        val email = "test.user@test.com"
+        val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
         FacebookSdk.sdkInitialize(context)
         val dbHandler = DatabaseHandler()
@@ -151,7 +141,10 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
+
+
         onView(withId(sendpostbtn)).perform(click())
+
         onView(withId(R.id.facebookCheck)).check(matches(isDisplayed()))
         onView(withId(R.id.twitterCheck)).check(matches(isDisplayed()))
         onView(withId(R.id.plain_text_input)).check(matches(isDisplayed()))
@@ -166,17 +159,20 @@ class PostTests {
     @Test
     fun testPlusButtonNoAcc ()
     {
+        //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("postTestUser"))
+        onView(withId(R.id.username)).perform(typeText("test"))
         onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("postTest342"))
+        onView(withId(R.id.password)).perform(typeText("test"))
+
         onView(withId(R.id.loginButton)).perform(click())
 
-        val emailt = "postTestUser"
-        val pwt = "postTest342"
+
+        val emailt = "test.user@test.com"
+        val pwt = "1234abc"
         val contextt = ApplicationProvider.getApplicationContext<Context>()
         val dbHandlert = com.example.pangea.DatabaseHandler()
         dbHandlert.registerUser(emailt, pwt, contextt)
@@ -190,8 +186,8 @@ class PostTests {
         }
 
         FacebookSdk.setApplicationId("171191854853298")
-        val email = "postTestUser"
-        val pw = "postTest342"
+        val email = "test.user@test.com"
+        val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
         FacebookSdk.sdkInitialize(context)
         val dbHandler = DatabaseHandler()
@@ -199,6 +195,7 @@ class PostTests {
         var user = dbHandler.getRegisteredUser(email, context)
         junit.framework.Assert.assertEquals(email, user.email)
         junit.framework.Assert.assertEquals(pw, user.password)
+
 
         dbHandler.saveFacebookLink(user, null, context)
         if(AccessToken.getCurrentAccessToken() != null)
@@ -222,13 +219,14 @@ class PostTests {
     @Test
     fun testSearchButton ()
     {
+        //Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("postTestUser"))
+        onView(withId(R.id.username)).perform(typeText("test"))
         onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("postTest342"))
+        onView(withId(R.id.password)).perform(typeText("test"))
 
         onView(withId(R.id.loginButton)).perform(click())
 
@@ -236,17 +234,19 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        onView(withId(R.id.searchbtn)).check(matches(isDisplayed()))
+        onView(withId(R.id.searchbtn)).check(matches(isDisplayed()));
     }
 
     @Test
     fun basicPost() {
+
+        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("postTestUser"))
+        onView(withId(R.id.username)).perform(typeText("test"))
         onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("postTest342"))
+        onView(withId(R.id.password)).perform(typeText("test"))
 
         onView(withId(R.id.loginButton)).perform(click())
 
@@ -257,57 +257,73 @@ class PostTests {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        val email = "postTestUser"
+        val email = "test.user@test.com"
         val register = DatabaseHandler()
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val message = "postTest342"
+        val message = "test"
         val image = null
 
         register.addFBPost(email, message, image, context, "", "26-05-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.refresh)).perform(click())
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.bookmark_checkbox)))
+
         PostDatabase.destroyInstance()
     }
 
     @Test
     fun testExpandPost() {
+
+        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("postTestUser"))
+        onView(withId(R.id.username)).perform(typeText("test"))
         onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("postTest342"))
+        onView(withId(R.id.password)).perform(typeText("test"))
 
         onView(withId(R.id.loginButton)).perform(click())
 
         //check if Dashboard is shown after login
         Intents.intended(IntentMatchers.hasComponent(DashboardsActivity::class.java.name))
-        assertEquals("com.example.pangea", appContext.packageName)
-
-        onView(Matchers.allOf(ViewMatchers.withText("ACCOUNTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
-                .perform(click())
-                .check(matches(isDisplayed()))
 
         onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
-                .perform(click())
-                .check(matches(isDisplayed()))
+            .perform(click())
+            .check(matches(isDisplayed()))
+
+        val email = "test"
+        val register = DatabaseHandler()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
+
+        val postslist = register.getAllPosts("test", context)
+
+        postslist.forEach{register.deletePostByID(it.postID!!, context)}
 
         register.addFBPost(email, message, image, context, "", "26-05-2021")
+        assertEquals("com.example.pangea", appContext.packageName)
+
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(click())
+
+       //Intents.intended(IntentMatchers.hasComponent(PostExpanded::class.java.name))
         onView(withId(R.id.TextViewPostExpanded)).check(matches(isDisplayed()))
+
         PostDatabase.destroyInstance()
     }
 
     @Test
     fun testLongClickDelete() {
+
+        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         onView(withId(R.id.username)).perform(clearText())
-        onView(withId(R.id.username)).perform(typeText("postTestUser"))
+        onView(withId(R.id.username)).perform(typeText("test"))
         onView(withId(R.id.password)).perform(clearText())
-        onView(withId(R.id.password)).perform(typeText("postTest342"))
+        onView(withId(R.id.password)).perform(typeText("test"))
 
         onView(withId(R.id.loginButton)).perform(click())
 
@@ -318,25 +334,29 @@ class PostTests {
                 .perform(click())
                 .check(matches(isDisplayed()))
 
-        val email = "postTestUser"
+        val email = "test"
         val register = DatabaseHandler()
         val context = ApplicationProvider.getApplicationContext<Context>()
+        val message = "test"
+        val image = null
 
         var postslist = register.getAllPosts(email, context)
 
         postslist.forEach{register.deletePostByID(it.postID!!, context)}
 
-        register.addFBPost(email, message, image, context, "")
+        register.addFBPost(email, message, image, context, "", "26-05-2021")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.refresh)).perform(click())
+        //onView(withId(R.id.refresh)).perform(click())
         onView(anyOf(withId(R.id.post_text_field))).perform(longClick())
 
         onView(withText("Delete Post")).check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click());
 
-        var postslist = register.getAllPosts(email, context)
+        postslist = register.getAllPosts(email, context)
+
         require(postslist.isEmpty())
+
         PostDatabase.destroyInstance()
     }
 
