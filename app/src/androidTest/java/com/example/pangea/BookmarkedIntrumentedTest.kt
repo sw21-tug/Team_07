@@ -53,7 +53,7 @@ class BookmarkedIntrumentedTest {
             postslist.forEach{register.deletePostByID(it.postID!!, contextt)}
             val message = "test"
             val image = null
-            register.addFBPost(email, message, image, contextt, "")
+            register.addFBPost(email, message, image, contextt, "", "01-01-2021")
         }
 
         @After
@@ -82,13 +82,6 @@ class BookmarkedIntrumentedTest {
             .perform(click())
             .check(matches(isDisplayed()))
 
-        val email = "bookmarkedTestUser"
-        val register = DatabaseHandler()
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val message = "postTest342"
-        val image = null
-
-        register.addFBPost(email, message, image, context, "")
         assertEquals("com.example.pangea", appContext.packageName)
 
         onView(withId(R.id.bookmark_checkbox)).perform(click())
@@ -118,16 +111,11 @@ class BookmarkedIntrumentedTest {
                 .perform(click())
                 .check(matches(isDisplayed()))
 
-        val email = "bookmarkedTestUser"
-        val register = DatabaseHandler()
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val message = "postTest342"
-        val image = null
-
-        register.addFBPost(email, message, image, context, "")
         assertEquals("com.example.pangea", appContext.packageName)
 
-        onView(withId(R.id.bookmark_checkbox)).perform(click())
+
+        val withId = withId(R.id.bookmark_checkbox)
+        onView(withId).perform(click())
         onView(Matchers.allOf(ViewMatchers.withText("BOOKMARKED"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
                 .perform(click())
                 .check(matches(isDisplayed()))
@@ -137,11 +125,14 @@ class BookmarkedIntrumentedTest {
         onView(Matchers.allOf(ViewMatchers.withText("POSTS"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
                 .perform(click())
                 .check(matches(isDisplayed()))
-        onView(withId(R.id.bookmark_checkbox)).perform(click())
+
+        val register = DatabaseHandler()
+        register.updatePostBookmarked("", false, ApplicationProvider.getApplicationContext<Context>())
 
         onView(Matchers.allOf(ViewMatchers.withText("BOOKMARKED"), ViewMatchers.isDescendantOfA(withId(R.id.dashboard_bar))))
                 .perform(click())
                 .check(matches(isDisplayed()))
+
 
         onView(not(withId(R.id.post_text_field)))
 
