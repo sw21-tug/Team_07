@@ -83,9 +83,6 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
 
         add_account_button = account_view.findViewById(R.id.addaccount)
 
-
-
-
         val addTwitter = account_view.findViewById<FloatingActionButton>(R.id.addTwitter)
         val addFacebook = account_view.findViewById<FloatingActionButton>(R.id.addFacebook)
 
@@ -180,7 +177,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             add_account_button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_700)));
             add_account_button.isClickable = true
         }
-        refreshConnectedAccounts()
+        refreshConnectedAccounts(false)
         if(rlLayoutFacebook.visibility == View.VISIBLE &&  rlLayoutTwitter.visibility == View.VISIBLE){
             add_account_button.isClickable = false
             add_account_button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
@@ -215,6 +212,7 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         webView.loadUrl(url)
         twitterDialog.setContentView(webView)
         return twitterDialog
+
     }
 
     override fun oAuthResponse() {
@@ -224,7 +222,8 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
             Log.d("TWITTER-Handler", "Logged in user and linked account")
 
             //get username here
-            refreshConnectedAccounts()
+            refreshConnectedAccounts(true)
+
         }
     }
 
@@ -239,9 +238,8 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
         {
             login_button_facebook.text = getString(R.string.facebook_link_text)
         }
-        refreshConnectedAccounts()
+        refreshConnectedAccounts(false)
         super.onActivityResult(requestCode, resultCode, data)
-
 
     }
 
@@ -252,29 +250,21 @@ class Accounts() : DialogFragment(), TwitterHandler.ITwitterCallback, FacebookHa
     /* this method shows the connected accounts as soon as you log in with a social media account
     *  TODO works for now just for twitter, facebook untouched because unclear if facebooks gets removed from app
     *  TODO also works now just for one connected account. */
-    private fun refreshConnectedAccounts()
+    private fun refreshConnectedAccounts(twitter: Boolean)
     {
         val sharedPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
         val userMail = sharedPref.getString("current_user", "").toString()
-        if(tHandler.hasLinkedAccount())
+        if(twitter || tHandler.hasLinkedAccount())
         {
             rlLayoutTwitter.visibility = View.VISIBLE
-            if(userMail == "accountsTest.user@test.com") {
-                twitterUserName.text = "Test"
-            }
-            else {
-                twitterUserName.text = tHandler.getTwitterUsername()
-            }
+            twitterUserName.text = tHandler.getTwitterUsername()
+
         }
         if(fHandler.hasLinkedAccount())
         {
             rlLayoutFacebook.visibility = View.VISIBLE
-            if(userMail == "accountsTest.user@test.com") {
-                facebookUserName.text = "Test"
-            }
-            else {
-                facebookUserName.text = fHandler.getUser()
-            }
+            facebookUserName.text = fHandler.getUser()
+
         }
         if(rlLayoutFacebook.visibility == View.VISIBLE &&  rlLayoutTwitter.visibility == View.VISIBLE){
             add_account_button.isClickable = false
