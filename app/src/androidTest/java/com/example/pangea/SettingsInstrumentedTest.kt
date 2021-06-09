@@ -17,7 +17,6 @@ import androidx.test.espresso.action.ViewActions.typeTextIntoFocusedView
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -25,8 +24,6 @@ import androidx.test.rule.ActivityTestRule
 import junit.framework.Assert
 import org.hamcrest.Matchers.anything
 import org.hamcrest.Matchers.equalTo
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -38,36 +35,20 @@ class SettingsInstrumentedTest {
                 override fun getActivityIntent(): Intent {
                     val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
                     return Intent(targetContext, SettingsActivity::class.java).apply {
-                        putExtra("loggedInUserMail", "settingsTestUser")
+                        putExtra("loggedInUserMail", "test.user@test.com")
                     }
                 }
             }
-    @Before
-    fun setUp() {
-        val email = "settingsTestUser"
-        val pw = "1234abc"
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val dbHandler = DatabaseHandler()
-        dbHandler.registerUser(email, pw, context)
-    }
-
-    @After
-    fun cleanUp() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val dbHandlert = com.example.pangea.DatabaseHandler()
-        val email = "settingsTestUser"
-        dbHandlert.deletUserByEmail(email, context)
-    }
-
 
     var resources: Resources = InstrumentationRegistry.getInstrumentation().targetContext.resources
 
     @Test
     fun changePasswordTest() {
-        val email = "settingsTestUser"
+        val email = "test.user@test.com"
         val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
         val dbHandler = DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
         var user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
@@ -80,15 +61,16 @@ class SettingsInstrumentedTest {
         onView(withInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)).perform(typeTextIntoFocusedView("1234"))
         onView(withText("OK")).perform(click())
         user = dbHandler.getRegisteredUser(email, context)
-        assert(user.password.toString() == "1234abc")
+        assert(user.password.toString() == "1234")
     }
 
     @Test
     fun testSwitchLanguage() {
-        val email = "settingsTestUser"
+        val email = "test.user@test.com"
         val pw = "1234abc"
         val context = ApplicationProvider.getApplicationContext<Context>()
         val dbHandler = DatabaseHandler()
+        dbHandler.registerUser(email, pw, context)
         var user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals(email, user.email)
         Assert.assertEquals(pw, user.password)
@@ -101,8 +83,7 @@ class SettingsInstrumentedTest {
                 .perform(actionOnItem<RecyclerView.ViewHolder>(
                         hasDescendant(withText("English")), click()))
 
-        val context2 = ApplicationProvider.getApplicationContext<Context>()
-        user = dbHandler.getRegisteredUser(email, context2)
+        user = dbHandler.getRegisteredUser(email, context)
         Assert.assertEquals("en", user.language)
 
         onView(withText("Russian"))
@@ -110,5 +91,6 @@ class SettingsInstrumentedTest {
                 .perform(click());
 
         user = dbHandler.getRegisteredUser(email, context)
+        //Assert.assertEquals("ru", user.language)
     }
 }
