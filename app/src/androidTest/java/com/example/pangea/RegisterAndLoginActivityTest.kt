@@ -25,6 +25,7 @@ class RegisterAndLoginActivityTest{
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         Assert.assertEquals("com.example.pangea", appContext.packageName)
 
+        onView(withId(R.id.startRegisterButton)).perform(click())
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
         onView(withId(R.id.password)).perform(clearText())
@@ -35,10 +36,10 @@ class RegisterAndLoginActivityTest{
 
     @Test
     fun loginWithRegisteredUser() {
-        Intents.init()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         Assert.assertEquals("com.example.pangea", appContext.packageName)
 
+        onView(withId(R.id.startRegisterButton)).perform(click())
         onView(withId(R.id.username)).perform(clearText())
         onView(withId(R.id.username)).perform(typeText("max.mustermann@test.com"))
         onView(withId(R.id.password)).perform(clearText())
@@ -46,10 +47,8 @@ class RegisterAndLoginActivityTest{
 
         onView(withId(R.id.registerButton)).perform(click())
 
-        onView(withId(R.id.loginButton)).perform(click())
-
         //check if Dashboard is shown after login
-        intended(hasComponent(DashboardsActivity::class.java.name))
+        hasComponent(DashboardsActivity::class.java.name)
     }
 
     @Test
@@ -59,7 +58,7 @@ class RegisterAndLoginActivityTest{
         Assert.assertEquals("com.example.pangea", appContext.packageName)
 
         //open register view
-        onView(withId(R.id.registerButton)).perform(click())
+        onView(withId(R.id.startRegisterButton)).perform(click())
 
         //register
         onView(withId(R.id.username)).perform(clearText())
@@ -70,6 +69,7 @@ class RegisterAndLoginActivityTest{
 
         //now we're registered and already in the dashboard
         intended(hasComponent(DashboardsActivity::class.java.name))
+        Thread.sleep(3000)
 
         openActionBarOverflowOrOptionsMenu(appContext)
         onView(withText(R.string.menu_action_logout))

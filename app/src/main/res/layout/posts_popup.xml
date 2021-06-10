@@ -14,9 +14,23 @@
         android:text="@string/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plain_text_input"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.007" />
+
+    <Button
+        android:id="@+id/add_media_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="@string/Attach"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plain_text_input"
+        app:layout_constraintVertical_bias="0.007" />
 
     <ImageView
         android:id="@+id/facebook_img"
@@ -37,7 +51,8 @@
         android:layout_marginEnd="37dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/facebook_img"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:enabled="false"/>
 
     <CheckBox
         android:id="@+id/twitterCheck"
@@ -50,7 +65,8 @@
         app:layout_constraintBottom_toTopOf="@+id/facebookCheck"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:enabled="false" />
 
     <EditText
         android:id="@+id/plain_text_input"
@@ -65,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/facebook_img" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/twitter_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -74,5 +90,22 @@
         app:layout_constraintTop_toTopOf="@+id/twitterCheck"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/twitter_bird_logo_2012_svg" />
+
+    <ImageView
+        android:id="@+id/preview_picture"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="60dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_media_btn"
+        app:layout_constraintVertical_bias="0.166"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
